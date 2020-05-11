@@ -1,0 +1,14 @@
+<div class="row ">
+  <div class="col-md-2" *ngIf="cols=='col-md-10'">
+    <app-admin-menu></app-admin-menu>
+  </div>
+  <div class="{{cols}}">
+    <div class="col-md-12">
+      <app-admin-navbar></app-admin-navbar>
+    </div>
+    <div class="col-md-12">
+      <app-main></app-main>
+    </div>
+  </div>
+
+</div>

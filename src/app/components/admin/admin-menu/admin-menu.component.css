@@ -1,0 +1,9 @@
+.admin-logo{
+  height: 100px;
+  width: 80px;
+}
+.profile-image{
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}

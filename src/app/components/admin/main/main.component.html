@@ -1,0 +1,96 @@
+<div class="row card ">
+  <div class="card-header bg-dark text-white">
+    <h1>Dashboard</h1>
+    <label for="search"><button class="btn btn-sm bg-white" (click)="search = !search"><span class="fa fa-search-plus"></span></button></label>
+    <input type="text" class="form-control" placeholder="search" *ngIf="search" id="search">
+  </div>
+  <div class="card-body row">
+    <div class="col-md-3">
+        <div class="card bg-info shadow">
+          <div class="card-body text-white">
+            <h2><span class="fa fa-users"></span> Utilisateurs 25223</h2>
+          </div>
+          <div class="card-footer align-content-end">
+            <a href="#" class="card-link text-white" >voir plus <i class="fa fa-arrow-right"></i></a>
+          </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-success shadow">
+        <div class="card-body text-white">
+          <h2><span class="fa fa-tasks"></span> Stages 502</h2>
+        </div>
+        <div class="card-footer align-content-end">
+          <a href="#" class="card-link text-white" >voir plus <i class="fa fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-white shadow">
+        <div class="card-body text-dark">
+          <h2><span class="fa fa-file-archive-o"></span> Rapports 252</h2>
+        </div>
+        <div class="card-footer align-content-end">
+          <a href="#" class="card-link text-dark" >voir plus <i class="fa fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-warning shadow">
+        <div class="card-body text-white">
+          <h2><span class="fa fa-pencil-square-o"></span> Forum 25223</h2>
+        </div>
+        <div class="card-footer align-content-end">
+          <a href="#" class="card-link text-white" >voir plus <i class="fa fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <div class="card-footer bg-white">
+    <div class="container-fluid row">
+      <div class="col-md-6">
+        <div class="input-group ">
+          <input type="text" class="form-control" placeholder="chercher utilisateur ..">
+          <div class="input-group-append">
+            <button class="btn btn-outline-dark"><span class="fa fa-search"></span></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="input-group ">
+          <div class="input-group-prepend">
+            <label class="input-group-text">Chercher par</label>
+          </div>
+          <select class="custom-select" >
+            <option selected>Choisir...</option>
+            <option value="1">Nom</option>
+            <option value="2">Prénom</option>
+            <option value="3">Email</option>
+            <option value="3">Sexe</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="input-group ">
+          <div class="input-group-prepend">
+            <label class="input-group-text">Roles</label>
+          </div>
+          <select class="custom-select" >
+            <option selected>Choisir...</option>
+            <option value="1">Etudiant</option>
+            <option value="2">Encadreur</option>
+            <option value="3">Coordinateur</option>
+            <option value="3">Jury</option>
+            <option value="3">Agent Admin</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+    <div class="">
+      <app-utilisateur-table></app-utilisateur-table>
+    </div>
+  </div>
+</div>

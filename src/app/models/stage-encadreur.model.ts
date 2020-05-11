@@ -1,0 +1,15 @@
+import {Stage} from "./stage.model";
+import {Encadreur} from "./encadreur.model";
+
+export class StageEncadreur {
+  id:number;
+  dateAffectaion:Date;
+  remarque:string;
+  stage:Stage;
+  encadreur:Encadreur;
+
+  constructor() {
+    this.encadreur = new Encadreur();
+    this.stage = new Stage();
+  }
+}

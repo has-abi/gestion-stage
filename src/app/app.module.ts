@@ -3,26 +3,31 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MenuComponent } from './components/menu/menu.component';
-import { CovidListComponent } from './components/covid-list/covid-list.component';
 import { HttpClientModule } from "@angular/common/http";
-import { StatisticsComponent } from './components/statistics/statistics.component';
-import { PieChartComponent } from './components/pie-chart/pie-chart.component';
-import { MapComponent } from './components/map/map.component';
+import {ButtonModule} from 'primeng/button';
+import {AdminMenuComponent} from "./components/admin/admin-menu/admin-menu.component";
+import { AdminNavbarComponent } from './components/admin/admin-navbar/admin-navbar.component';
+import { MainComponent } from './components/admin/main/main.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { UtilisateurTableComponent } from './components/admin/tables/utilisateur-table/utilisateur-table.component';
+import { StageTablesComponent } from './components/admin/tables/stage-tables/stage-tables.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    MenuComponent,
-    CovidListComponent,
-    StatisticsComponent,
-    PieChartComponent,
-    MapComponent,
+    AdminMenuComponent,
+    AdminNavbarComponent,
+    MainComponent,
+    AdminComponent,
+    UtilisateurTableComponent,
+    StageTablesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ButtonModule
 
   ],
   providers: [],
