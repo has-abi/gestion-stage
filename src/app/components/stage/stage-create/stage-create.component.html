@@ -1,0 +1,178 @@
+<div class="card">
+  <div class="card-header bg-dark text-white">
+    <h1>Créer un stage</h1>
+    <div class="row">
+      <div class="input-group col-md-3">
+        <div class="input-group-prepend bg-secondary  btn" >Date début*</div>
+        <input type="date" class="form-control" [(ngModel)]="stage.dateDebut">
+      </div>
+      <div class="input-group col-md-3">
+        <div class="input-group-prepend bg-secondary btn" >Date fin*</div>
+        <input type="date" class="form-control" [(ngModel)]="stage.dateFin">
+      </div>
+      <div class="input-group col-md-6">
+        <div class="input-group-prepend btn btn-warning" (click)="ajouterSujet = !ajouterSujet">
+          Ajouter le Sujet
+        </div>
+        <input type="text" class="form-control" *ngIf="ajouterSujet" placeholder="sujet de stage..."  [(ngModel)]="stage.sujet">
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <flash-messages></flash-messages>
+    <div class="card ">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-10">
+            <h2>Etudiant</h2>
+          </div>
+          <div class="col-md-2">
+                <button class="btn btn-outline-success float-right" (click)="increaseEtudiants()"> <span class="fa fa-plus"></span></button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div  *ngFor="let e of etudiants;let i = index ">
+          <div *ngIf="i>0">
+            <button class="btn-sm btn-danger float-right shadow-none" (click)="decreaseEtudiant(i)"><span class="fa fa-minus-circle"></span></button>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-3">
+              <label for="cin">Cin*</label>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="cin..." id="cin" [(ngModel)]="e.cin" [class.border-warning]=" e.cin =='' "  >
+                <div class="input-group-append">
+                  <button class="btn btn-dark" (click)="findEtudiantByCin(i)"><span class="fa fa-pencil"></span></button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="codeAppoge">Code d'appogé*</label>
+              <input type="text" class="form-control" placeholder="code d'appogé..." id="codeAppoge" [(ngModel)]="e.codeAppoge" [class.border-warning]=" e.codeAppoge =='' ">
+            </div>
+            <div class="form-group col-md-3">
+              <label for="nom">Nom*</label>
+              <input type="text" class="form-control" placeholder="nom..." id="nom" [(ngModel)]="e.utilisateur.nom" [class.border-warning]=" e.utilisateur.nom =='' ">
+            </div>
+            <div class="form-group col-md-3">
+              <label for="prenom">Prénom</label>
+              <input type="text" class="form-control" placeholder="prénom..." id="prenom" [(ngModel)]="e.utilisateur.prenom" [class.border-warning]=" e.utilisateur.prenom =='' ">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mt-2">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-10">
+            <h2>Encadreur<span class="text-danger small">(Optionel)</span></h2>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-outline-success float-right" (click)="increaseEncadrants()"> <span class="fa fa-plus"></span></button>
+          </div>
+        </div>
+        </div>
+      <div class="card-body ">
+        <div *ngFor="let e of encadreurs;let i = index ">
+          <div >
+            <button *ngIf="i>0" class="btn-sm btn-danger float-right mt-2" (click)="decreaseEncadreur(i)"><span class="fa fa-minus-circle"></span></button>
+          </div>
+          <div class="row mt-2" >
+            <div class="form-group col-md-3">
+              <label for="ref">Réference*</label>
+              <input type="text" class="form-control" placeholder="ref..." id="ref" [(ngModel)]="e.reference">
+            </div>
+            <div class="form-group col-md-3">
+              <label for="nomE">Nom*</label>
+              <input type="text" class="form-control" placeholder="nom..." id="nomE" [(ngModel)]="e.utilisateur.nom">
+            </div>
+            <div class="form-group col-md-3">
+              <label for="prenomE">Prénom*</label>
+              <input type="text" class="form-control" placeholder="prénom..." id="prenomE" [(ngModel)]="e.utilisateur.prenom">
+            </div>
+            <div class="form-group col-md-3">
+              <label for="profession">Profession*</label>
+              <input type="text" class="form-control" placeholder="profession..." id="profession" [(ngModel)]="e.profession" >
+            </div>
+          </div>
+          <div class="row" >
+            <div class="input-group col-md-6">
+              <div class="input-group-prepend">
+                <button class="btn bg-dark"><span class="fa fa-user text-white"></span></button>
+              </div>
+              <input type="email" class="form-control" placeholder="email..." id="email" [(ngModel)]="e.utilisateur.email">
+            </div>
+            <div class="input-group col-md-6">
+              <div class="input-group-prepend">
+                <button class="btn bg-dark"><span class="fa fa-lock text-white"></span></button>
+              </div>
+              <input type="password" class="form-control" placeholder="password..." id="pwd" disabled [(ngModel)]="e.utilisateur.motPass">
+              <div class="input-group-append">
+                <button class="btn btn-primary" (click)="generateP(i)">Générer un mot de passe</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mt-2">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-10">
+            <h2>Structure d'accueil<span class="text-danger small">(Optionel)</span></h2>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-outline-success float-right" (click)="ajouterStructure = !ajouterStructure"><span class="fa fa-plus" [class.fa-minus]="ajouterStructure"></span></button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body" *ngIf="ajouterStructure">
+        <div class="row">
+          <div class="col-md-3">
+            <label for="raisonSocial">Raison sociale</label>
+            <input type="text" class="form-control" id="raisonSocial" placeholder="raison social..." [(ngModel)]="stage.organismeAccueil.raisonSocial">
+          </div>
+          <div class="col-md-3">
+            <label for="emailS">Email</label>
+            <input type="email" class="form-control" id="emailS" placeholder="email..." [(ngModel)]="stage.organismeAccueil.email">
+          </div>
+          <div class="col-md-3">
+            <label for="tele">Télé</label>
+            <input type="text" class="form-control" id="tele" placeholder="telephone..." [(ngModel)]="stage.organismeAccueil.tele">
+          </div>
+          <div class="col-md-3">
+            <label for="adress">Adress</label>
+            <input type="text" class="form-control" id="adress" placeholder="adress" [(ngModel)]="stage.organismeAccueil.adress">
+          </div>
+          <div class="col-md-3">
+            <label for="responsable">Responsable</label>
+            <input type="text" class="form-control" id="responsable" placeholder="responsable..." [(ngModel)]="stage.organismeAccueil.responsable">
+          </div>
+          <div class="col-md-3">
+            <label for="type">Type</label>
+            <select  id="type" class="form-control" [(ngModel)]="stage.organismeAccueil.typeOrganisme.type">
+              <option value="0">--Select--</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="typeService">Type Service</label>
+            <select  id="typeService" class="form-control" [(ngModel)]="stage.organismeAccueil.typeServiceOrganisme.type">
+              <option value="0">--Select--</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="ville">Ville</label>
+            <select  id="ville" class="form-control" [(ngModel)]="stage.organismeAccueil.ville.nom">
+              <option value="0">--Select--</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <button class="btn btn-info btn-block" (click)="ceateStage()">Créer <span class="fa fa-plus"></span></button>
+  </div>
+</div>
+

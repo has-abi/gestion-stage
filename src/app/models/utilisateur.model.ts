@@ -16,12 +16,13 @@ export class Utilisateur {
   reponce:string;
   active:boolean;
   dateJoin:Date;
+  role:number;
   commentaires:Array<Commentaire>;
   sujetForums:Array<SujetForum>;
 
 
   constructor() {
-    this.commentaires = new Array<Commentaire>();
     this.sujetForums = new Array<SujetForum>();
+    this.commentaires = new Array<Commentaire>();
   }
 }

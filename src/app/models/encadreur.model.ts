@@ -11,8 +11,5 @@ export class Encadreur {
   utilisateur:Utilisateur;
   stageEncadreurs:Array<StageEncadreur>;
 
-  constructor() {
-    this.utilisateur = new Utilisateur();
-    this.stageEncadreurs = new Array<StageEncadreur>();
-  }
+
 }

@@ -49,7 +49,11 @@
 
   </div>
   <div class="card-footer bg-white">
-    <div class="container-fluid row">
+  <div class="card ">
+    <div class="card-header">
+      <h1>Utilisateurs</h1>
+    </div>
+    <div class="card-body row container-fluid">
       <div class="col-md-6">
         <div class="input-group ">
           <input type="text" class="form-control" placeholder="chercher utilisateur ..">
@@ -87,10 +91,66 @@
           </select>
         </div>
       </div>
-
+      <div class="col-md-12">
+        <app-utilisateur-table></app-utilisateur-table>
+      </div>
     </div>
-    <div class="">
-      <app-utilisateur-table></app-utilisateur-table>
+    <div class="card-footer">
+      <button class="btn btn-outline-info float-right">Voir plus <span class="fa fa-plus"></span></button>
     </div>
   </div>
-</div>
+
+    <div class="card ">
+      <div class="card-header">
+        <h1>Stages</h1>
+      </div>
+      <div class="card-body row container-fluid">
+        <div class="col-md-6">
+          <div class="input-group ">
+            <input type="text" class="form-control" placeholder="chercher stage ..">
+            <div class="input-group-append">
+              <button class="btn btn-outline-dark"><span class="fa fa-search"></span></button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="input-group ">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Chercher par</label>
+            </div>
+            <select class="custom-select" >
+              <option selected>Choisir...</option>
+              <option value="1">Sujet</option>
+              <option value="2">Date début</option>
+              <option value="3">Date fin</option>
+              <option value="3">Date de soutenance</option>
+              <option value="3">Organisme d'accueil</option>
+              <option value="3">Filière</option>
+
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="input-group ">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Roles</label>
+            </div>
+            <select class="custom-select" >
+              <option selected>Choisir...</option>
+              <option value="1">Etudiant</option>
+              <option value="2">Encadreur</option>
+              <option value="3">Jury</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <app-stage-tables></app-stage-tables>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-outline-success float-right">Voir plus <span class="fa fa-plus"></span></button>
+      </div>
+    </div>
+  </div>
+
+  </div>
