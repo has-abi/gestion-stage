@@ -1,0 +1,25 @@
+<div class="row my-6 card p-4">
+  <div class="col-md-2">
+    <img src="../../../assets/unnamed.png" alt="" class="rounded-circle" style="height: 30px;width: 30px">
+    <p>Auteur name</p>
+  </div>
+  <div class="col-md-10">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium, deserunt.</p>
+    <p><span class="small">Crée le 20-04-2020</span></p>
+    <button class="btn btn-secondary " (click)="commenter=!commenter"> <i class="fa fa-comment-o"></i> Commentaires </button>
+  </div>
+  <div class="col-md-12 my-2" *ngIf="commenter">
+    <div class="form-group">
+      <textarea class="form-control" rows="2" cols="30" placeholder="créer un commentaire ..."></textarea>
+      <button class="btn btn-success float-right">Commenter</button>
+    </div>
+    <div class="row mx-3 card p-2ka">
+
+      <div class="col-md-10">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium, deserunt.</p>
+        <p><span class="small">Crée le 20-04-2020</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
