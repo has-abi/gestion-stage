@@ -1,7 +1,25 @@
 <nav class="navbar  navbar-expand navbar-light bg-white shadow-bottom">
   <a  class="navbar-brand" (click)="switchCols()"><span class="fa fa-bars"></span></a>
 <ul class="navbar-nav ml-auto dropdown">
-  <li class="nav-item mr-2"><img src="../../../../assets/portofolio.jpg" alt="" class="rounded-circle " style="height: 30px;width: 30px"></li>
+  <li class="nav-item mr-2 dropdown">
+    <img src="../../../../assets/portofolio.jpg" alt="" class="rounded-circle border-dark dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="height: 30px;width: 30px">
+    <ul class="dropdown-menu dropdown-cart" role="menu">
+      <li>
+                  <span class="item">
+                    <span class="item-left">
+                        <img src="http://lorempixel.com/50/50/" alt="" />
+                        <span class="item-info">
+                            <span>Item name</span>
+                            <span>23$</span>
+                        </span>
+                    </span>
+                    <span class="item-right">
+                        <button class="btn btn-xs btn-danger pull-right">x</button>
+                    </span>
+                </span>
+      </li>
+    </ul>
+  </li>
  <li class="nav-item"><a href="#" class="text-dark nav-link">Déconnecter <i class="fa fa-sign-out"></i></a></li>
 </ul>
 </nav>
