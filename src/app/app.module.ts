@@ -23,6 +23,9 @@ import { MainCoordinateurComponent } from './components/coordinateur/main-coordi
 import { CoordinateurComponent } from './components/coordinateur/coordinateur/coordinateur.component';
 import { FlashMessagesModule } from "angular2-flash-messages";
 import { ListStagesComponent } from './components/stage/list-stages/list-stages.component';
+import { EtudiantComponent } from './components/etudiant/etudiant.component';
+import { ProfilEtudiantComponent } from './components/etudiant/profil-etudiant/profil-etudiant.component';
+import { EtudiantLoginComponent } from './components/etudiant/etudiant-login/etudiant-login.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +43,10 @@ import { ListStagesComponent } from './components/stage/list-stages/list-stages.
     StageCreateComponent,
     MainCoordinateurComponent,
     CoordinateurComponent,
-    ListStagesComponent
+    ListStagesComponent,
+    EtudiantComponent,
+    ProfilEtudiantComponent,
+    EtudiantLoginComponent
 
   ],
   imports: [

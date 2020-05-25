@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {SujetForum} from "../../models/sujet-forum.model";
+import {SujetForum} from "../models/sujet-forum.model";
 
 @Injectable({
   providedIn: 'root'
