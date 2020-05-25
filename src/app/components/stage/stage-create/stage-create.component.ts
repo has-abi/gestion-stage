@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild, ElementRef } from '@angular/core';
 import {StageService} from "../../../services/stage.service";
 import {Etudiant} from "../../../models/etudiant.model";
 import {EtudiantService} from "../../../services/etudiant.service";
@@ -8,7 +8,11 @@ import {Encadreur} from "../../../models/encadreur.model";
 import {StageEtudiant} from "../../../models/stage-etudiant.model";
 import {StageEncadreur} from "../../../models/stage-encadreur.model";
 import {FlashMessagesService} from "angular2-flash-messages";
-import * as generatePassword from "generate-password/src/generate"
+import * as jsPDF from 'jspdf';
+import {PasswordGeneratorService} from "../../../services/utils/password-generator.service";
+import {OrganismeService} from "../../../services/organisme.service";
+import {OrganismeAccueil} from "../../../models/organisme-accueil.model";
+
 @Component({
   selector: 'app-stage-create',
   templateUrl: './stage-create.component.html',
@@ -17,19 +21,40 @@ import * as generatePassword from "generate-password/src/generate"
 export class StageCreateComponent implements OnInit {
   ajouterSujet = false;
   ajouterStructure = false;
+  typeEnc:string="--Type Encadreur--";
   constructor(private stageService: StageService,private etudiantService: EtudiantService,private encadreurService:EncadreurService,
-              private juryService:JuryService,private flashMessagesService:FlashMessagesService) { }
+              private juryService:JuryService,private flashMessagesService:FlashMessagesService,private passwordGeneratorService:PasswordGeneratorService
+              ,private organismeService:OrganismeService) { }
 
   ngOnInit(): void {
     this.etudiants.push(this.etudiant);
+    this.encadreur.type = "Encadreur de la faculté";
     this.encadreurs.push(this.encadreur);
+    this.organismeService.findAllPays();
+    this.organismeService.findAllTypeOrganisme();
+    this.organismeService.findAllTypeServiceOrganisme();
+    this.organismeService.findAllVille();
 
   }
-  showFlash() {
-    // 1st parameter is a flash message text
-    // 2nd parameter is optional. You can pass object with options.
-    this.flashMessagesService.show('stage est crée avec succée', { cssClass: 'alert-success', timeout: 2000 });
+  @ViewChild('content') content: ElementRef;
+  public SavePDF(): void {
+    let content=this.content.nativeElement;
+    let doc = new jsPDF();
+    let _elementHandlers =
+      {
+        '#editor':function(element,renderer){
+          return true;
+        }
+      };
+    doc.fromHTML(content.innerHTML,15,15,{
+
+      'width':190,
+      'elementHandlers':_elementHandlers
+    });
+
+    doc.save('test.pdf');
   }
+
   get stage(){
     return this.stageService.stage;
   }
@@ -40,7 +65,14 @@ export class StageCreateComponent implements OnInit {
     console.log(this.etudiants);
   }
   increaseEncadrants(){
-    this.encadreurs.push(this.encadreur);
+    const e = new Encadreur();
+    e.type = this.typeEnc;
+    if(this.typeEnc == "Encadreur de l'organisme"){
+      const  d = new Date();
+      e.reference = "EO"+d.getTime();
+    }
+    this.encadreurs.push(this.cloneEncadreur(e));
+    console.log(this.encadreurs)
   }
   decreaseEtudiant(i:number){
       this.etudiants.splice(i,1);
@@ -82,6 +114,7 @@ export class StageCreateComponent implements OnInit {
         this.stage.stageEncadreurs.push(se);
       }
     })
+
     this.stageService.save();
     this.flashMessagesService.show('stage est crée avec succée', { cssClass: 'alert-success', timeout: 6000 });
   }
@@ -92,14 +125,30 @@ export class StageCreateComponent implements OnInit {
       }
   }
   generateP(i:number){
-    const ge= generatePassword.generate(
-      {
-        length: 10,
-        numbers: true,
-      },
-
-    )
-    this.encadreurs[i].utilisateur.motPass = ge;
+      this.encadreurs[i].user.motPass = this.passwordGeneratorService.getRandomPassword();
   }
-
+  get typeOrganismes(){
+    return this.organismeService.typeOrganismes;
+  }
+  get typeServiceOrganismes(){
+    return this.organismeService.typeServiceOrganismes;
+  }
+  get villes(){
+    return this.organismeService.villes;
+  }
+  get pays(){
+    return this.organismeService.pays;
+  }
+  initOrganisation(){
+    this.stage.organismeAccueil.ville.nom = this.stage.organismeAccueil.typeOrganisme.type = this.stage.organismeAccueil.typeServiceOrganisme.type = "--SELECT--"
+  }
+  toggleOrganisme(){
+    this.ajouterStructure =!this.ajouterStructure;
+    if(this.ajouterStructure){
+      this.stage.organismeAccueil = new OrganismeAccueil();
+      this.initOrganisation();
+    }else{
+      this.stage.organismeAccueil = null;
+    }
+  }
 }

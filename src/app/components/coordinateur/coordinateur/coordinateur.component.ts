@@ -10,6 +10,10 @@ export class CoordinateurComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
+
+
   }
+
 
 }

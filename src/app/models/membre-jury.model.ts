@@ -1,15 +1,15 @@
-import {Utilisateur} from "./utilisateur.model";
+import {User} from "./user.model";
 import {StageMembreJury} from "./stage-membre-jury.model";
 
 export class MembreJury {
   id:number;
   reference:string;
   profession:string;
-  utilisateur:Utilisateur;
+  user:User;
   stageMembrejuries:Array<StageMembreJury>;
 
   constructor() {
-    this.utilisateur = new Utilisateur();
+    this.user = new User();
     this.stageMembrejuries = new Array<StageMembreJury>();
   }
 }

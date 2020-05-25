@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Encadreur} from "../models/encadreur.model";
 import {HttpClient} from "@angular/common/http";
-import {Utilisateur} from "../models/utilisateur.model";
+import {User} from "../models/user.model";
 import {StageEncadreur} from "../models/stage-encadreur.model";
 
 @Injectable({
@@ -16,13 +16,14 @@ export class EncadreurService {
   get encadreur(): Encadreur {
     if(this._encadreur == null){
       this._encadreur = new Encadreur();
-      this._encadreur.utilisateur = new Utilisateur();
+      this._encadreur.user = new User();
+      this._encadreur.type="faculte";
     }
     return this._encadreur;
   }
 
   set encadreur(encadreur: Encadreur) {
-    encadreur.utilisateur = new Utilisateur();
+    encadreur.user = new User();
     this._encadreur = encadreur;
   }
 
@@ -42,8 +43,6 @@ export class EncadreurService {
     e.profession = encadreur.profession;
     e.reference = encadreur.reference;
     e.remarque = encadreur.remarque;
-    e.stageEncadreurs = new Array<StageEncadreur>();
-    e.utilisateur = new Utilisateur();
     e.qualite = encadreur.qualite;
     e.type = encadreur.type;
     return e;

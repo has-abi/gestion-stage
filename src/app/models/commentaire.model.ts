@@ -1,4 +1,4 @@
-import {Utilisateur} from "./utilisateur.model";
+import {User} from "./user.model";
 import {SujetForum} from "./sujet-forum.model";
 
 export class Commentaire {
@@ -6,13 +6,13 @@ export class Commentaire {
   contenu:string;
   dateCreation:Date;
   dateModification:Date;
-  utilisateur:Utilisateur;
+  user:User;
   commentaire:Commentaire;
   sujetForum:SujetForum;
   commentaires:Array<Commentaire>;
 
   constructor() {
-    this.utilisateur = new Utilisateur();
+    this.user = new User();
     this.sujetForum = new SujetForum();
     this.commentaire = new Commentaire();
     this.commentaires = new Array<Commentaire>();

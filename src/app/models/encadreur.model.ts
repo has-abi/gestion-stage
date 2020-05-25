@@ -1,4 +1,4 @@
-import {Utilisateur} from "./utilisateur.model";
+import {User} from "./user.model";
 import {StageEncadreur} from "./stage-encadreur.model";
 
 export class Encadreur {
@@ -8,8 +8,12 @@ export class Encadreur {
   profession:string;
   qualite:string;
   type:string;
-  utilisateur:Utilisateur;
+  user:User;
   stageEncadreurs:Array<StageEncadreur>;
 
 
+  constructor() {
+    this.user = new User();
+    this.stageEncadreurs = new Array<StageEncadreur>();
+  }
 }

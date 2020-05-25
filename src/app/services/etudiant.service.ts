@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import {Etudiant} from "../models/etudiant.model";
 import {HttpClient} from "@angular/common/http";
-import {Utilisateur} from "../models/utilisateur.model";
 import {Filiere} from "../models/filiere.model";
-import {EtudiantDocument} from "../models/etudiant-document.model";
-import {StageEtudiant} from "../models/stage-etudiant.model";
-import {UtilisateurService} from "./utilisateur.service";
+import {UserService} from "./user.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +11,8 @@ export class EtudiantService {
 
   private _etudiant:Etudiant;
   private _etudiants:Array<Etudiant>;
-  link="http://localhost:8093/gestion-stage-api/etudiant/"
-  constructor(private http:HttpClient,private utilisateurService :UtilisateurService) { }
+  link="http://localhost:8091/gestion-stage-api/etudiant/"
+  constructor(private http:HttpClient,private userService :UserService) { }
   findAllEtudiants(){
     return this.http.get<Array<Etudiant>>(this.link).subscribe(data=>{
       this.etudiants = data;

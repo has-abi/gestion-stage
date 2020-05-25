@@ -1,7 +1,7 @@
 import {Filiere} from "./filiere.model";
 import {StageEtudiant} from "./stage-etudiant.model";
 import {EtudiantDocument} from "./etudiant-document.model";
-import {Utilisateur} from "./utilisateur.model";
+import {User} from "./user.model";
 
 export class Etudiant {
   id:number;
@@ -10,14 +10,14 @@ export class Etudiant {
   nationalite:string;
   niveau:string;
   situation_familiale:string;
-  utilisateur:Utilisateur;
+  user:User;
   filiere:Filiere;
   stageEtudiants:Array<StageEtudiant>;
   etudiantDocuments:Array<EtudiantDocument>;
 
   constructor() {
     this.filiere = new Filiere();
-    this.utilisateur = new Utilisateur();
+    this.user = new User();
     this.stageEtudiants = new Array<StageEtudiant>();
     this.etudiantDocuments = new Array<EtudiantDocument>();
   }
