@@ -1,14 +1,14 @@
 import {Filiere} from "./filiere.model";
-import {Utilisateur} from "./utilisateur.model";
+import {User} from "./user.model";
 
 export class Coordinateur {
   id:number;
   reference:string;
   filiere:Filiere;
-  utilisateur:Utilisateur;
+  user:User;
 
   constructor() {
     this.filiere = new Filiere();
-    this.utilisateur = new Utilisateur();
+    this.user = new User();
   }
 }

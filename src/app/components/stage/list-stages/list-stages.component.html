@@ -1,1 +1,240 @@
-<p>list-stages works!</p>
+<div class="card ">
+  <div class="card-header bg-success">
+    <h1 class="text-white"> <span class="fa fa-clock-o"></span> Active Stages</h1>
+  </div>
+  <div class="card-body row">
+    <div class="col-md-6">
+      <div class="input-group ">
+        <input type="text" class="form-control" placeholder="chercher stage .."  [(ngModel)]="searchStage" (input)="chercher()">
+        <input type="date" class="form-control" *ngIf="searchByDate" [(ngModel)]="searchStage">
+        <div class="input-group-append">
+          <button class="btn btn-outline-dark" (click)="chercher()"><span class="fa fa-search"></span></button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <label class="input-group-text">Chercher par</label>
+        </div>
+        <select class="custom-select" [class.disabled]="searchCretaria"  [(ngModel)]="search">
+          <option selected disabled [ngValue]="'-SELECT-'" class="text-center">-SELECT-</option>
+          <option value="1">Sujet</option>
+          <option value="2" (click)="searchByDate = true">Date début</option>
+          <option value="3" (click)="searchByDate = true">Date fin</option>
+          <option value="4">Organisme d'accueil</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="input-group "  [class.disabled]="!searchRoles">
+        <div class="input-group-prepend">
+          <label class="input-group-text">Roles</label>
+        </div>
+        <select class="custom-select" (click)="searchCretaria = false" [(ngModel)]="roles">
+          <option selected disabled [ngValue]="'-SELECT-'">-SELECT-</option>
+          <option value="1">Etudiant</option>
+          <option value="2">Encadreur</option>
+          <option value="3">Jury</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-2  mt-2">
+      <div class="dropdown">
+        <button class="btn btn-dark btn-block dropdown-toggle" data-toggle="dropdown" aria-expanded="false" role="button">Colonnes</button>
+        <ul class="dropdown-menu" role="menu">
+          <li class="dropdown-item"><input type="checkbox" (click)="columns.id = !columns.id">ID</li>
+          <li class="dropdown-item"><input type="checkbox" (click)="columns.sujet = !columns.sujet">Sujet</li>
+          <li class="dropdown-item"><input type="checkbox" (click)="columns.dateDebut = !columns.dateDebut">Date début</li>
+          <li class="dropdown-item"><input type="checkbox" (click)="columns.dateFin = !columns.dateFin">Date Fin</li>
+          <li class="dropdown-item"><input type="checkbox" (click)="columns.status = !columns.status">Statu</li>
+          <li class="dropdown-item"><input type="checkbox" (click)="columns.etudiants = !columns.etudiants">Etudiants</li>
+          <li class="dropdown-item"><input type="checkbox" (click)="columns.encadreurs = !columns.encadreurs">Encadreurs</li>
+          <li class="dropdown-item"><input type="checkbox" (click)="columns.juries = !columns.juries">Juries</li>
+          <li class="dropdown-item"><input type="checkbox" (click)="columns.rapport = !columns.rapport">Rapport</li>
+          <li class="dropdown-item"><input type="checkbox" (click)="columns.organisme = !columns.organisme">struture d'accueil</li>
+          <li class="dropdown-item"><input type="checkbox" (click)="columns.actions = !columns.actions">Actions</li>
+        </ul>
+      </div>
+      </div>
+    <div class="col-md-2 mt-2">
+        <div class="dropdown">
+          <button class="btn bg-light btn-block dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Order par</button>
+          <ul class="dropdown-menu" role="menu">
+            <li class="dropdown-item">noveaux</li>
+            <li class="dropdown-item">anciens</li>
+            <li class="dropdown-item">Ordre alphabétique</li>
+          </ul>
+        </div>
+    </div>
+    <div class="col-md-3 mt-2 offset-5">
+      <div class="btn-group">
+        <button class="btn btn-danger">Suprimer <span class="fa fa-trash"></span></button>
+        <button class="btn btn-primary mx-1">Activer <span class="fa fa-thumbs-up"></span></button>
+      </div>
+
+    </div>
+    <div class="col-md-12">
+      <div class="table-responsive">
+        <table class="table table-striped   my-4  shadow">
+          <thead>
+          <tr>
+            <th><input type="checkbox" ></th>
+            <th *ngIf="columns.id">ID</th>
+            <th *ngIf="columns.sujet">Sujet</th>
+            <th *ngIf="columns.dateDebut">Date Début</th>
+            <th *ngIf="columns.dateFin">Date Fin</th>
+            <th *ngIf="columns.status">Status</th>
+            <th *ngIf="columns.etudiants">Etudiants</th>
+            <th *ngIf="columns.encadreurs">Encadreurs</th>
+            <th *ngIf="columns.juries">Juries</th>
+            <th *ngIf="columns.organisme">Organisme d'accueil</th>
+            <th *ngIf="columns.rapport">Rapport</th>
+            <th *ngIf="columns.actions">Actions</th>
+          </tr>
+          </thead>
+         <tbody>
+         <tr *ngFor="let stage of stagePage.content">
+           <td><input type="checkbox"></td>
+           <td *ngIf="columns.id">{{stage.id}}</td>
+           <td *ngIf="columns.sujet">{{stage.sujet}}</td>
+           <td *ngIf="columns.dateDebut">{{stage.dateDebut}}</td>
+           <td *ngIf="columns.dateFin">{{stage.dateFin}}</td>
+           <td *ngIf="columns.status"><span *ngIf="stage.statu == true" class="text-success font-weight-bold">
+             Active
+           </span>
+           <span *ngIf="stage.statu == false" class="text-danger font-weight-bold">
+             Inactive
+           </span>
+           </td>
+           <td *ngIf="columns.etudiants" class="text-center">
+             <button class="btn-sm btn-warning"><i class="fa fa-bars"  data-toggle="modal" data-target="#etudiantModal" (click)="findStageEtudiants(stage.reference)"></i></button>
+           </td>
+           <td *ngIf="columns.encadreurs" class="text-center">
+             <button class="btn-sm btn-warning"><i class="fa fa-bars"></i></button>
+             </td>
+           <td *ngIf="columns.juries" class="text-center">
+             <button class="btn-sm btn-warning"><i class="fa fa-bars"></i></button>
+           </td>
+           <td *ngIf="columns.organisme" class="text-center"><span *ngIf="stage.organismeAccueil">{{stage.organismeAccueil.raisonSociale}}</span>
+            <span *ngIf="!stage.organismeAccueil">-</span>
+           </td>
+           <td *ngIf="columns.rapport" class="text-center">
+             <button class="btn btn-danger"><span class="fa fa-file-pdf-o"></span></button>
+           </td>
+           <td *ngIf="columns.actions">
+            <h2 class="d-inline"><span class="fa fa-pencil text-primary"  data-toggle="tooltip" data-placement="top" title="Editer"></span></h2>
+             <h2 class="d-inline"><span class="fa fa-trash text-danger mx-1" data-toggle="tooltip" data-placement="top" title="Supprimer"></span></h2>
+             <h2 class="d-inline"><span class="fa fa-eye text-success " data-toggle="tooltip" data-placement="top" title="details"></span></h2>
+           </td>
+         </tr>
+         </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <div class="card-footer d-flex justify-content-center align-items-center">
+    <nav class="text-center m-auto">
+      <ul *ngIf="searchStage.length == 0"  class="pagination">
+        <li class="page-item">
+          <select class="form-control" [(ngModel)]="size" (change)="resizePage()">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+          </select>
+        </li>
+        <li class="page-item" (click)="getIndexPage(0)"><a class="page-link" >premier</a></li>
+        <li class="page-item" [class.disabled]="stagePage.first">
+          <a class="page-link"  aria-label="Previous" (click)="prevElements()" >
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <li class="page-item" *ngFor="let i of tableElements" (click)="getIndexPage(i)"><a class="page-link">{{i+1}}</a></li>
+
+        <li class="page-item" (click)="nextElements()" [class.disabled]="stagePage.last">
+          <a class="page-link"  aria-label="Next" >
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+        <li class="page-item"><span class="page-link text-dark"><span *ngIf="stagePage.last">{{stagePage.totalElements}}</span><span *ngIf="!stagePage.last">{{(stagePage.number+1)*size}}</span> de {{stagePage.totalElements}}</span></li>
+        <li class="page-item" (click)="getIndexPage(stagePage.totalPages-1)"><a class="page-link" >dernier</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<div *ngIf="stageEtudiants.length>0" class="modal" id="etudiantModal" tabindex="-1" role="dialog" aria-labelledby="etudiantModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title">Etudiants :</h1>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <td>CNE</td>
+            <td>Code d'appogé</td>
+            <td>Nom</td>
+            <td>Prenom</td>
+            <td>Actions</td>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let se of stageEtudiants">
+            <td>{{se.etudiant.cin}}</td>
+            <td>{{se.etudiant.codeAppoge}}</td>
+            <td>{{se.etudiant.user.nom}}</td>
+            <td>{{se.etudiant.user.prenom}}</td>
+            <td><span class="fa fa-bars mx-2 text-warning" data-toggle="tooltip" data-placement="top" title="plus de details"></span><span class="fa fa-trash text-danger" data-toggle="tooltip" data-placement="top" title="suprimer"></span></td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="card" *ngIf="modifyEtudiant">
+          <div class="card-header">
+            <h5>Modification</h5>
+          </div>
+          <div class="card-body">
+            <div *ngFor="let se of stageEtudiants">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="cne">CNE:</label>
+                    <input type="text" class="form-control" id="cne" [(ngModel)]="se.etudiant.cin">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="codeAppoge">Code d'appogé:</label>
+                    <input type="text" class="form-control" id="codeAppoge" [(ngModel)]="se.etudiant.codeAppoge">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="nom">Nom:</label>
+                    <input type="text" class="form-control" id="nom" [(ngModel)]="se.etudiant.user.nom">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="prenom">Prénom:</label>
+                    <input type="text" class="form-control" id="prenom" [(ngModel)]="se.etudiant.user.prenom">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        <button type="button" class="btn " data-toggle="modal" data-target="etudiantModal" (click)="modifyEtudiant = !modifyEtudiant" [class.btn-success]="modifyEtudiant"  [class.btn-primary]="!modifyEtudiant">Modifier</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -5,7 +5,7 @@ import {Stage} from "./stage.model";
 
 export class OrganismeAccueil {
   id:number;
-  raisonSocial:string;
+  raisonSociale:string;
   email:string;
   tele:string;
   adress:string;

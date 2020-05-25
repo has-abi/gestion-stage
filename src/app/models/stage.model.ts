@@ -17,6 +17,7 @@ export class Stage {
   stageMembreJuries:Array<StageMembreJury>;
 
   constructor() {
+    this.organismeAccueil = new OrganismeAccueil();
     this.stageEtudiants = new Array<StageEtudiant>();
     this.stageEncadreurs = new Array<StageEncadreur>();
     this.stageMembreJuries = new Array<StageMembreJury>();

@@ -1,18 +1,22 @@
-<div class="card">
+<div class="card" id="content" #content>
   <div class="card-header bg-dark text-white">
-    <h1>Créer un stage</h1>
+    <h1><span class="fa fa-plus-circle"></span> Créer un stage</h1>
     <div class="row">
       <div class="input-group col-md-3">
-        <div class="input-group-prepend bg-secondary  btn" >Date début*</div>
+        <div class="input-group-prepend bg-secondary" >
+          <div class="input-group-text"><i class="fa fa-calendar"></i>Date début*</div>
+          </div>
         <input type="date" class="form-control" [(ngModel)]="stage.dateDebut">
       </div>
       <div class="input-group col-md-3">
-        <div class="input-group-prepend bg-secondary btn" >Date fin*</div>
+        <div class="input-group-prepend bg-secondary" >
+          <div class="input-group-text"><span class="fa fa-calendar"></span> Date fin*</div>
+        </div>
         <input type="date" class="form-control" [(ngModel)]="stage.dateFin">
       </div>
       <div class="input-group col-md-6">
-        <div class="input-group-prepend btn btn-warning" (click)="ajouterSujet = !ajouterSujet">
-          Ajouter le Sujet
+        <div class="input-group-prepend " (click)="ajouterSujet = !ajouterSujet">
+          <div class="input-group-text bg-warning">Ajouter le Sujet <span class="fa fa-chevron-circle-right" [class.fa-chevron-circle-right]="!ajouterSujet" [class.fa-chevron-circle-left]="ajouterSujet"></span></div>
         </div>
         <input type="text" class="form-control" *ngIf="ajouterSujet" placeholder="sujet de stage..."  [(ngModel)]="stage.sujet">
       </div>
@@ -24,7 +28,7 @@
       <div class="card-header">
         <div class="row">
           <div class="col-md-10">
-            <h2>Etudiant</h2>
+            <h2><span class="fa fa-graduation-cap"></span> Etudiant</h2>
           </div>
           <div class="col-md-2">
                 <button class="btn btn-outline-success float-right" (click)="increaseEtudiants()"> <span class="fa fa-plus"></span></button>
@@ -52,11 +56,11 @@
             </div>
             <div class="form-group col-md-3">
               <label for="nom">Nom*</label>
-              <input type="text" class="form-control" placeholder="nom..." id="nom" [(ngModel)]="e.utilisateur.nom" [class.border-warning]=" e.utilisateur.nom =='' ">
+              <input type="text" class="form-control" placeholder="nom..." id="nom" [(ngModel)]="e.user.nom" [class.border-warning]=" e.user.nom =='' ">
             </div>
             <div class="form-group col-md-3">
               <label for="prenom">Prénom</label>
-              <input type="text" class="form-control" placeholder="prénom..." id="prenom" [(ngModel)]="e.utilisateur.prenom" [class.border-warning]=" e.utilisateur.prenom =='' ">
+              <input type="text" class="form-control" placeholder="prénom..." id="prenom" [(ngModel)]="e.user.prenom" [class.border-warning]=" e.user.prenom =='' ">
             </div>
           </div>
         </div>
@@ -65,54 +69,71 @@
     <div class="card mt-2">
       <div class="card-header">
         <div class="row">
-          <div class="col-md-10">
-            <h2>Encadreur<span class="text-danger small">(Optionel)</span></h2>
+          <div class="col-md-9">
+            <h2><span class="fa fa-university"></span>Encadreur<span class="text-danger small">(Optionel)</span></h2>
           </div>
-          <div class="col-md-2">
-            <button class="btn btn-outline-success float-right" (click)="increaseEncadrants()"> <span class="fa fa-plus"></span></button>
+          <div class="col-md-3">
+            <div class="row">
+              <div class="col-md-9">
+                <select  id="typeEncadreur" class="form-control text-center" [(ngModel)]="typeEnc" >
+                  <option [ngValue]="'--Type Encadreur--'"
+                          disabled
+                          selected>--Type Encadreur--</option>
+                  <option value="Encadreur de la faculté" >Encadreur de la faculté</option>
+                  <option value="Encadreur de l'organisme">Encadreur de l'organisme</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <button class="btn btn-outline-success float-right" (click)="increaseEncadrants()"> <span class="fa fa-plus"></span></button>
+              </div>
+            </div>
+
           </div>
         </div>
         </div>
       <div class="card-body ">
         <div *ngFor="let e of encadreurs;let i = index ">
-          <div >
-            <button *ngIf="i>0" class="btn-sm btn-danger float-right mt-2" (click)="decreaseEncadreur(i)"><span class="fa fa-minus-circle"></span></button>
-          </div>
-          <div class="row mt-2" >
-            <div class="form-group col-md-3">
-              <label for="ref">Réference*</label>
-              <input type="text" class="form-control" placeholder="ref..." id="ref" [(ngModel)]="e.reference">
+          <div *ngIf="e.type != '--Type Encadreur--'">
+            <div>
+              <button *ngIf="i>0" class="btn-sm btn-danger float-right mt-2" (click)="decreaseEncadreur(i)"><span class="fa fa-minus-circle"></span></button>
             </div>
-            <div class="form-group col-md-3">
-              <label for="nomE">Nom*</label>
-              <input type="text" class="form-control" placeholder="nom..." id="nomE" [(ngModel)]="e.utilisateur.nom">
-            </div>
-            <div class="form-group col-md-3">
-              <label for="prenomE">Prénom*</label>
-              <input type="text" class="form-control" placeholder="prénom..." id="prenomE" [(ngModel)]="e.utilisateur.prenom">
-            </div>
-            <div class="form-group col-md-3">
-              <label for="profession">Profession*</label>
-              <input type="text" class="form-control" placeholder="profession..." id="profession" [(ngModel)]="e.profession" >
-            </div>
-          </div>
-          <div class="row" >
-            <div class="input-group col-md-6">
-              <div class="input-group-prepend">
-                <button class="btn bg-dark"><span class="fa fa-user text-white"></span></button>
+            <div class="row mt-2"  >
+              <div *ngIf="e.type == 'Encadreur de la faculté'" class="form-group col-md-3">
+                <label for="ref">Rpp*</label>
+                <input type="text" class="form-control" placeholder="ref..." id="ref" [(ngModel)]="e.reference">
               </div>
-              <input type="email" class="form-control" placeholder="email..." id="email" [(ngModel)]="e.utilisateur.email">
-            </div>
-            <div class="input-group col-md-6">
-              <div class="input-group-prepend">
-                <button class="btn bg-dark"><span class="fa fa-lock text-white"></span></button>
+              <div class="form-group col-md-3">
+                <label for="nomE">Nom*</label>
+                <input type="text" class="form-control" placeholder="nom..." id="nomE" [(ngModel)]="e.user.nom">
               </div>
-              <input type="password" class="form-control" placeholder="password..." id="pwd" disabled [(ngModel)]="e.utilisateur.motPass">
-              <div class="input-group-append">
-                <button class="btn btn-primary" (click)="generateP(i)">Générer un mot de passe</button>
+              <div class="form-group col-md-3">
+                <label for="prenomE">Prénom*</label>
+                <input type="text" class="form-control" placeholder="prénom..." id="prenomE" [(ngModel)]="e.user.prenom">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="profession">Profession*</label>
+                <input type="text" class="form-control" placeholder="profession..." id="profession" [(ngModel)]="e.profession" >
               </div>
             </div>
+            <div class="row" >
+              <div class="input-group col-md-6">
+                <div class="input-group-prepend">
+                  <button class="btn bg-dark"><span class="fa fa-user text-white"></span></button>
+                </div>
+                <input type="email" class="form-control" placeholder="email..." id="email" [(ngModel)]="e.user.email">
+              </div>
+              <div class="input-group col-md-6">
+                <div class="input-group-prepend">
+                  <button class="btn bg-dark"><span class="fa fa-lock text-white"></span></button>
+                </div>
+                <input type="text" class="form-control" placeholder="password..." id="pwd" disabled [(ngModel)]="e.user.motPass">
+                <div class="input-group-append">
+                  <button class="btn btn-primary" (click)="generateP(i)">Générer un mot de passe</button>
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -120,10 +141,10 @@
       <div class="card-header">
         <div class="row">
           <div class="col-md-10">
-            <h2>Structure d'accueil<span class="text-danger small">(Optionel)</span></h2>
+            <h2><span class="fa fa-building"></span> Structure d'accueil<span class="text-danger small">(Optionel)</span></h2>
           </div>
           <div class="col-md-2">
-            <button class="btn btn-outline-success float-right" (click)="ajouterStructure = !ajouterStructure"><span class="fa fa-plus" [class.fa-minus]="ajouterStructure"></span></button>
+            <button class="btn btn-outline-success float-right" (click)="toggleOrganisme()"><span class="fa fa-plus" [class.fa-minus]="ajouterStructure"></span></button>
           </div>
         </div>
       </div>
@@ -131,7 +152,7 @@
         <div class="row">
           <div class="col-md-3">
             <label for="raisonSocial">Raison sociale</label>
-            <input type="text" class="form-control" id="raisonSocial" placeholder="raison social..." [(ngModel)]="stage.organismeAccueil.raisonSocial">
+            <input type="text" class="form-control" id="raisonSocial" placeholder="raison social..." [(ngModel)]="stage.organismeAccueil.raisonSociale">
           </div>
           <div class="col-md-3">
             <label for="emailS">Email</label>
@@ -152,19 +173,22 @@
           <div class="col-md-3">
             <label for="type">Type</label>
             <select  id="type" class="form-control" [(ngModel)]="stage.organismeAccueil.typeOrganisme.type">
-              <option value="0">--Select--</option>
+              <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+              <option *ngFor="let type of typeOrganismes" value="{{type.type}}">{{type.type}}</option>
             </select>
           </div>
           <div class="col-md-3">
             <label for="typeService">Type Service</label>
             <select  id="typeService" class="form-control" [(ngModel)]="stage.organismeAccueil.typeServiceOrganisme.type">
-              <option value="0">--Select--</option>
+              <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+              <option *ngFor="let type of typeServiceOrganismes" value="{{type.type}}">{{type.type}}</option>
             </select>
           </div>
           <div class="col-md-3">
             <label for="ville">Ville</label>
             <select  id="ville" class="form-control" [(ngModel)]="stage.organismeAccueil.ville.nom">
-              <option value="0">--Select--</option>
+              <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+              <option *ngFor="let ville of villes" value="{{ville.nom}}">{{ville.nom}}</option>
             </select>
           </div>
         </div>

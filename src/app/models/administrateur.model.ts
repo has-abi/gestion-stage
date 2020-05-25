@@ -1,12 +1,12 @@
-import {Utilisateur} from "./utilisateur.model";
+import {User} from "./user.model";
 
 export class Administrateur {
   id:number;
   ref:string;
   profession:string;
-  utilisateur:Utilisateur;
+  user:User;
 
   constructor() {
-    this.utilisateur = new Utilisateur();
+    this.user = new User();
   }
 }
