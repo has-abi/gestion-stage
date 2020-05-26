@@ -21,6 +21,9 @@ import { ListStagesComponent } from './components/stage/list-stages/list-stages.
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { CoordinateurAccueilComponent } from './components/coordinateur/coordinateur-accueil/coordinateur-accueil.component';
+import { EtudiantComponent } from './components/etudiant/etudiant.component';
+import { EtudiantNavbarComponent } from './components/etudiant/etudiant-navbar/etudiant-navbar.component';
+import { EtudiantMainComponent } from './components/etudiant/etudiant-main/etudiant-main.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +40,10 @@ import { CoordinateurAccueilComponent } from './components/coordinateur/coordina
     ListStagesComponent,
     LoginComponent,
     RegisterComponent,
-    CoordinateurAccueilComponent
+    CoordinateurAccueilComponent,
+    EtudiantComponent,
+    EtudiantNavbarComponent,
+    EtudiantMainComponent
   ],
   imports: [
     BrowserModule,
