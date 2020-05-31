@@ -1,0 +1,44 @@
+<nav class="navbar  navbar-expand navbar-light bg-white shadow">
+  <a  class="navbar-brand" routerLink="/etudiant/profile"><img src="../../../../assets/logoStage.png" alt="fstg logo" style="height:40px;width:160px">
+  </a>
+
+  <ul class="navbar-nav ml-auto">
+    <li class="nav-item" >
+      <div class="input-group">
+        <input   type="text" class="form-control shadow-sm"   placeholder="chercher ..."   [(ngModel)]="searchInput" [class.index]="searching" >
+        <div class="input-group-append">
+          <button class="btn shadow-sm text-white" style="background: orange"  (click)="search()"><i class="fa fa-search"></i></button>
+        </div>
+      </div>
+    </li>
+    <li class="nav-item">
+      <a href="#" class="nav-link text-dark">Stages <span class="fa fa-bars"></span></a>
+    </li>
+    <li class="nav-item">
+      <a href="#" class="nav-link text-dark">Tâches <span class="fa fa-tasks"></span></a>
+    </li>
+    <li class="nav-item">
+      <a href="#" class="nav-link text-dark">Forum <span class="fa fa-commenting"></span></a>
+    </li>
+    <li class="nav-item dropdown mr-5">
+      <button class="bg-transparent border-0 dropdown-toggle nav-link text-dark" data-toggle="dropdown" aria-expanded="false" role="button">Autres <span class="fa fa-cog"></span></button>
+      <ul class="dropdown-menu border-0 shadow mr-3" role="listbox">
+        <li class="dropdown-item">Documents <span class="fa fa-file"></span></li>
+        <li class="dropdown-item">Structures d'acceuill <span class="fa fa-building"></span></li>
+      </ul>
+    </li>
+    <li class="nav-item dropleft mx-2">
+      <img src="" alt="profile" class="rounded-circle border-dark dropdown-toggle shadow-sm" data-toggle="dropdown" role="button" aria-expanded="false" style="height: 30px;width: 30px">
+      <ul class="dropdown-menu shadow" role="menu">
+        <li class="dropdown-item">
+          <a href="#" class="text-dark btn-link text-decoration-none">Profile <span class="fa-pull-right fa fa-user-circle"></span></a>
+        </li>
+        <li class="dropdown-item">
+          <a href="#" class="text-dark btn-link text-decoration-none">Déconnexion <span class=" fa fa-sign-out"></span></a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+

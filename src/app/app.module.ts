@@ -23,13 +23,15 @@ import { MainCoordinateurComponent } from './components/coordinateur/main-coordi
 import { CoordinateurComponent } from './components/coordinateur/coordinateur/coordinateur.component';
 import { FlashMessagesModule } from "angular2-flash-messages";
 import { ListStagesComponent } from './components/stage/list-stages/list-stages.component';
-import { EtudiantComponent } from './components/etudiant/etudiant.component';
 import { ProfilEtudiantComponent } from './components/etudiant/profil-etudiant/profil-etudiant.component';
 import { EtudiantLoginComponent } from './components/etudiant/etudiant-login/etudiant-login.component';
 
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { CoordinateurAccueilComponent } from './components/coordinateur/coordinateur-accueil/coordinateur-accueil.component';
+import { EtudiantComponent } from './components/etudiant/etudiant.component';
+import { EtudiantNavbarComponent } from './components/etudiant/etudiant-navbar/etudiant-navbar.component';
+import { EtudiantMainComponent } from './components/etudiant/etudiant-main/etudiant-main.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +54,10 @@ import { CoordinateurAccueilComponent } from './components/coordinateur/coordina
     EtudiantLoginComponent,
     LoginComponent,
     RegisterComponent,
-    CoordinateurAccueilComponent
+    CoordinateurAccueilComponent,
+    EtudiantComponent,
+    EtudiantNavbarComponent,
+    EtudiantMainComponent
   ],
   imports: [
     BrowserModule,
