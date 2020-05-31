@@ -32,6 +32,7 @@
     "generate-password": "^1.5.1",
     "jquery": "^3.5.1",
     "jspdf": "^1.5.3",
+    "ngp-sort-pipe": "0.0.4",
     "ngx-pagination-bootstrap": "^1.6.0",
     "ngx-webstorage": "^5.0.0",
     "popper.js": "^1.16.0",

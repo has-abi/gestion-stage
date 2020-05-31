@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from "@angular/common/http";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgxWebstorageModule} from "ngx-webstorage";
+import { NgpSortModule } from "ngp-sort-pipe";
 import {AdminMenuComponent} from "./components/admin/admin-menu/admin-menu.component";
 import { AdminNavbarComponent } from './components/admin/admin-navbar/admin-navbar.component';
 import { MainComponent } from './components/admin/main/main.component';
@@ -24,6 +25,17 @@ import { CoordinateurAccueilComponent } from './components/coordinateur/coordina
 import { EtudiantComponent } from './components/etudiant/etudiant.component';
 import { EtudiantNavbarComponent } from './components/etudiant/etudiant-navbar/etudiant-navbar.component';
 import { EtudiantMainComponent } from './components/etudiant/etudiant-main/etudiant-main.component';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { RapportComponent } from './components/modals/rapport/rapport.component';
+import { RapportDisplayComponent } from './components/modals/rapport-display/rapport-display.component';
+import { AjouterOrganismeComponent } from './components/modals/ajouter-organisme/ajouter-organisme.component';
+import { ViewStageComponent } from './components/stage/view-stage/view-stage.component';
+import { RapportFormComponent } from './components/rapport/rapport-form/rapport-form.component';
+import { OrganismeFormComponent } from './components/organisme/organisme-form/organisme-form.component';
+import { ListEncadreurComponent } from './components/encadreur/list-encadreur/list-encadreur.component';
+import { ListEtudiantComponent } from './components/etudiant/list-etudiant/list-etudiant.component';
+import { ListJuryComponent } from './components/jury/list-jury/list-jury.component';
+import { SearchComponent } from './components/search/search.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,7 +55,18 @@ import { EtudiantMainComponent } from './components/etudiant/etudiant-main/etudi
     CoordinateurAccueilComponent,
     EtudiantComponent,
     EtudiantNavbarComponent,
-    EtudiantMainComponent
+    EtudiantMainComponent,
+    EditProfileComponent,
+    RapportComponent,
+    RapportDisplayComponent,
+    AjouterOrganismeComponent,
+    ViewStageComponent,
+    RapportFormComponent,
+    OrganismeFormComponent,
+    ListEncadreurComponent,
+    ListEtudiantComponent,
+    ListJuryComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +76,8 @@ import { EtudiantMainComponent } from './components/etudiant/etudiant-main/etudi
     HttpClientModule,
     FlashMessagesModule.forRoot(),
     ReactiveFormsModule,
-    NgxWebstorageModule.forRoot()
+    NgxWebstorageModule.forRoot(),
+    NgpSortModule
   ],
   providers: [],
   bootstrap: [AppComponent]

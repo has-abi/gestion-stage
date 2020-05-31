@@ -13,17 +13,17 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
-      cne:new FormControl([
+      cne:new FormControl('',[
         Validators.required,
         Validators.minLength(10),
         Validators.maxLength(10),
         Validators.pattern("*[A-Z]{1}[0-9]{9}$")
       ]),
-      codeAppoge:new FormControl([
+      codeAppoge:new FormControl('',[
         Validators.required,
         Validators.pattern("{d}")
       ]),
-      registerEmail:new FormControl([
+      registerEmail:new FormControl('',[
         Validators.required,
         Validators.email
       ])

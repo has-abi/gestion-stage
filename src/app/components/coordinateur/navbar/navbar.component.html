@@ -10,25 +10,13 @@
           <button class="btn btn-info shadow-sm"  (click)="search()"><i class="fa fa-search"></i></button>
         </div>
       </div>
-
     </li>
-    <li class="nav-item dropdown mx-2">
-      <button  class="nav-link text-dark dropdown-toggle bg-transparent border-0" data-toggle="dropdown" role="button" aria-expanded="false">Stages <i class="fa fa-file"></i></button>
-      <ul class="dropdown-menu border-0 shadow" role="menu">
-        <li class="dropdown-item "><a  routerLink="/stage/create" class="btn btn-success btn-block">Créer Stage </a></li>
-        <li class="dropdown-item"><a  routerLink="/stage/list" class="btn-link btn-block text-dark text-decoration-none">Stages actifs</a></li>
-      </ul>
+    <li class="nav-item mx-2"><a routerLink="/stage/create" class="nav-link btnbg-transparent border-0 text-success" data-toggle="tooltip" data-placement="top" title="créé un stage">
+      <span class="fa fa-plus fa-2x"></span></a>
     </li>
-    <li class="nav-item dropdown mr-5">
-      <button class="bg-transparent border-0 dropdown-toggle nav-link text-dark" data-toggle="dropdown" aria-expanded="false" role="button"><span class="fa fa-cog"></span></button>
-      <ul class="dropdown-menu border-0 shadow mr-3" role="listbox">
-        <li class="dropdown-item">Etudiants <span class="fa fa-graduation-cap"></span></li>
-        <li class="dropdown-item">Encadreurs <span class="fa fa-university"></span></li>
-        <li class="dropdown-item">Juries <span class="fa fa-universal-access"></span></li>
-      </ul>
-    </li>
-    <li class="nav-item dropleft mx-2">
-      <img src="../../../../assets/portofolio.jpg" alt="profile" class="rounded-circle border-dark dropdown-toggle shadow-sm" data-toggle="dropdown" role="button" aria-expanded="false" style="height: 30px;width: 30px">
+    <li class="nav-item"><a routerLink="/stage/list" class="nav-link btn bg-transparent border-0 text-dark" data-toggle="tooltip" data-placement="top" title="voire tout les stages">Stages <span class="fa fa-bars"></span></a></li>
+    <li class="nav-item dropleft mx-2 mr-5">
+      <img src="../../../../assets/portofolio.jpg" alt="profile" class="rounded-circle border-dark dropdown-toggle shadow-sm" data-toggle="dropdown" role="button" aria-expanded="false" style="height: 40px;width: 40px">
       <ul class="dropdown-menu shadow" role="menu">
         <li class="dropdown-item">
           <a href="#" class="text-dark btn-link text-decoration-none">Profile <span class="fa-pull-right fa fa-user-circle"></span></a>

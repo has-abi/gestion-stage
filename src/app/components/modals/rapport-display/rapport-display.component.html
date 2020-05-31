@@ -1,0 +1,60 @@
+<div  class="modal" id="ViewrapportModal" tabindex="-1" role="dialog" aria-labelledby="ViewrapportModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h1 class="modal-title "><span class="fa fa-file-o"></span> Rapport de stage</h1>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><b>Titre:</b> {{rapport.document.titre}}
+              <input *ngIf="modifierRapport" type="text" class="form-control form-control-sm shadow-sm" [(ngModel)]="rapport.document.titre">
+          </li>
+          <li class="list-group-item"><b>Description:</b> {{rapport.descreption}}
+            <input *ngIf="modifierRapport" type="text" class="form-control form-control-sm shadow-sm" [(ngModel)]="rapport.descreption">
+          </li>
+          <li class="list-group-item"><b>Date de dépôt:</b> {{rapport.dateDepot}}</li>
+          <li class="list-group-item">
+            <div *ngIf="rapport.valider" ><span class="fa fa-check-circle text-success fa-2x"></span> <b>Valider</b></div>
+            <div *ngIf="!rapport.valider" ><span class="fa fa-warning text-warning fa-2x"></span> <b>Pas Encore Valider</b>
+              <button class="btn-sm btn-success float-right" (click)="valider()"> Valider le rapport <span class="fa fa-check"></span></button>
+            </div>
+          </li>
+          <li class="list-group-item"><b>Fichier:</b> Voir:
+            <a target="_blank" href="http://localhost:8091/file/display/{{rapport.document.reference}}" class="btn-sm btn-success"><span class="fa fa-file-pdf-o "></span></a>
+            Telecharger:
+            <a  href="http://localhost:8091/files/{{rapport.document.reference}}" class="btn-sm btn-primary"><span class="fa fa-download "></span></a>
+            <div *ngIf="modifierRapport" class="form-group">
+              <div *ngIf="currentFile" class="progress">
+                <div
+                  class="progress-bar progress-bar-info progress-bar-striped"
+                  role="progressbar"
+                  attr.aria-valuenow="{{ progress }}"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [ngStyle]="{ width: progress + '%' }"
+                >
+                  {{ progress }}%
+                </div>
+              </div>
+              <label class="btn btn-default">
+                <input type="file" (change)="selectFile($event)"  name="file" id="file" />
+              </label>
+
+              <div class="alert alert-light" role="alert">{{ message }}</div>
+            </div>
+
+          </li>
+        </ul>
+        <button *ngIf="modifierRapport" class="btn-sm btn-light"><span class="fa fa-check"></span></button>
+      </div>
+      <div class="modal-footer">
+        <button *ngIf="!rapport.valider" class="btn btn-info shadow-sm" (click)="modifierRapport = !modifierRapport">Modifier <span class="fa" [class.fa-plus]="!modifierRapport" [class.fa-minus]="modifierRapport"></span></button>
+        <button type="button" class="btn bg-dark text-white shadow-sm" data-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
