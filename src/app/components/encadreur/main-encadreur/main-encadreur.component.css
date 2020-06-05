@@ -1,0 +1,12 @@
+.pop-up{
+  display: none
+}
+.list:hover .pop-up{
+  display: inline;
+}
+.list:hover .call{
+  text-align: center;
+}
+.list{
+  text-align: center;
+}

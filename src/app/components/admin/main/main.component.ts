@@ -1,4 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import {EtudiantNavbarComponent} from "../../etudiant/etudiant-navbar/etudiant-navbar.component";
+import {EtudiantService} from "../../../services/etudiant.service";
+import {EncadreurService} from "../../../services/encadreur.service";
+import {JuryService} from "../../../services/jury.service";
+import {StageService} from "../../../services/stage.service";
+import {UserService} from "../../../services/user.service";
+import {ForumService} from "../../../services/forum.service";
+import {RapportService} from "../../../services/rapport.service";
 
 @Component({
   selector: 'app-main',
@@ -7,9 +15,35 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainComponent implements OnInit {
   search =false;
-  constructor() { }
+  nombreStages = 0;
+  nombreEtudiants = 0;
+  nombreEncadreurs = 0;
+  nombreJuries = 0;
+  nombreUsers = 0;
+  nombreRepport = 0;
+  nombreForum =0;
+  constructor(private etudiantService:EtudiantService,private encadreurService:EncadreurService,private juryService:JuryService,
+              private stageService:StageService,private userService:UserService, private forumService:ForumService,private rapportService:RapportService) { }
 
   ngOnInit(): void {
+    this.countForums();
+    this.countRapports();
+    this.countStages();
+    this.countUsers();
   }
+  countUsers(){
+    this.userService.countusers().subscribe(n=>this.nombreUsers = n);
+  }
+  countStages(){
+    this.stageService.countStages().subscribe(n=>this.nombreStages = n)
+  }
+  countRapports(){
+    this.rapportService.countRapport().subscribe(n=>this.nombreRepport = n)
+  }
+  countForums(){
+    this.forumService.countForum().subscribe(n=>this.nombreForum = n)
+  }
+
+
 
 }

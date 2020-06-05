@@ -10,6 +10,7 @@ export class ListEtudiantComponent implements OnInit {
   page = 0;
   size =10;
   id=1;
+  sort="asc";
   searchInput ="";
   searching = false;
   tableOrder = {
@@ -26,7 +27,7 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   findByCoordinateur(){
-    this.etudiantService.findByCoordinateur(this.id,this.page,this.size);
+    this.etudiantService.findByCoordinateur(this.id,this.page,this.size,this.sort);
   }
   nextElements(){
     if(this.page<=this.pageEtudiant.totalPages){
@@ -71,6 +72,12 @@ export class ListEtudiantComponent implements OnInit {
     return this.etudiantService.etudiants;
   }
   changeOrder(order:string,prop:string){
+    if(order=="asc" && prop == "id"){
+      this.etudiantService.findByCoordinateur(this.id,this.page,this.size,"asc");
+    }
+    if(order=="desc" && prop == "id"){
+      this.etudiantService.findByCoordinateur(this.id,this.page,this.size,"desc");
+    }
     this.tableOrder.order = order;
     this.tableOrder.prop = prop;
   }

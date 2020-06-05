@@ -7,14 +7,6 @@ export class Commentaire {
   dateCreation:Date;
   dateModification:Date;
   user:User;
-  commentaire:Commentaire;
   sujetForum:SujetForum;
   commentaires:Array<Commentaire>;
-
-  constructor() {
-    this.user = new User();
-    this.sujetForum = new SujetForum();
-    this.commentaire = new Commentaire();
-    this.commentaires = new Array<Commentaire>();
-  }
 }

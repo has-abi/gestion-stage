@@ -1,5 +1,6 @@
 import {Commentaire} from "./commentaire.model";
 import {SujetForum} from "./sujet-forum.model";
+import {Role} from "./role.model";
 
 export class User {
   id:number;
@@ -16,6 +17,7 @@ export class User {
   reponce:string;
   active:boolean;
   dateJoin:Date;
+  role:Role;
   commentaires:Array<Commentaire>;
   sujetForums:Array<SujetForum>;
 

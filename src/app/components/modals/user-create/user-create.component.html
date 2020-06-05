@@ -1,0 +1,103 @@
+<div  class="modal" id="rapportModal" tabindex="-1" role="dialog" aria-labelledby="rapportModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title">Créer un Utilisateur :</h1>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="userForm" (ngSubmit)="create(userForm.value)">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label for="uNom">Nom</label>
+                <input type="text" id="uNom" class="form-control">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label for="uprenom">Prénom</label>
+                <input type="text" id="uprenom" class="form-control">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label for="uemail">E-mail</label>
+                <input type="email" id="uemail" class="form-control">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label for="upwd"></label>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="password..." id="upwd" disabled >
+                  <div class="input-group-append">
+                    <button class="btn btn-primary" (click)="generateP()">Générer un mot de passe</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label for="role">Role</label>
+                <select class="form-control" id="role">
+                  <option value="'none'">--SELECT--</option>
+                  <option value="1">Etudiant</option>
+                  <option value="2">Coordinateur</option>
+                  <option value="3">Encadreur</option>
+                  <option value="4">Jury</option>
+                </select>
+              </div>
+            </div>
+            <div *ngIf="role == '1'" class="col-12">
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="cne">CNE</label>
+                    <input type="text" class="form-control" id="cne">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="codeAppoge">Code appogé</label>
+                    <input type="text" class="form-control" id="codeAppoge">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="role == '2'" class="col-6">
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="rpp">Rpp*</label>
+                    <input type="text" class="form-control" id="rpp">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="filiere">Filière*</label>
+                    <select  id="filiere" class="form-control">
+                      <option  [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+                      <option *ngFor="let f of filieres" value="{{f.libelle}}">{{f.libelle}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <button class="btn btn-primary">Enregistrer <span class="fa fa-check"></span></button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+

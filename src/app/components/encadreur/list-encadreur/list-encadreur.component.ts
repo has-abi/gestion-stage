@@ -28,7 +28,7 @@ export class ListEncadreurComponent implements OnInit {
   encadreurView(encadreur:Encadreur){
   }
   findByCoordinateur(){
-    this.encadreurService.findByCoordinateur(this.id,this.page,this.size);
+    this.encadreurService.findByCoordinateur(this.id,this.page,this.size,"asc");
   }
   nextElements(){
     if(this.page<=this.pageEncadreurs.totalPages){
@@ -73,6 +73,12 @@ export class ListEncadreurComponent implements OnInit {
     return this.encadreurService.encadreurs;
   }
   changeOrder(order:string,prop:string){
+    if(order=="asc" && prop == "id"){
+      this.encadreurService.findByCoordinateur(this.id,this.page,this.size,"asc");
+    }
+    if(order=="desc" && prop == "id"){
+      this.encadreurService.findByCoordinateur(this.id,this.page,this.size,"desc");
+    }
     this.tableOrder.order = order;
     this.tableOrder.prop = prop;
   }

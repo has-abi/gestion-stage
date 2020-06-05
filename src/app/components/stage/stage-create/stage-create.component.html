@@ -1,29 +1,29 @@
-<div class="card" id="content" #content>
-  <div class="card-header bg-dark text-white">
-    <h1><span class="fa fa-plus-circle"></span> Créer un stage</h1>
+<div class="card" id="content" >
+  <div class="card-header bg-dark text-white" >
+    <h1><span class="fa fa-plus-circle" ></span> Créer un stage</h1>
     <div class="row">
       <div class="input-group col-md-3">
-        <div class="input-group-prepend bg-secondary" >
-          <div class="input-group-text"><i class="fa fa-calendar"></i>Date début*</div>
+        <div class="input-group-prepend bg-secondary">
+          <div class="input-group-text" style="cursor: pointer"><i class="fa fa-calendar"></i>Date début*</div>
           </div>
-        <input type="date" class="form-control" [(ngModel)]="stage.dateDebut">
+        <input type="date" class="form-control" [(ngModel)]="stage.dateDebut" >
       </div>
       <div class="input-group col-md-3">
         <div class="input-group-prepend bg-secondary" >
-          <div class="input-group-text"><span class="fa fa-calendar"></span> Date fin*</div>
+          <div class="input-group-text" style="cursor: pointer"><span class="fa fa-calendar"></span> Date fin*</div>
         </div>
-        <input type="date" class="form-control" [(ngModel)]="stage.dateFin">
+        <input type="date" class="form-control" [(ngModel)]="stage.dateFin" >
       </div>
       <div class="input-group col-md-6">
         <div class="input-group-prepend " (click)="ajouterSujet = !ajouterSujet">
-          <div class="input-group-text bg-warning">Ajouter le Sujet <span class="fa fa-chevron-circle-right" [class.fa-chevron-circle-right]="!ajouterSujet" [class.fa-chevron-circle-left]="ajouterSujet"></span></div>
+          <div class="input-group-text bg-warning" style="cursor: pointer">Ajouter le Sujet <span  class="fa fa-chevron-circle-right" [class.fa-chevron-circle-right]="!ajouterSujet" [class.fa-chevron-circle-left]="ajouterSujet"></span></div>
         </div>
         <input type="text" class="form-control" *ngIf="ajouterSujet" placeholder="sujet de stage..."  [(ngModel)]="stage.sujet">
       </div>
     </div>
   </div>
   <div class="card-body">
-    <flash-messages></flash-messages>
+
     <div class="card shadow-sm ">
       <div class="card-header">
         <div class="row">
@@ -44,7 +44,7 @@
             <div class="form-group col-md-3">
               <label for="cin">CNE*</label>
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="cin..." id="cin" [(ngModel)]="e.cin" [class.border-warning]=" e.cin =='' "  >
+                <input type="text" class="form-control" placeholder="cin..." id="cin" [(ngModel)]="e.cin" [class.border-warning]=" e.cin ==''"  >
                 <div class="input-group-append">
                   <button class="btn btn-dark" (click)="findEtudiantByCin(i)"><span class="fa fa-pencil"></span></button>
                 </div>
@@ -52,25 +52,25 @@
             </div>
             <div class="form-group col-md-3">
               <label for="codeAppoge">Code d'appogé*</label>
-              <input type="text" class="form-control" placeholder="code d'appogé..." id="codeAppoge" [(ngModel)]="e.codeAppoge" [class.border-warning]=" e.codeAppoge =='' ">
+              <input type="text" class="form-control" placeholder="code d'appogé..." id="codeAppoge" [(ngModel)]="e.codeAppoge" [class.border-warning]=" e.codeAppoge =='' " >
             </div>
             <div class="form-group col-md-3">
               <label for="nom">Nom*</label>
-              <input type="text" class="form-control" placeholder="nom..." id="nom" [(ngModel)]="e.user.nom" [class.border-warning]=" e.user.nom =='' ">
+              <input type="text" class="form-control" placeholder="nom..." id="nom" [(ngModel)]="e.user.nom" [class.border-warning]=" e.user.nom =='' " >
             </div>
             <div class="form-group col-md-3">
               <label for="prenom">Prénom</label>
-              <input type="text" class="form-control" placeholder="prénom..." id="prenom" [(ngModel)]="e.user.prenom" [class.border-warning]=" e.user.prenom =='' ">
+              <input type="text" class="form-control" placeholder="prénom..." id="prenom" [(ngModel)]="e.user.prenom" [class.border-warning]=" e.user.prenom =='' " >
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="card mt-2 shadow-sm">
+    <div class="card mt-2 shadow-sm" >
       <div class="card-header">
         <div class="row">
           <div class="col-md-9">
-            <h2><span class="fa fa-university"></span>Encadreur<span class="text-danger small">(Optionel)</span></h2>
+            <h2><span class="fa fa-briefcase"></span>Encadreur<span class="text-danger small">(Optionel)</span></h2>
           </div>
           <div class="col-md-3">
             <div class="row">
@@ -91,11 +91,11 @@
           </div>
         </div>
         </div>
-      <div class="card-body ">
+      <div *ngIf="ajouterEncadreur" class="card-body ">
         <div *ngFor="let e of encadreurs;let i = index ">
           <div *ngIf="e.type != '--Type Encadreur--'">
             <div>
-              <button *ngIf="i>0" class="btn-sm btn-danger float-right mt-2" (click)="decreaseEncadreur(i)"><span class="fa fa-minus-circle"></span></button>
+              <button  class="btn-sm btn-danger float-right mt-2" (click)="decreaseEncadreur(i)"><span class="fa fa-minus-circle"></span></button>
             </div>
             <div class="row mt-2"  >
               <div *ngIf="e.type == 'Encadreur de la faculté'" class="form-group col-md-3">
@@ -111,8 +111,8 @@
                 <input type="text" class="form-control" placeholder="prénom..." id="prenomE" [(ngModel)]="e.user.prenom">
               </div>
               <div class="form-group col-md-3">
-                <label for="profession">Profession*</label>
-                <input type="text" class="form-control" placeholder="profession..." id="profession" [(ngModel)]="e.profession" >
+                <label for="qualite">Qualité*</label>
+                <input type="text" class="form-control" placeholder="qualité..." id="qualite" [(ngModel)]="e.qualite" >
               </div>
             </div>
             <div class="row" >
@@ -137,7 +137,7 @@
         </div>
       </div>
     </div>
-    <div class="card mt-2 shadow-sm">
+    <div class="card mt-2 shadow-sm" >
       <div class="card-header">
         <div class="row">
           <div class="col-md-10">
@@ -155,16 +155,20 @@
             <input type="text" class="form-control" id="raisonSocial" placeholder="raison social..." [(ngModel)]="stage.organismeAccueil.raisonSociale">
           </div>
           <div class="col-md-3">
-            <label for="emailS">Email</label>
+            <label for="emailS">E-mail</label>
             <input type="email" class="form-control" id="emailS" placeholder="email..." [(ngModel)]="stage.organismeAccueil.email">
           </div>
           <div class="col-md-3">
-            <label for="tele">Télé</label>
-            <input type="text" class="form-control" id="tele" placeholder="telephone..." [(ngModel)]="stage.organismeAccueil.tele">
+            <label for="tele">GSM</label>
+            <input type="text" class="form-control" id="tele" placeholder="gsm..." [(ngModel)]="stage.organismeAccueil.tele">
+          </div>
+          <div class="col-md-3">
+            <label for="fax">Fax</label>
+            <input type="text" class="form-control" id="fax" placeholder="fax..." [(ngModel)]="stage.organismeAccueil.teleFix">
           </div>
           <div class="col-md-3">
             <label for="adress">Adress</label>
-            <input type="text" class="form-control" id="adress" placeholder="adress" [(ngModel)]="stage.organismeAccueil.adress">
+            <input type="text" class="form-control" id="adress" placeholder="adress..." [(ngModel)]="stage.organismeAccueil.adress">
           </div>
           <div class="col-md-3">
             <label for="responsable">Responsable</label>
@@ -185,6 +189,13 @@
             </select>
           </div>
           <div class="col-md-3">
+            <label for="pays">Pays</label>
+            <select  id="pays" class="form-control" [(ngModel)]="stage.organismeAccueil.ville.pays.nom">
+              <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+              <option *ngFor="let p of pays" value="{{p.nom}}">{{p.nom}}</option>
+            </select>
+          </div>
+          <div class="col-md-3">
             <label for="ville">Ville</label>
             <select  id="ville" class="form-control" [(ngModel)]="stage.organismeAccueil.ville.nom">
               <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
@@ -196,7 +207,8 @@
     </div>
   </div>
   <div class="card-footer">
-    <button class="btn btn-info btn-block" (click)="ceateStage()">Créer <span class="fa fa-plus"></span></button>
+    <button class="btn btn-info btn-block" (click)="ceateStage()" [disabled]="!validateInputs()">Créer <span class="fa fa-plus"></span></button>
+    <flash-messages></flash-messages>
   </div>
 </div>
 

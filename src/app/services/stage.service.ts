@@ -3,6 +3,8 @@ import {Stage} from "../models/stage.model";
 
 import {HttpClient} from "@angular/common/http";
 import {StagePage} from "../models/pageModels/stage-page.model";
+import {Coordinateur} from "../models/coordinateur.model";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +16,7 @@ export class StageService {
   private _stages:Array<Stage>;
   private _stagePage:StagePage;
   tableElements = [];
+  nombreStages = 0;
   private _selectedStages:Array<Stage>;
   stageMessage = {
     "type":'',
@@ -21,29 +24,38 @@ export class StageService {
   }
   url="http://localhost:8091/gestion-stage-api/stage/"
   constructor(private httpClient:HttpClient) { }
-  save(){
-    this.stage.reference = this.getReference();
-    this.httpClient.post(this.url,this.stage).subscribe(resp=>{
-      console.log(resp)
+
+  findByCoordinateurId(id:number,page:number,size:number){
+    this.httpClient.get<StagePage>(this.url+"encadreur/id/"+id+"/page/"+page+"/size/"+size).subscribe(data=>{
+      this.stagePage = data;
     })
   }
-  update(){
-
-        this.httpClient.put(this.url,this.stage).subscribe(resp=>{
-          console.log(resp);
-          if(resp>0){
-
-            this.stageMessage.type="success";
-            this.stageMessage.message="stage modifier avec succée!"
-          }else{
-            this.stageMessage.type="error";
-            this.stageMessage.message="on ne peut pas modifier le stage!"
-          }
-        })
-
-
-    console.log(this.stageMessage);
+  countStages():Observable<number>{
+    return this.httpClient.get<number>(this.url+"count");
   }
+  findByEtudiantId(id:number,page:number,size:number){
+    this.httpClient.get<StagePage>(this.url+"etudiant/id/"+id+"/page/"+page+"/size/"+size).subscribe(data=>{
+      this.stagePage = data;
+    })
+  }
+  findByJuryId(id:number,page:number,size:number){
+    this.httpClient.get<StagePage>(this.url+"jury/id/"+id+"/page/"+page+"/size/"+size).subscribe(data=>{
+      this.stagePage = data;
+    })
+  }
+
+  save(stage:Stage):Observable<number>{
+    stage.reference = this.getReference();
+    return this.httpClient.post<number>(this.url,stage);
+  }
+
+  update():Observable<number>{
+       return  this.httpClient.put<number>(this.url,this.stage);
+  }
+  deleteByReference(reference:string):Observable<number>{
+    return this.httpClient.delete<number>(this.url+"reference/"+reference);
+  }
+
   findAllPages(page:number,size:number){
       return this.httpClient.get<StagePage>(this.url+"list/get?page="+page+"&size="+size).subscribe(data=>{
         this.stagePage = data
@@ -152,5 +164,25 @@ export class StageService {
       || this.stage.organismeAccueil.typeOrganisme.type == "--SELECT--" || this.stage.organismeAccueil.typeServiceOrganisme.type == "--SELECT--" || this.stage.organismeAccueil.ville.nom == "--SELECT--")
 
   }
+  activerStage(ref:string):Observable<number>{
+    return  this.httpClient.put<number>(this.url+"activate",ref);
+  }
+  countByCoordinateurReference(ref:string){
+      this.httpClient.get<number>(this.url+"coordinateur/count/ref/"+ref).subscribe(n=>this.nombreStages = n);
+  }
+  countByEncadreurId(id:number){
+    this.httpClient.get<number>(this.url+"encadreur/count/id/"+id).subscribe(n=>this.nombreStages = n);
+  }
+  countByEtudiantId(id:number){
+    this.httpClient.get<number>(this.url+"etudiant/count/id/"+id).subscribe(n=>this.nombreStages = n);
+  }
+  countByJuryId(id:number){
+    this.httpClient.get<number>(this.url+"jury/count/id/"+id).subscribe(n=>this.nombreStages = n);
+  }
+  findByReference(ref:string){
+    this.httpClient.get<Stage>(this.url+"reference/"+ref).subscribe(data=>this.stage= data);
+  }
+
+
 
 }

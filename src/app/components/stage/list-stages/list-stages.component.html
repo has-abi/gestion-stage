@@ -1,8 +1,25 @@
 <div class="card ">
   <div class="card-header bg-light">
-    <h1 class="text-dark"> <span class="fa fa-bars"></span>Stages</h1>
+    <div class="row">
+      <div class="col-sm-9">
+        <h1 class="text-dark"> <span class="fa fa-bars"></span> Stages</h1>
+      </div>
+      <div class="col-ms-3">
+        <select class="form-control float-right shadow-sm d-inline" [(ngModel)]="selectedTable">
+          <option value="Stages" selected>Stages</option>
+          <option value="Etudiants">Etudiants</option>
+          <option value="Encadreurs">Encadreurs</option>
+          <option value="Juries">Juries</option>
+        </select>
+      </div>
+    </div>
+
   </div>
-  <div class="card-body row">
+  <div class="card-body ">
+    <app-list-etudiant *ngIf="selectedTable == 'Etudiants'"></app-list-etudiant>
+    <app-list-encadreur *ngIf="selectedTable == 'Encadreurs'"></app-list-encadreur>
+    <app-list-jury *ngIf="selectedTable == 'Juries'"></app-list-jury>
+  <div *ngIf="selectedTable == 'Stages'" class="row">
     <div class="col-md-5">
       <div class="input-group ">
         <input type="text" class="form-control" placeholder="chercher stage .."  [(ngModel)]="searchStage" (input)="chercher()">
@@ -41,28 +58,30 @@
           <div class="dropdown-item"><input type="checkbox" (change)="columns.juries = !columns.juries" [checked]="columns.juries"> Juries</div>
           <div class="dropdown-item"><input type="checkbox" (change)="columns.rapport = !columns.rapport" [checked]="columns.rapport"> Rapport</div>
           <div class="dropdown-item"><input type="checkbox" (change)="columns.organisme = !columns.organisme" [checked]="columns.organisme"> struture d'accueil</div>
+          <div class="dropdown-item"><input type="checkbox" (change)="columns.convention = !columns.convention" [checked]="columns.convention">Convention</div>
           <div class="dropdown-item"><input type="checkbox" (change)="columns.actions = !columns.actions" [checked]="columns.actions"> Actions</div>
         </div>
       </div>
-      </div>
+    </div>
     <div class="col-md-2 ">
-        <div class="dropdown">
-          <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false">Order par</button>
-          <ul class="dropdown-menu shadow-sm" role="menu">
-            <li class="dropdown-item" (click)="changeOrder('desc','id')">noveaux</li>
-            <li class="dropdown-item" (click)="changeOrder('asc','id')">anciens</li>
-            <li class="dropdown-item" (click)="changeOrder('desc','sujet')">Ordre alphabétique</li>
-          </ul>
-        </div>
+      <div class="dropdown">
+        <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false">Order par</button>
+        <ul class="dropdown-menu shadow-sm" role="menu">
+          <li class="dropdown-item" (click)="changeOrder('desc','id')">noveaux</li>
+          <li class="dropdown-item" (click)="changeOrder('asc','id')">anciens</li>
+          <li class="dropdown-item" (click)="changeOrder('desc','sujet')">Ordre alphabétique</li>
+        </ul>
+      </div>
     </div>
     <div *ngIf="selectedStages.length>0" class="col-md-3 mt-2 offset-5">
       <div class="btn-group">
-        <button class="btn btn-danger shadow-sm">Suprimer <span class="fa fa-trash"></span></button>
-        <button class="btn btn-primary mx-1 shadow-sm">Activer <span class="fa fa-check"></span></button>
+        <button class="btn btn-danger shadow-sm" (click)="deleteAll()">Suprimer <span class="fa fa-trash"></span></button>
+        <button class="btn btn-primary mx-1 shadow-sm" (click)="activateAll()">Activer <span class="fa fa-check"></span></button>
       </div>
 
     </div>
     <div class="col-md-12">
+      <flash-messages></flash-messages>
       <div class="table-responsive">
         <table class="table table-striped   my-4  shadow">
           <thead>
@@ -78,75 +97,80 @@
             <th class="text-center" *ngIf="columns.juries">Juries</th>
             <th class="text-center" *ngIf="columns.organisme">Organisme d'accueil</th>
             <th class="text-center" *ngIf="columns.rapport">Rapport</th>
+            <th class="text-center" *ngIf="columns.convention">Convention</th>
             <th class="text-center" *ngIf="columns.actions">Actions</th>
           </tr>
           </thead>
-         <tbody>
-         <tr *ngFor="let stage of stagePage.content | sortBy: tableOrder.order:tableOrder.prop">
-           <td><input type="checkbox" [checked]="existeInSelectedStage(stage)" (click)="addToSelectedStages(stage)"></td>
-           <td *ngIf="columns.id">{{stage.id}}</td>
-           <td *ngIf="columns.sujet">{{stage.sujet}}</td>
-           <td *ngIf="columns.dateDebut">{{stage.dateDebut}}</td>
-           <td *ngIf="columns.dateFin">{{stage.dateFin}}</td>
-           <td *ngIf="columns.status"><span *ngIf="stage.statu == true" class="text-success font-weight-bold">
+          <tbody>
+          <tr *ngFor="let stage of stagePage.content | sortBy: tableOrder.order:tableOrder.prop">
+            <td><input type="checkbox" [checked]="existeInSelectedStage(stage)" (click)="addToSelectedStages(stage)"></td>
+            <td *ngIf="columns.id">{{stage.id}}</td>
+            <td *ngIf="columns.sujet">{{stage.sujet}}</td>
+            <td *ngIf="columns.dateDebut">{{stage.dateDebut}}</td>
+            <td *ngIf="columns.dateFin">{{stage.dateFin}}</td>
+            <td *ngIf="columns.status"><span *ngIf="stage.statu == true" class="text-success font-weight-bold">
              Active
            </span>
-           <span *ngIf="stage.statu == false" class=" font-weight-bold">
-             <span class="text-danger">Inactive </span> <i class="fa fa-check text-primary fa-2x" data-toggle="tooltip" data-placement="top" title="activer ce stage" (click)="activerStage(stage.reference)" ></i>
+              <span *ngIf="stage.statu == false" class=" font-weight-bold text-warning">
+            Inactive
            </span>
-           </td>
-           <td *ngIf="columns.etudiants" class="text-center">
-             <button class="btn bg-transparent border-0"><i class="fa "  (click)="showEtudiants(stage.id)" [class.fa-caret-down]="showEtudiant.id!=stage.id" [class.fa-caret-up]="showEtudiant.id==stage.id "></i></button>
-             <ul *ngIf="showEtudiant.id == stage.id && showEtudiant.show" class="list-group list-group-flush">
-               <li class="list-group-item text-left" *ngFor="let se of stage.stageEtudiants">
-                 <p><b>CNE :</b>{{se.etudiant.cin}}</p>
-                 <p><b>Nom:</b> {{se.etudiant.user.nom}}</p>
-                 <p><b>Prénom :</b> {{se.etudiant.user.prenom}}</p>
-               </li>
-             </ul>
-           </td>
-           <td *ngIf="columns.encadreurs" class="text-center">
-             <button class="btn bg-transparent border-0"><i class="fa "  (click)="showEncadreurs(stage.id)" [class.fa-caret-down]="showEncadrant.id!=stage.id" [class.fa-caret-up]="showEncadrant.id==stage.id "></i></button>
-             <ul *ngIf="showEncadrant.id == stage.id && showEncadrant.show" class="list-group list-group-flush">
-               <li class="list-group-item text-left" *ngFor="let se of stage.stageEncadreurs">
-                 <p><b>Nom et Prénom :</b>{{se.encadreur.user.nom}} {{se.encadreur.user.prenom}}</p>
-                 <p><b>Télé:</b> {{se.encadreur.user.tele}}</p>
-                 <p><b>Email :</b> {{se.encadreur.user.email}}</p>
-               </li>
-             </ul>
-             </td>
-           <td *ngIf="columns.juries" class="text-center">
-             <button class="btn bg-transparent border-0"><i class="fa "  (click)="showJuries(stage.id)" [class.fa-caret-down]="showjury.id!=stage.id" [class.fa-caret-up]="showjury.id==stage.id "></i></button>
-             <ul *ngIf="showEtudiant.id == stage.id && showjury.show" class="list-group list-group-flush">
-               <li class="list-group-item text-left" *ngFor="let se of stage.stageMembreJuries">
-                 <p><b>Nom et Prénom :</b>{{se.membreJury.user.nom}} {{se.membreJury.user.prenom}}</p>
-                 <p><b>Télé:</b> {{se.membreJury.user.tele}}</p>
-                 <p><b>Email :</b> {{se.membreJury.user.email}}</p>
-               </li>
-             </ul>
-           </td>
-           <td *ngIf="columns.organisme" class="text-center"><span *ngIf="stage.organismeAccueil">{{stage.organismeAccueil.raisonSociale}}</span>
-            <span *ngIf="stage.organismeAccueil == null "><span data-toggle="tooltip" data-placement="top" title="Ajouter la structure d'accueil" class="fa fa-plus-circle text-success fa-2x" data-toggle="modal" data-target="#organismeModal" (click)="ajouterStructure(stage)"></span></span>
-           </td>
-           <td *ngIf="columns.rapport" class="text-center">
-             <button *ngIf="stage.rapport != null" class="btn btn-danger" data-toggle="modal" data-target="#ViewrapportModal" (click)="diaplayRapport(stage.rapport)"><span class="fa fa-file-pdf-o"></span></button>
-             <button *ngIf="stage.rapport == null" class="btn btn-info" data-toggle="modal" data-target="#rapportModal" (click)="setStageRef(stage.reference)"><span class="fa fa-upload"></span></button>
-           </td>
-           <td *ngIf="columns.actions">
-             <div class="btn-group-sm">
-             <button class="btn-sm btn-primary"><span class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" title="Editer"></span></button>
-             <button class="btn-sm btn-danger"><span class="fa fa-trash"  data-toggle="tooltip" data-placement="top" title="Suprimer"></span></button>
-             <button routerLink="/stage" class="btn-sm btn-success" (click)="stageView(stage)"><span class="fa fa-eye"  data-toggle="tooltip" data-placement="top" title="Détaill"></span></button>
-           </div>
-           </td>
-         </tr>
-         </tbody>
+            </td>
+            <td *ngIf="columns.etudiants" class="text-center">
+              <button class="btn bg-transparent border-0"><i class="fa "  (click)="showEtudiants(stage.id)" [class.fa-caret-down]="showEtudiant.id!=stage.id" [class.fa-caret-up]="showEtudiant.id==stage.id "></i></button>
+              <ul *ngIf="showEtudiant.id == stage.id && showEtudiant.show" class="list-group list-group-flush">
+                <li class="list-group-item text-left" *ngFor="let se of stage.stageEtudiants">
+                  <p><b>CNE :</b>{{se.etudiant.cin}}</p>
+                  <p><b>Nom:</b> {{se.etudiant.user.nom}}</p>
+                  <p><b>Prénom :</b> {{se.etudiant.user.prenom}}</p>
+                </li>
+              </ul>
+            </td>
+            <td *ngIf="columns.encadreurs" class="text-center">
+              <button class="btn bg-transparent border-0"><i class="fa "  (click)="showEncadreurs(stage.id)" [class.fa-caret-down]="showEncadrant.id!=stage.id" [class.fa-caret-up]="showEncadrant.id==stage.id "></i></button>
+              <ul *ngIf="showEncadrant.id == stage.id && showEncadrant.show" class="list-group list-group-flush">
+                <li class="list-group-item text-left" *ngFor="let se of stage.stageEncadreurs">
+                  <p><b>Nom et Prénom :</b>{{se.encadreur.user.nom}} {{se.encadreur.user.prenom}}</p>
+                  <p><b>Télé:</b> {{se.encadreur.user.tele}}</p>
+                  <p><b>Email :</b> {{se.encadreur.user.email}}</p>
+                </li>
+              </ul>
+            </td>
+            <td *ngIf="columns.juries" class="text-center">
+              <button class="btn bg-transparent border-0"><i class="fa "  (click)="showJuries(stage.id)" [class.fa-caret-down]="showjury.id!=stage.id" [class.fa-caret-up]="showjury.id==stage.id "></i></button>
+              <ul *ngIf="showEtudiant.id == stage.id && showjury.show" class="list-group list-group-flush">
+                <li class="list-group-item text-left" *ngFor="let se of stage.stageMembreJuries">
+                  <p><b>Nom et Prénom :</b>{{se.membreJury.user.nom}} {{se.membreJury.user.prenom}}</p>
+                  <p><b>Télé:</b> {{se.membreJury.user.tele}}</p>
+                  <p><b>Email :</b> {{se.membreJury.user.email}}</p>
+                </li>
+              </ul>
+            </td>
+            <td *ngIf="columns.organisme" class="text-center"><span *ngIf="stage.organismeAccueil">{{stage.organismeAccueil.raisonSociale}}</span>
+              <span *ngIf="stage.organismeAccueil == null "><span data-toggle="tooltip" data-placement="top" title="Ajouter la structure d'accueil" class="fa fa-plus-circle text-success fa-2x" data-toggle="modal" data-target="#organismeModal" (click)="ajouterStructure(stage)"></span></span>
+            </td>
+            <td *ngIf="columns.rapport" class="text-center">
+              <button *ngIf="stage.rapport != null" class="btn btn-danger" data-toggle="modal" data-target="#ViewrapportModal" (click)="diaplayRapport(stage.rapport)"><span class="fa fa-file-pdf-o"></span></button>
+              <button *ngIf="stage.rapport == null" class="btn btn-info" data-toggle="modal" data-target="#rapportModal" (click)="setStageRef(stage.reference)"><span class="fa fa-upload"></span></button>
+            </td>
+            <td *ngIf="columns.convention">
+              <button class="btn-sm btn-warning shadow-sm" data-toggle="modal" data-target="#conventionModal"  (click)="conventioner(stage)"><span class="fa fa-file"></span></button>
+            </td>
+            <td *ngIf="columns.actions">
+              <div class="btn-group-sm">
+                <button class="btn-sm btn-danger" (click)="deleteStage(stage.reference)"><span class="fa fa-trash"  data-toggle="tooltip" data-placement="top" title="Suprimer"></span></button>
+                <button routerLink="/stage" class="btn-sm btn-success" (click)="stageView(stage)"><span class="fa fa-eye"  data-toggle="tooltip" data-placement="top" title="Détaill"></span></button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
         </table>
       </div>
     </div>
+  </div>
+
 
   </div>
-  <div class="card-footer d-flex justify-content-center align-items-center">
+  <div *ngIf="selectedTable == 'Stages'" class="card-footer d-flex justify-content-center align-items-center">
     <nav class="text-center m-auto">
       <ul *ngIf="searchStage.length == 0"  class="pagination">
         <li class="page-item">
@@ -253,4 +277,5 @@
 <app-rapport></app-rapport>
 <app-rapport-display></app-rapport-display>
 <app-ajouter-organisme></app-ajouter-organisme>
+<app-convention></app-convention>
 

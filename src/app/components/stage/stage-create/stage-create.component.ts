@@ -8,10 +8,11 @@ import {Encadreur} from "../../../models/encadreur.model";
 import {StageEtudiant} from "../../../models/stage-etudiant.model";
 import {StageEncadreur} from "../../../models/stage-encadreur.model";
 import {FlashMessagesService} from "angular2-flash-messages";
-import * as jsPDF from 'jspdf';
 import {PasswordGeneratorService} from "../../../services/utils/password-generator.service";
 import {OrganismeService} from "../../../services/organisme.service";
 import {OrganismeAccueil} from "../../../models/organisme-accueil.model";
+import {Stage} from "../../../models/stage.model";
+import {CoordinateurService} from "../../../services/coordinateur.service";
 
 @Component({
   selector: 'app-stage-create',
@@ -21,50 +22,26 @@ import {OrganismeAccueil} from "../../../models/organisme-accueil.model";
 export class StageCreateComponent implements OnInit {
   ajouterSujet = false;
   ajouterStructure = false;
+  ajouterEncadreur = false;
+  stage:Stage  = new Stage();
   typeEnc:string="--Type Encadreur--";
   constructor(private stageService: StageService,private etudiantService: EtudiantService,private encadreurService:EncadreurService,
               private juryService:JuryService,private flashMessagesService:FlashMessagesService,private passwordGeneratorService:PasswordGeneratorService
-              ,private organismeService:OrganismeService) { }
+              ,private organismeService:OrganismeService,private coordinateurService:CoordinateurService) { }
 
   ngOnInit(): void {
+    this.stage.stageEtudiants = [];
     this.etudiants.push(this.etudiant);
-    this.encadreur.type = "Encadreur de la faculté";
-    this.encadreurs.push(this.encadreur);
-    this.organismeService.findAllPays();
-    this.organismeService.findAllTypeOrganisme();
-    this.organismeService.findAllTypeServiceOrganisme();
-    this.organismeService.findAllVille();
-
-  }
-  @ViewChild('content') content: ElementRef;
-  public SavePDF(): void {
-    let content=this.content.nativeElement;
-    let doc = new jsPDF();
-    let _elementHandlers =
-      {
-        '#editor':function(element,renderer){
-          return true;
-        }
-      };
-    doc.fromHTML(content.innerHTML,15,15,{
-
-      'width':190,
-      'elementHandlers':_elementHandlers
-    });
-
-    doc.save('test.pdf');
+    this.coordinateurService.getCoordinateur();
   }
 
-  get stage(){
-    return this.stageService.stage;
-  }
 
 
   increaseEtudiants(){
     this.etudiants.push(this.cloneEtudiant(new Etudiant()));
-    console.log(this.etudiants);
   }
   increaseEncadrants(){
+    this.ajouterEncadreur = true;
     const e = new Encadreur();
     e.type = this.typeEnc;
     if(this.typeEnc == "Encadreur de l'organisme"){
@@ -80,6 +57,7 @@ export class StageCreateComponent implements OnInit {
   }
   decreaseEncadreur(i:number){
       this.encadreurs.splice(i,1);
+      if(this.encadreurs.length == 0) this.ajouterSujet = false;
   }
   get etudiants(){
     return this.etudiantService.etudiants;
@@ -101,11 +79,12 @@ export class StageCreateComponent implements OnInit {
   }
   ceateStage(){
     this.etudiants.forEach(e=>{
-      const se = new StageEtudiant();
-      e.filiere.id = 1;
-      se.etudiant = e;
-      //pour le test
-      this.stage.stageEtudiants.push(se);
+      if(e.cin){
+        const se = new StageEtudiant();
+        e.filiere.id = 1;
+        se.etudiant = e;
+        this.stage.stageEtudiants.push(se);
+      }
     });
     this.encadreurs.forEach(e=>{
       if(e.reference){
@@ -115,8 +94,20 @@ export class StageCreateComponent implements OnInit {
       }
     })
 
-    this.stageService.save();
-    this.flashMessagesService.show('stage est crée avec succée', { cssClass: 'alert-success', timeout: 6000 });
+    this.stage.coordinateur = this.coordinateurService.coordinateur;
+    this.stageService.save(this.stage).subscribe(resp=>{
+      console.log(resp)
+      if(resp>0){
+        this.flashMessagesService.show('stage est crée avec succée!', { cssClass: 'alert-success', timeout: 6000 })
+        this.stage = new Stage();
+        this.etudiantService.etudiants = new Array<Etudiant>();
+        this.encadreurService.encadreurs = new Array<Encadreur>();
+        this.stage.organismeAccueil =  null;
+      }else{
+        this.flashMessagesService.show('il y\'a un problème dans la création du stage! ', { cssClass: 'alert-danger', timeout: 6000 })
+      }
+    });
+    //this.flashMessagesService.show('stage est crée avec succée', { cssClass: 'alert-success', timeout: 6000 });
   }
   findEtudiantByCin(i:number) {
       if(this.etudiants[i].cin ){
@@ -140,15 +131,54 @@ export class StageCreateComponent implements OnInit {
     return this.organismeService.pays;
   }
   initOrganisation(){
-    this.stage.organismeAccueil.ville.nom = this.stage.organismeAccueil.typeOrganisme.type = this.stage.organismeAccueil.typeServiceOrganisme.type = "--SELECT--"
+    this.stage.organismeAccueil.ville.nom = this.stage.organismeAccueil.typeOrganisme.type = this.stage.organismeAccueil.typeServiceOrganisme.type =this.stage.organismeAccueil.ville.pays.nom= "--SELECT--"
   }
   toggleOrganisme(){
+
     this.ajouterStructure =!this.ajouterStructure;
     if(this.ajouterStructure){
+      this.organismeService.findAllPays();
+      this.organismeService.findAllTypeOrganisme();
+      this.organismeService.findAllTypeServiceOrganisme();
+      this.organismeService.findAllVille();
       this.stage.organismeAccueil = new OrganismeAccueil();
       this.initOrganisation();
     }else{
       this.stage.organismeAccueil = null;
     }
   }
+  validateInputs() {
+    return this.stage.dateDebut  && this.stage.dateFin && this.validateOrganisme() && this.validateEtuiants() && this.validateEncadreurs();
+  }
+  validateOrganisme(){
+    if(this.stage.organismeAccueil != null){
+      const o = this.stage.organismeAccueil;
+      return o.raisonSociale && o.adress && o.email && o.responsable && o.tele && o.teleFix && o.typeOrganisme.type !="--SELECT--" && o.typeServiceOrganisme.type != "--SELECT--" && o.ville.nom != "--SELECT--" && o.ville.pays.nom !="--SELECT--";
+    }else{
+      return true;
+    }
+
+  }
+  validateEtuiants(){
+    for(let i = 0;i<this.etudiants.length;i++) {
+      if((this.etudiants[i].cin == undefined  || this.etudiants[i].cin.length != 10) || (this.etudiants[i].codeAppoge == undefined  || this.etudiants[i].codeAppoge.length ==0)
+        || (this.etudiants[i].user.nom == undefined || this.etudiants[i].user.nom.length==0) || (this.etudiants[i].user.prenom == undefined  || this.etudiants[i].user.prenom.length==0)){
+        return false;
+      }
+    }
+      return true;
+  }
+  validateEncadreurs(){
+    if(this.encadreurs.length == 0) return  true;
+    for(let i = 0;i<this.encadreurs.length;i++){
+      if(((this.encadreurs[i].reference == undefined || this.encadreurs[i].reference.length == 0) ||(this.encadreurs[i].user.nom == undefined  || this.encadreurs[i].user.nom.length ==0) ||
+        (this.encadreurs[i].user.prenom == undefined  || this.encadreurs[i].user.prenom.length == 0) || (this.encadreurs[i].user.email == undefined  || this.encadreurs[i].user.email.length == 0)) ||
+        (!this.encadreurs[i].user.motPass  == undefined  || this.encadreurs[i].user.motPass.length == 0)){
+        return false;
+      }
+    }
+      return true;
+  }
+
 }
+

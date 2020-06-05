@@ -15,8 +15,8 @@ export class EncadreurService {
    tableElements = [];
   url="http://localhost:8091/gestion-stage-api/encadreur"
   constructor(private http: HttpClient) { }
-  findByCoordinateur(id:number,page:number,size:number){
-    this.http.get<EncadreurPage>(this.url+"/coordinateur/id/"+id+"/page/"+page+"/size/"+size).subscribe(datas=>{
+  findByCoordinateur(id:number,page:number,size:number,sort:string){
+    this.http.get<EncadreurPage>(this.url+"/coordinateur/id/"+id+"/page/"+page+"/size/"+size+"/sort/"+sort).subscribe(datas=>{
       this.pageEncadreurs = datas;
       this.fillTableElements(datas.totalPages);
     })

@@ -11,6 +11,7 @@ import {MembreJury} from "../../../models/membre-jury.model";
 import {OrganismeService} from "../../../services/organisme.service";
 import {Observable} from "rxjs";
 import {OrganismeAccueil} from "../../../models/organisme-accueil.model";
+import {Stage} from "../../../models/stage.model";
 
 @Component({
   selector: 'app-view-stage',
@@ -47,7 +48,7 @@ export class ViewStageComponent implements OnInit {
     console.log(this.sessionStorage.retrieve("stageToView"));
 
   }
-  get stage(){
+  get stage():Stage{
     return this.sessionStorage.retrieve("stageToView");
   }
   findEtudiantByCin() {
@@ -69,15 +70,16 @@ export class ViewStageComponent implements OnInit {
     this.juries[i].user.motPass = this.passwordGeneratorService.getRandomPassword();
   }
   increaseEncadrants(){
-    this.ajouterEncadreurs =true;
-    const e = new Encadreur();
-    e.type = this.typeEnc;
-    if(this.typeEnc == "Encadreur de l'organisme"){
-      const  d = new Date();
-      e.reference = "EO"+d.getTime();
+    if(this.stage.stageEncadreurs.length<2){
+      this.ajouterEncadreurs =true;
+      const e = new Encadreur();
+      e.type = this.typeEnc;
+      if(this.typeEnc == "Encadreur de l'organisme"){
+        const  d = new Date();
+        e.reference = "EO"+d.getTime();
+      }
+      this.encadreurs.push(this.cloneEncadreur(e));
     }
-    this.encadreurs.push(this.cloneEncadreur(e));
-    console.log(this.encadreurs)
   }
   cloneEncadreur(encadreur:Encadreur){
     return this.encadreurService.cloneEncadreur(encadreur);
@@ -114,7 +116,7 @@ export class ViewStageComponent implements OnInit {
   }
 
   update(){
-
+    console.log(this.stage);
   }
 
 }

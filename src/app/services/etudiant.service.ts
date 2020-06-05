@@ -4,7 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Filiere} from "../models/filiere.model";
 import {UserService} from "./user.service";
 import {EtudiantPage} from "../models/pageModels/etudiant-page";
-import {Encadreur} from "../models/encadreur.model";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +17,29 @@ export class EtudiantService {
   tableElements = [];
   link="http://localhost:8091/gestion-stage-api/etudiant/"
   constructor(private http:HttpClient,private userService :UserService) { }
-  findByCoordinateur(id:number,page:number,size:number){
-    return this.http.get<EtudiantPage>(this.link+"coordinateur/id/"+id+"/page/"+page+"/size/"+size).subscribe(data=>{
+  findByCoordinateur(id:number,page:number,size:number,sort:string){
+    return this.http.get<EtudiantPage>(this.link+"coordinateur/id/"+id+"/page/"+page+"/size/"+size+"/sort/"+sort).subscribe(data=>{
       this._pageEtudiant = data;
       this.fillTableElements(data.totalPages);
     })
+  }
+  findByCodeAppoge(codeAppoge:string){
+    this.http.get<Etudiant>(this.link+"codeAppoge/"+codeAppoge).subscribe(data=>this.etudiant = data);
+  }
+  findByUserId(id:number){
+    this.http.get<Etudiant>(this.link+"user/id/"+id).subscribe(d=>this.etudiant = d);
+  }
+  findAll(page:number,size:number,sort:string){
+    this.http.get<EtudiantPage>(this.link+"page/"+page+"/size/"+size+"/sort/"+sort);
+  }
+  removeByCne(cne:string):Observable<number>{
+    return this.http.delete<number>(this.link+"cin/"+cne);
+  }
+  save():Observable<number>{
+    return this.http.post<number>(this.link,this.etudiant);
+  }
+  update(etudiant:Etudiant):Observable<number>{
+    return this.http.put<number>(this.link,etudiant);
   }
   search(seach:string){
     const request = "search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.email:*"+seach+"* OR " +
@@ -89,4 +107,13 @@ export class EtudiantService {
   set pageEtudiant(value: EtudiantPage) {
     this._pageEtudiant = value;
   }
+  findByNiveau(niveau:string,page:number,size:number){
+    this.http.get<EtudiantPage>(this.link+"niveau/"+niveau+"/page/"+page+"/size/"+size).subscribe(data=>this.pageEtudiant = data);
+  }
+  findByNomOrPrenom(find:string,page:number,size:number){
+    this.http.get<EtudiantPage>(this.link+"user/nom/"+find+"/prenom/"+find+"/page/"+page+"/size/"+size).subscribe(data=>{
+      this.pageEtudiant = data;
+    })
+  }
+
 }

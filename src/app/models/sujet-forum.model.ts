@@ -12,10 +12,4 @@ export class SujetForum {
   user:User;
   stage:Stage;
   commentaires:Array<Commentaire>;
-
-  constructor() {
-    this.stage = new Stage();
-    this.user = new User();
-    this.commentaires = new Array<Commentaire>();
-  }
 }

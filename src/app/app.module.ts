@@ -36,6 +36,14 @@ import { ListEncadreurComponent } from './components/encadreur/list-encadreur/li
 import { ListEtudiantComponent } from './components/etudiant/list-etudiant/list-etudiant.component';
 import { ListJuryComponent } from './components/jury/list-jury/list-jury.component';
 import { SearchComponent } from './components/search/search.component';
+import { ConventionComponent } from './components/pdf/convention/convention.component';
+import { MainEncadreurComponent } from './components/encadreur/main-encadreur/main-encadreur.component';
+import { NavbarEncadreurComponent } from './components/encadreur/navbar-encadreur/navbar-encadreur.component';
+import { StatisticsComponent } from './components/statistics/statistics.component';
+import { RapportTableComponent } from './components/admin/tables/rapport-table/rapport-table.component';
+import { ForumTableComponent } from './components/admin/tables/forum-table/forum-table.component';
+import { ForumComponent } from './components/forum/forum.component';
+import { UserCreateComponent } from './components/modals/user-create/user-create.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -66,7 +74,15 @@ import { SearchComponent } from './components/search/search.component';
     ListEncadreurComponent,
     ListEtudiantComponent,
     ListJuryComponent,
-    SearchComponent
+    SearchComponent,
+    ConventionComponent,
+    MainEncadreurComponent,
+    NavbarEncadreurComponent,
+    StatisticsComponent,
+    RapportTableComponent,
+    ForumTableComponent,
+    ForumComponent,
+    UserCreateComponent
   ],
   imports: [
     BrowserModule,

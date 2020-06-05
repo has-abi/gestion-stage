@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-md-11">
+    <div class="card shadow my-4">
+      <div class="card-header text-white" style="background: #4287f5"><h1><span class="fa fa-briefcase"></span> Active Stages</h1></div>
+      <div class="card-body">
+        <ul class="list-group-item">
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-md-6"><b><i class="fas fa-file-alt"></i>Sujet: </b> Gestion des stagiaires</div>
+              <div class="col-md-3"><b><span class="fa fa-calendar"></span> Date début: </b>12-01-2020</div>
+              <div class="col-md-3"><b><span class="fa fa-calendar"></span> Date fin: </b>12-06-2020</div>
+              <div class="col-md-6"><span class="fa fa-graduation-cap"></span> <span class="font-weight-bold">Abida hassan</span>
+                <span class="fa fa-bars mx-3"></span></div>
+              <div class="col-md-6"><span class="fa fa-graduation-cap"></span> <span class="font-weight-bold">El abdellaoui Aicha</span>
+                <span class="fa fa-bars mx-3"></span></div>
+              <div class="col-md-12"><button class="btn-sm btn-success float-right" (click)="ajouterTache = !ajouterTache"><span class="fa " [class.fa-plus-circle]="!ajouterTache" [class.fa-minus-circle]="ajouterTache"></span></button></div>
+              <div *ngIf="ajouterTache" class="col-md-12">
+                <textarea  cols="30" rows="5" class="form-control">Tâche....</textarea>
+                <div class="row my-2">
+                  <div class="col-md-6">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text"><span class="fa fa-calendar"></span> Date limit*</div>
+                      </div>
+                      <input type="date" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <button class="btn btn-info btn-block">Affecter</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-md-6"><b><span class="fa fa-bars"></span> Sujet: </b> Gestion des stagiaires</div>
+              <div class="col-md-3"><b><span class="fa fa-calendar"></span> Date début: </b>12-01-2020</div>
+              <div class="col-md-3"><b><span class="fa fa-calendar"></span> Date fin: </b>12-06-2020</div>
+              <div class="col-md-6"><span class="fa fa-graduation-cap"></span> <span class="font-weight-bold">Abida hassan</span>
+                <span class="fa fa-bars mx-3"></span></div>
+              <div class="col-md-6"><span class="fa fa-graduation-cap"></span> <span class="font-weight-bold">El abdellaoui Aicha</span>
+                <span class="fa fa-bars mx-3"></span></div>
+              <div class="col-md-12"><button class="btn-sm btn-success float-right"><span class="fa fa-plus-circle"></span></button></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-1 mt-4">
+    <ul class="list-group float-right list">
+      <li class="list-group-item bg-dark text-white call"><span class="fa fa-graduation-cap"></span><span class="pop-up"> Etudiants</span></li>
+      <li class="list-group-item bg-dark text-white call"><span class="fa fa-tasks"></span><span class="pop-up"> Tâches</span></li>
+      <li class="list-group-item bg-dark text-white call"><span class="fa fa-bars"></span><span class="pop-up"> stages</span></li>
+      <li class="list-group-item bg-dark text-white call"><span class="fa fa-file"></span><span class="pop-up"> Documents</span></li>
+    </ul>
+  </div>
+</div>
+

@@ -15,8 +15,8 @@ export class JuryService {
   private _pagejury:JuryPage;
   tableElements = [];
   constructor(private http: HttpClient) { }
-  findByCoordinateur(id:number,page:number,size:number){
-    this.http.get<JuryPage>(this.url+"coordinateur/id/"+id+"/page/"+page+"/size/"+size).subscribe(datas=>{
+  findByCoordinateur(id:number,page:number,size:number,sort:string){
+    this.http.get<JuryPage>(this.url+"coordinateur/id/"+id+"/page/"+page+"/size/"+size+"/sort/"+sort).subscribe(datas=>{
       this.pagejury = datas;
       this.pagejury.content = datas.content;
     })

@@ -5,8 +5,9 @@ import {Stage} from "../../../models/stage.model";
 import {RapportService} from "../../../services/rapport.service";
 import {Rapport} from "../../../models/rapport.model";
 import {OrganismeService} from "../../../services/organisme.service";
-import {OrganismeAccueil} from "../../../models/organisme-accueil.model";
 import {SessionStorageService} from "ngx-webstorage";
+import {ConventionService} from "../../../services/convention.service";
+import {FlashMessagesService} from "angular2-flash-messages";
 
 @Component({
   selector: 'app-list-stages',
@@ -21,6 +22,7 @@ export class ListStagesComponent implements OnInit {
   searchStage = "";
   modifyEtudiant = false;
   searchByDate = false;
+  selectedTable="Stages"
   columns = {
     'id':false,
     'sujet':true,
@@ -32,7 +34,8 @@ export class ListStagesComponent implements OnInit {
     'organisme':true,
     'actions':true,
     'juries':false,
-    'rapport':false
+    'rapport':false,
+    'convention':false
   }
   selectAll = false;
   tableOrder = {
@@ -52,11 +55,61 @@ export class ListStagesComponent implements OnInit {
     show:false
   }
   constructor(private stageService: StageService,private stageEtudiantService:StageEtudiantService,
-              private rapportService:RapportService,private organismeService:OrganismeService,private sessionStorage:SessionStorageService) { }
+              private rapportService:RapportService,private organismeService:OrganismeService,
+              private sessionStorage:SessionStorageService,private conventionService:ConventionService,
+              private flashMessagesService:FlashMessagesService) { }
 
   ngOnInit(): void {
     this.findAllPages();
 
+  }
+  deleteStage(stage:Stage){
+   this.stageService.deleteByReference(stage.reference).subscribe(resp=>{
+     if(resp>0){
+       this.flashMessagesService.show("stage supprimer avec succée!", { cssClass: 'alert-success', timeout: 5000 });
+        this.stagePage.content.splice(this.stagePage.content.indexOf(stage,0),1);
+     }else{
+       this.flashMessagesService.show("stagee ne peut pas être suprpimer!!", { cssClass: 'alert-danger', timeout: 5000 });
+     }
+   });
+
+  }
+
+  conventioner(cStage:Stage){
+    this.conventionService.convention.organisme = cStage.organismeAccueil;
+    this.conventionService.convention.dateDebutStage = this.getFormatDate(cStage.dateDebut);
+    this.conventionService.convention.dateFinStage = this.getFormatDate(cStage.dateFin);
+    this.conventionService.convention.durreStage = this.getDiffMonth(cStage.dateDebut,cStage.dateFin);
+    cStage.stageEtudiants.forEach(se=>{
+      this.conventionService.convention.etudiantCne.push(se.etudiant.cin);
+    })
+    console.log(this.conventionService.convention.etudiantCne)
+    console.log(this.conventionService.convention.etudiantCne[0])
+    cStage.stageEncadreurs.forEach(se=>{
+      if(se.encadreur.type == "Encadreur de la faculté"){
+        this.conventionService.convention.encadreurFaculte = se.encadreur;
+      }else{
+        this.conventionService.convention.encadreurStructure = se.encadreur;
+      }
+    })
+    this.conventionService.convention.sujetStage = cStage.sujet;
+    console.log(this.conventionService.convention);
+  }
+  getFormatDate(d:Date):string{
+    let date = new Date(d);
+    let month = date.getMonth()+1;
+    let day = date.getDate();
+    let year = date.getFullYear();
+    return day + "/"+month+"/"+year;
+  }
+  getDiffMonth(date1:Date,date2:Date){
+    let d1 = new Date(date1);
+    let d2 = new Date(date2);
+    let months;
+    months = (d2.getFullYear() - d1.getFullYear())*12;
+    months -= d1.getMonth();
+    months += d2.getMonth();
+    return months <= 0 ? 0 : months;
   }
   findAll(){
     return this.stageService.getAllStages();
@@ -160,9 +213,9 @@ export class ListStagesComponent implements OnInit {
     }else {
       this.selectedStages.splice(0,this.selectedStages.length);
     }
-    console.log(this.selectedStages);
   }
   existeInSelectedStage(stage){
+
     const contain = this.selectedStages.filter(s=>s.id == stage.id);
     if(contain.length == 0){
       return false;
@@ -180,9 +233,7 @@ export class ListStagesComponent implements OnInit {
   diaplayRapport(rapport:Rapport){
     this.rapportService.rapport = rapport;
   }
-  activerStage(ref:string){
 
-  }
   ajouterStructure(stage:Stage){
     this.stageService.stage= stage;
   }
@@ -218,4 +269,28 @@ export class ListStagesComponent implements OnInit {
     return this.organismeService.organismeAcceuil;
   }
 
+  deleteAll() {
+    this.selectedStages.forEach(stage=>{
+      this.deleteStage(stage);
+    })
+  }
+  activateAll(){
+    this.selectedStages.forEach(stage=>{
+      this.activerStage(stage);
+    })
+  }
+  activerStage(stage:Stage){
+    this.stageService.activerStage(stage.reference).subscribe(resp=>{
+      if(resp>0){
+        this.flashMessagesService.show("stage activer avec succée!", { cssClass: 'alert-success', timeout: 5000 });
+        this.stagePage.content.forEach(s=>{
+          if(s.reference == stage.reference){
+            s.statu = true;
+          }
+        })
+      }else{
+        this.flashMessagesService.show("stagee ne peut pas être activer!!", { cssClass: 'alert-danger', timeout: 5000 });
+      }
+    })
+  }
 }

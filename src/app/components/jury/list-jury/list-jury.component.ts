@@ -19,10 +19,11 @@ export class ListJuryComponent implements OnInit {
   constructor(private juryService:JuryService) { }
 
   ngOnInit(): void {
+    this.findByCoordinateur();
   }
 
   findByCoordinateur(){
-    this.juryService.findByCoordinateur(this.id,this.page,this.size);
+    this.juryService.findByCoordinateur(this.id,this.page,this.size,"asc");
   }
   nextElements(){
     if(this.page<=this.pageJury.totalPages){
@@ -70,6 +71,12 @@ export class ListJuryComponent implements OnInit {
     return this.juryService.juries;
   }
   changeOrder(order:string,prop:string){
+    if(order=="asc" && prop == "id"){
+      this.juryService.findByCoordinateur(this.id,this.page,this.size,"asc");
+    }
+    if(order=="desc" && prop == "id"){
+      this.juryService.findByCoordinateur(this.id,this.page,this.size,"desc");
+    }
     this.tableOrder.order = order;
     this.tableOrder.prop = prop;
   }

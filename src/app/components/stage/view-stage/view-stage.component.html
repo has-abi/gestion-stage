@@ -1,7 +1,7 @@
 <div class="card">
-  <div class="card-header bg-info text-white">
+  <div class="card-header bg-dark text-white">
     <h1 class="d-inline"><span class="fa fa-file"></span> Stage: {{stage.sujet}} </h1>
-    <span *ngIf="!updateStage.stage && !stage.status" class="fa fa-pencil fa-2x float-right" (click)="updateStage.stage  = !updateStage.stage" style="cursor: pointer"></span>
+    <span *ngIf="!updateStage.stage && !stage.statu" class="fa fa-pencil fa-2x float-right" (click)="updateStage.stage  = !updateStage.stage" style="cursor: pointer"></span>
     <span *ngIf="updateStage.stage" class="fa fa-times fa-2x float-right" (click)="updateStage.stage  = !updateStage.stage" style="cursor: pointer"></span>
     <div  class="row">
       <div class="col-md-3"><b>Statu:</b> <span *ngIf="stage.statu" class="text-success">Active <span class="fa fa-check"></span></span>
@@ -37,7 +37,7 @@
       <div class="card shadow-sm mt-3">
         <div class="card-header bg-dark text-white">
           <h1 class="d-inline"> <span class="fa fa-graduation-cap"></span> Les étudiants de stage </h1>
-          <span *ngIf="!updateStage.etudiants &&  !stage.status" class="fa fa-pencil fa-2x float-right" (click)="updateStage.etudiants  = !updateStage.etudiants" style="cursor: pointer"></span>
+          <span *ngIf="!updateStage.etudiants &&  !stage.statu" class="fa fa-pencil fa-2x float-right" (click)="updateStage.etudiants  = !updateStage.etudiants" style="cursor: pointer"></span>
           <span *ngIf="updateStage.etudiants" class="fa fa-check fa-2x float-right" (click)="updateStage.etudiants  = !updateStage.etudiants" style="cursor: pointer"></span>
         </div>
         <div class="card-body table-responsive">
@@ -111,7 +111,7 @@
       </div>
     <div class="card shadow-sm mt-3">
       <div class="card-header bg-dark text-white"><h1 class="d-inline"><span class="fa fa-briefcase"></span> Les Encadreurs de stage</h1>
-        <span *ngIf="!updateStage.encadreurs && !stage.status" class="fa fa-pencil fa-2x float-right" (click)="updateStage.encadreurs  = !updateStage.encadreurs" style="cursor: pointer"></span>
+        <span *ngIf="!updateStage.encadreurs && !stage.statu" class="fa fa-pencil fa-2x float-right" (click)="updateStage.encadreurs  = !updateStage.encadreurs" style="cursor: pointer"></span>
         <span *ngIf="updateStage.encadreurs" class="fa fa-times fa-2x float-right" (click)="updateStage.encadreurs  = !updateStage.encadreurs" style="cursor: pointer"></span>
       </div>
       <div class="card-body table-responsive">
@@ -143,7 +143,7 @@
       <div *ngIf="updateStage.encadreurs" class="card-footer">
         <div *ngFor="let e of stage.stageEncadreurs ">
             <div class="row mt-2">
-              <div *ngIf="e.type == 'Encadreur de la faculté'" class="form-group col-md-3">
+              <div *ngIf="e.encadreur.type == 'Encadreur de la faculté'" class="form-group col-md-3">
                 <label for="ref">Rpp*</label>
                 <input type="text" class="form-control" placeholder="ref..." id="ref" [(ngModel)]="e.encadreur.reference">
               </div>
@@ -245,7 +245,7 @@
     </div>
   <div class="card shadow-sm mt-3">
     <div class="card-header bg-dark text-white"><h1 class="d-inline"><span class="fa fa-briefcase"></span> Les Jurys de stage</h1>
-      <span *ngIf="!updateStage.juries && !stage.status" class="fa fa-pencil fa-2x float-right" (click)="updateStage.juries  = !updateStage.juries" style="cursor: pointer"></span>
+      <span *ngIf="!updateStage.juries && !stage.statu" class="fa fa-pencil fa-2x float-right" (click)="updateStage.juries  = !updateStage.juries" style="cursor: pointer"></span>
       <span *ngIf="updateStage.juries" class="fa fa-times fa-2x float-right" (click)="updateStage.juries  = !updateStage.juries" style="cursor: pointer"></span>
     </div>
     <div class="card-body table-responsive">
@@ -346,8 +346,8 @@
   </div>
     <div class="card shadow-sm mt-3">
       <div class="card-header bg-dark text-white"><h1 class="d-inline"><span class="fa fa-building"></span> Structure D'acceuil</h1>
-        <span *ngIf="stage.organismeAccueil!=null && !stage.status" class="fa fa-pencil fa-2x float-right" style="cursor: pointer" (click)="updateStage.organisme = true"></span>
-        <span *ngIf="stage.organismeAccueil==null && !stage.status" class="fa fa-plus-circle fa-2x float-right" data-toggle="modal" data-target="#organismeModal"  style="cursor: pointer"></span>
+        <span *ngIf="stage.organismeAccueil!=null && !stage.statu" class="fa fa-pencil fa-2x float-right" style="cursor: pointer" (click)="updateStage.organisme = true"></span>
+        <span *ngIf="stage.organismeAccueil==null && !stage.statu" class="fa fa-plus-circle fa-2x float-right" data-toggle="modal" data-target="#organismeModal"  style="cursor: pointer"></span>
       </div>
       <div *ngIf="stage.organismeAccueil!=null" class="card-body">
         <div class="row">
