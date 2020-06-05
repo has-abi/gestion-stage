@@ -1,0 +1,29 @@
+<div class="modal" id="tachedetails" tabindex="-6" role="dialog" aria-labelledby="tachedetails" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-center">Tache Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Contenu  :  <span class="text-center">{{tache.contenu}}</span></p>
+        <p> Reference : <span class="text-center">{{tache.reference}}</span></p>
+        <p> Encadrant: <span class="fa fa-user"></span>
+          {{tache.stageEncadreur.encadreur.user.nom }} {{tache.stageEncadreur.encadreur.user.prenom}}</p>
+        <p> Date Creation:
+          <span class="fa fa-calendar "></span>{{tache.dateCreation}}  </p>
+        <p> Date limite: <span class="fa fa-calendar"></span> {{tache.dateLimit}} </p>
+        <p> Date Validation:
+          <span class="fa fa-calendar"></span>{{tache.dateVlidation}}  </p>
+        <p> Effectuer: <span class="text-center">{{tache.effectuer}} </span></p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+

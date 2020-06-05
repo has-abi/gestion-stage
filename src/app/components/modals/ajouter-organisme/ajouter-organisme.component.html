@@ -1,0 +1,19 @@
+<div  class="modal "  id="organismeModal" tabindex="-6" role="dialog" aria-labelledby="organismeModal" aria-hidden="true">
+  <h1 class="modal-title"><span class="fa fa-building"></span> Ajouter une structure d'acceuil :</h1>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-organisme-form></app-organisme-form>
+        <div *ngIf="MessgErrors.type == 'error'">
+          <div class="mt-2 alert alert-danger">{{MessgErrors.message}}</div>
+        </div>
+        <div *ngIf="MessgErrors.type == 'success'">
+          <div class="mt-2 alert alert-success">{{MessgErrors.message}}</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-dismiss="modal" (click)="dismissOrganisme()" >Fermer</button>
+      </div>
+

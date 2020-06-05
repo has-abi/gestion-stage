@@ -2,6 +2,7 @@ import {OrganismeAccueil} from "./organisme-accueil.model";
 import {StageEtudiant} from "./stage-etudiant.model";
 import {StageEncadreur} from "./stage-encadreur.model";
 import {StageMembreJury} from "./stage-membre-jury.model";
+import {Rapport} from "./rapport.model";
 
 export class Stage {
   id:number;
@@ -15,8 +16,10 @@ export class Stage {
   stageEtudiants:Array<StageEtudiant>;
   stageEncadreurs:Array<StageEncadreur>;
   stageMembreJuries:Array<StageMembreJury>;
+  rapport:Rapport;
 
   constructor() {
+    this.rapport = new Rapport();
     this.organismeAccueil = new OrganismeAccueil();
     this.stageEtudiants = new Array<StageEtudiant>();
     this.stageEncadreurs = new Array<StageEncadreur>();

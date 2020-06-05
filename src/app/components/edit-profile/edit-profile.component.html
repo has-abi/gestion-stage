@@ -1,0 +1,127 @@
+<div class="d-flex justify-content-center align-items-center my-4">
+  <div class="card mt-3 shadow-sm" style="width: 550px">
+    <div class="card-img d-flex justify-content-center align-items-center bg-light py-2">
+      <img src="../../../assets/portofolio.jpg" alt="image de profile" class="rounded-circle " height="80px" width="80px">
+      <button class="btn bg-transparent border-0 ml-2" (click)="editInfos.photo = !editInfos.photo"><span class="fa fa-pencil pull-right text-dark mb-0"></span></button>
+
+    </div>
+    <div class="card-body">
+      <div class="text-body text-center">
+        <h1><span class="fa fa-user"></span> Profile informations</h1>
+      </div>
+      <div *ngIf="editInfos.photo" class="input-group  ">
+        <div class="input-group-prepend"><div class="input-group-text">Photo</div></div>
+        <input type="file" class="form-control " style="width: 100px">
+        <div class="input-group-append">
+          <button class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Modifier la photo de profile"><span class="fa fa-check"></span></button></div>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-6"><h4><b>Nom:</b> Abida
+              <button class="btn bg-transparent border-0 " (click)="editInfos.nom = !editInfos.nom"><span class="fa fa-pencil"></span></button></h4></div>
+            <div *ngIf="editInfos.nom" class="col-md-6">
+              <div class="input-group">
+                <input type="text" class="form-control form-control-sm">
+                <div class="input-group-append">
+                  <button class="btn btn-sm btn-light text-dark border-dark"  data-toggle="tooltip" data-placement="right" title="Modifier le nom"><i class="fa fa-check-circle"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6"><h4><b>Prénom:</b> Hassan
+              <button class="btn bg-transparent border-0 " (click)="editInfos.prenom = !editInfos.prenom"><span class="fa fa-pencil"></span></button></h4></div>
+            <div *ngIf="editInfos.prenom" class="col-md-6">
+              <div class="input-group">
+                <input type="text" class="form-control form-control-sm">
+                <div class="input-group-append">
+                  <button class="btn btn-sm btn-light text-dark border-dark" data-toggle="tooltip" data-placement="right" title="Modifier le prénom"><i class="fa fa-check-circle"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6"><h4><b>Email:</b> abida@gmail.com
+              <button class="btn bg-transparent border-0 " (click)="editInfos.email = !editInfos.email"><span class="fa fa-pencil"></span></button></h4></div>
+            <div *ngIf="editInfos.email" class="col-md-6">
+              <div class="input-group">
+                <input type="email" class="form-control form-control-sm">
+                <div class="input-group-append">
+                  <button class="btn btn-sm btn-light text-dark border-dark" data-toggle="tooltip" data-placement="right" title="Modifier le email"><i class="fa fa-check-circle"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6"><h4><b>Mot de Passe:</b> Abida
+              <button class="btn bg-transparent border-0 " (click)="editInfos.pwd = !editInfos.pwd"><span class="fa fa-pencil"></span></button></h4></div>
+            <div *ngIf="editInfos.pwd" class="col-md-6">
+              <div class="input-group">
+                <input type="password" class="form-control form-control-sm">
+                <div class="input-group-append">
+                  <button class="btn btn-sm btn-light text-dark border-dark" data-toggle="tooltip" data-placement="right" title="Modifier le mot de passe"><i class="fa fa-check-circle"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6"><h4><b>Adress:</b> Marrakech
+              <button class="btn bg-transparent border-0 " (click)="editInfos.adress = !editInfos.adress"><span class="fa fa-pencil"></span></button></h4></div>
+            <div *ngIf="editInfos.adress" class="col-md-6">
+              <div class="input-group">
+                <input type="text" class="form-control form-control-sm">
+                <div class="input-group-append">
+                  <button class="btn btn-sm btn-light text-dark border-dark" data-toggle="tooltip" data-placement="right" title="Modifier le adress"><i class="fa fa-arrow-circle-right"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6"><h4><b>Téléphone:</b> 0659416875
+              <button class="btn bg-transparent border-0 " (click)="editInfos.tele = !editInfos.tele"><span class="fa fa-pencil"></span></button></h4></div>
+            <div *ngIf="editInfos.tele" class="col-md-6">
+              <div class="input-group">
+                <input type="text" class="form-control form-control-sm">
+                <div class="input-group-append">
+                  <button class="btn btn-sm btn-light text-dark border-dark" data-toggle="tooltip" data-placement="right" title="Modifier le téléphone"><i class="fa fa-check-circle"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-7"><h4><b>Date de naissance:</b> 12-09-1995
+              <button class="btn bg-transparent border-0 " (click)="editInfos.dateNaissance = !editInfos.dateNaissance"><span class="fa fa-pencil"></span></button></h4></div>
+            <div *ngIf="editInfos.dateNaissance" class="col-md-5">
+              <div class="input-group">
+                <input type="date" class="form-control form-control-sm">
+                <div class="input-group-append">
+                  <button class="btn btn-sm btn-light text-dark border-dark" data-toggle="tooltip" data-placement="right" title="Modifier la date de naissance"><i class="fa fa-check-circle"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6"><h4><b>Sexe:</b> Homme
+              <button class="btn bg-transparent border-0 " (click)="editInfos.sexe = !editInfos.sexe"><span class="fa fa-pencil"></span></button></h4></div>
+            <div *ngIf="editInfos.sexe" class="col-md-6">
+              <div class="form-check form-check-inline mt-2">
+                <input class="form-check-input" type="checkbox" id="homme" value="homme">
+                <label class="form-check-label" for="homme">Homme</label>
+              </div>
+              <div class="form-check form-check-inline mt-2">
+                <input class="form-check-input" type="checkbox" id="femme" value="femme">
+                <label class="form-check-label" for="femme">Femme</label>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-outline-info float-right " data-toggle="tooltip" data-placement="right" title="sauvegarder les modifications">Enregistrer <span class="fa fa-check"></span></button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</div>

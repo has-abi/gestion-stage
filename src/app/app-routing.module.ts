@@ -6,6 +6,7 @@ import {LoginComponent} from "./components/auth/login/login.component";
 import {RegisterComponent} from "./components/auth/register/register.component";
 import {CoordinateurComponent} from "./components/coordinateur/coordinateur/coordinateur.component";
 import {CoordinateurAccueilComponent} from "./components/coordinateur/coordinateur-accueil/coordinateur-accueil.component";
+import {ViewStageComponent} from "./components/stage/view-stage/view-stage.component";
 
 
 const routes: Routes = [
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path:"coordinateur/profile",component: CoordinateurAccueilComponent},
   {path:"login",component:LoginComponent},
   {path:"register",component:RegisterComponent},
+  {path:"stage",component:ViewStageComponent},
   {path:'',redirectTo:"login",pathMatch:'full'}
 ];
 

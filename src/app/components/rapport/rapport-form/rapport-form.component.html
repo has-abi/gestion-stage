@@ -1,0 +1,36 @@
+<form [formGroup]="rapportForm" (ngSubmit)="upload(rapportForm.value)">
+  <div class="form-group">
+    <label for="titre">Titre*:</label>
+    <input type="text" class="form-control" id="titre"  name="titre" formControlName="titre" required="true" >
+    <div *ngIf="titre.invalid && (titre.dirty || titre.touched)">
+      <div *ngIf="titre.errors.required" class="text-warning">Titre du rapport est obligatoire!</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="desc">Description*:</label>
+    <textarea class="form-control" id="desc" rows="2" formControlName="desc" name="desc" required="true" ></textarea>
+    <div *ngIf="desc.invalid && (desc.dirty || desc.touched)">
+      <div *ngIf="desc.errors.required" class="text-warning">Description du rapport est obligatoire!</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div *ngIf="currentFile" class="progress">
+      <div
+        class="progress-bar progress-bar-info progress-bar-striped"
+        role="progressbar"
+        attr.aria-valuenow="{{ progress }}"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [ngStyle]="{ width: progress + '%' }"
+      >
+        {{ progress }}%
+      </div>
+    </div>
+    <label class="btn btn-default">
+      <input type="file" (change)="selectFile($event)"  name="file" id="file" />
+    </label>
+
+    <div class="alert alert-light" role="alert">{{ message }}</div>
+  </div>
+  <button class="btn btn-primary float-right"  type="submit"  [disabled]="!selectedFile">Enregister <span class="fa fa-check"></span></button>
+</form>

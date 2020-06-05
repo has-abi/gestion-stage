@@ -1,0 +1,93 @@
+<form [formGroup]="organismeForm" (ngSubmit)=" AjouterOrganisme(organismeForm.value)" *ngIf="organismeForm" class="row">
+      <div class="form-group col-md-6">
+        <label for="raisonSocial">Raison sociale</label>
+        <input type="text" class="form-control" id="raisonSocial" name="raisonSocial" placeholder="raison social..."  required="true" formControlName="raisonSocial">
+        <div *ngIf="raisonSocial.invalid && (raisonSocial.touched || raisonSocial.dirty)">
+          <div *ngIf="raisonSocial.errors.required" class="text-warning">raison social est obligatoire!</div>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="email..."   required="true" formControlName="email">
+        <div *ngIf="email.invalid && (email.touched || email.dirty)">
+          <div *ngIf="email.errors.required" class="text-warning">E-mail est obligatoire!</div>
+
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="gsm">GSM</label>
+        <input type="text" class="form-control" id="gsm" name="gsm" placeholder="telephone..."    required="true" formControlName="gsm">
+        <div *ngIf="gsm.invalid && (gsm.touched || gsm.dirty)">
+          <div *ngIf="gsm.errors.required" class="text-warning">GSM est obligatoire!</div>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="fix">Fix</label>
+        <input type="text" class="form-control" id="fix" name="fix" placeholder="telephone fix..."   required="true" formControlName="fix">
+        <div *ngIf="fix.invalid && (fix.touched || fix.dirty)">
+          <div *ngIf="fix.errors.required" class="text-warning">Fix est obligatoire!</div>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="adress">Adress</label>
+        <input type="text" class="form-control" id="adress" name="adress" placeholder="adress"    required="true" formControlName="adress">
+        <div *ngIf="adress.invalid && (adress.touched || adress.dirty)">
+          <div *ngIf="adress.errors.required" class="text-warning">Adress est obligatoire!</div>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="responsable">Responsable</label>
+        <input type="text" class="form-control" id="responsable" name="responsable" placeholder="responsable..."   required="true" formControlName="responsable">
+        <div *ngIf="responsable.invalid && (responsable.touched || responsable.dirty)">
+          <div *ngIf="responsable.errors.required" class="text-warning">Responsable est obligatoire!</div>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="typeO">Type</label>
+        <select  id="typeO" name="typeO" class="form-control"    required="true" formControlName="typeO" (change)="changeTypeO()">
+          <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+          <option *ngFor="let type of typeOrganismes" value="{{type.type}}">{{type.type}}</option>
+        </select>
+        <div *ngIf="typeO.invalid && (typeO.touched || typeO.dirty)">
+          <div *ngIf="typeO.errors.required" class="text-warning">Type organisme est obligatoire!</div>
+        </div>
+        <div *ngIf="typeOBox.isClicked && !typeOBox.valueChanged" class="text-warning">Type organisme est obligatoire!</div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="typeS">Type Service</label>
+        <select  id="typeS" name="typeS" class="form-control"  required="true" formControlName="typeS" (change)="changeTypeS()">
+          <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+          <option *ngFor="let type of typeServiceOrganismes" value="{{type.type}}">{{type.type}}</option>
+        </select>
+        <div *ngIf="typeS.invalid && (typeS.touched || typeS.dirty)">
+          <div *ngIf="typeS.errors.required" class="text-warning">Type Service organisme est obligatoire!</div>
+        </div>
+        <div *ngIf="typeSBox.isClicked && !typeSBox.valueChanged" class="text-warning">Type service organisme est obligatoire!</div>
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="pay">Pays</label>
+        <select  id="pay" name="pays" class="form-control"   required="true" formControlName="pay" (change)="changePays()">
+          <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+          <option *ngFor="let p of pays" value="{{p.nom}}">{{p.nom}}</option>
+        </select>
+        <div *ngIf="pay.invalid && (pay.touched || pay.dirty)">
+          <div *ngIf="pay.errors.required" class="text-warning">Pays de rr l'organisme est obligatoire!</div>
+        </div>
+        <div *ngIf="paysBox.isClicked && !paysBox.valueChanged" class="text-warning">Pays de l'organisme est obligatoire!</div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="ville">Ville</label>
+        <select  id="ville" name="ville" class="form-control"   required="true" formControlName="ville" (change)="changeVille()">
+          <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+          <option *ngFor="let ville of villes" value="{{ville.nom}}">{{ville.nom}}</option>
+        </select>
+        <div *ngIf="ville.invalid && (ville.touched || ville.dirty)">
+          <div *ngIf="ville.errors.required" class="text-warning">La ville de l'organisme est obligatoire!</div>
+        </div>
+        <div *ngIf="villeBox.isClicked && !villeBox.valueChanged" class="text-warning">La ville de l'organisme est obligatoire!</div>
+      </div>
+      <button class="btn btn-success btn-block mx-5" type="submit" [disabled]="validateForm()">Sauvegarder <span class="fa fa-check"></span></button>
+    </form>
+
+

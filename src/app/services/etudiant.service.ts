@@ -4,46 +4,57 @@ import {HttpClient, HttpEvent, HttpRequest} from "@angular/common/http";
 import {Etudiant} from "../models/etudiant.model";
 import {Filiere} from "../models/filiere.model";
 import {UserService} from "./user.service";
+
 import {Observable} from "rxjs";
 import {Stage} from "../models/stage.model";
+
+import {EtudiantPage} from "../models/pageModels/etudiant-page";
+
 import {Encadreur} from "../models/encadreur.model";
 
-@Injectable({
+ @Injectable({
   providedIn: 'root'
 })
 export class EtudiantService {
 
   private _etudiant:Etudiant;
   private _etudiants:Array<Etudiant>;
-  private _stage:Stage;
-  private _encadrant:Encadreur;
+  private _encadreurs:Array<Encadreur>;
 
-  get encadrant(): Encadreur {
-    if(this._encadrant==null){
-      return this._encadrant=new Encadreur();
+  get encadreurs(): Array<Encadreur> {
+    if(this._encadreurs==null){
+      this._encadreurs=new Array<Encadreur>();
     }
-    return this._encadrant;
+    return this._encadreurs;
   }
 
-  set encadrant(value: Encadreur) {
-    this._encadrant = value;
+  set encadreurs(value: Array<Encadreur>) {
+    this._encadreurs = value;
   }
-
-  get stage(): Stage {
-    if(this._stage==null){
-      this._stage=new Stage();
-    }
-    return this._stage;
-  }
-
-  set stage(value: Stage) {
-    this._stage = value;
-  }
-
-  url1="http://localhost:8091/stage/document/"
 
   link="http://localhost:8091/gestion-stage-api/etudiant/";
+  private _pageEtudiant:EtudiantPage;
+  tableElements = [];
   constructor(private http:HttpClient,private userService :UserService) { }
+  findByCoordinateur(id:number,page:number,size:number){
+    return this.http.get<EtudiantPage>(this.link+"coordinateur/id/"+id+"/page/"+page+"/size/"+size).subscribe(data=>{
+      this._pageEtudiant = data;
+      this.fillTableElements(data.totalPages);
+    })
+  }
+  search(seach:string){
+    const request = "search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.email:*"+seach+"* OR " +
+      "cin:*"+seach+"* OR user.sexe:*"+seach+"* OR user.adress:*"+seach+"* OR codeAppoge:*"+seach+"* OR niveau:*"+seach+"*";
+    this.http.get<Array<Etudiant>>(this.link+request).subscribe(datas=>{
+      this.etudiants = datas;
+
+    })
+  }
+  fillTableElements(size:number){
+    for(let i = 0;i<size;i++){
+      this.tableElements.push(i);
+    }
+  }
 
   findAllEtudiants(){
     return this.http.get<Array<Etudiant>>(this.link).subscribe(data=>{
@@ -84,20 +95,19 @@ export class EtudiantService {
     e.filiere = new Filiere();
     return e;
   }
-  upload(file: File,titre:string): Observable<HttpEvent<any>> {
-    const formData: FormData = new FormData();
 
-    formData.append('file', file);
-    formData.append('titre', titre);
-    const req = new HttpRequest('POST', this.url1, formData, {
-      reportProgress: true,
-      responseType: 'json'
-    });
+    get pageEtudiant(): EtudiantPage {
+    if(this._pageEtudiant==null){
+      this._pageEtudiant=new EtudiantPage();
+    }
+      return this._pageEtudiant;
+    }
 
-    return this.http.request(req);
-  }
-  getFiles(): Observable<any> {
-    return this.http.get(this.url1);
-  }
+    set pageEtudiant(value: EtudiantPage) {
+      this._pageEtudiant = value;
+    }
+
+
+
 }
 

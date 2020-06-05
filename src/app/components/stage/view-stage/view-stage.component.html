@@ -1,0 +1,441 @@
+<div class="card">
+  <div class="card-header bg-info text-white">
+    <h1 class="d-inline"><span class="fa fa-file"></span> Stage: {{stage.sujet}} </h1>
+    <span *ngIf="!updateStage.stage && !stage.status" class="fa fa-pencil fa-2x float-right" (click)="updateStage.stage  = !updateStage.stage" style="cursor: pointer"></span>
+    <span *ngIf="updateStage.stage" class="fa fa-times fa-2x float-right" (click)="updateStage.stage  = !updateStage.stage" style="cursor: pointer"></span>
+    <div  class="row">
+      <div class="col-md-3"><b>Statu:</b> <span *ngIf="stage.statu" class="text-success">Active <span class="fa fa-check"></span></span>
+        <span *ngIf="!stage.statu" class="text-warning"><span class="font-weight-bolder ml-2">Inactive</span> <span class="fa fa-warning"></span> <span class="btn-sm btn-success mx-3 fa fa-check"></span></span>
+      </div>
+      <div class="col-md-3"><b>Date céation :</b>{{stage.dateCreation}}</div>
+      <div class="col-md-3"><b>Date début :</b>{{stage.dateDebut}}</div>
+      <div class="col-md-3"><b>Date Fin :</b>{{stage.dateFin}}</div>
+    </div>
+    <div *ngIf="updateStage.stage" class="row">
+      <div class="input-group col-md-3">
+        <div class="input-group-prepend bg-secondary" >
+          <div class="input-group-text"><i class="fa fa-calendar"></i>Date début*</div>
+        </div>
+        <input type="date" class="form-control" [(ngModel)]="stage.dateDebut">
+      </div>
+      <div class="input-group col-md-3">
+        <div class="input-group-prepend bg-secondary" >
+          <div class="input-group-text"><span class="fa fa-calendar"></span> Date fin*</div>
+        </div>
+        <input type="date" class="form-control" [(ngModel)]="stage.dateFin">
+      </div>
+      <div class="input-group col-md-6">
+        <div class="input-group-prepend " >
+          <div class="input-group-text bg-light">Ajouter le Sujet <span class="fa fa-chevron-circle-right"></span></div>
+        </div>
+        <input type="text" class="form-control" placeholder="sujet de stage..."  [(ngModel)]="stage.sujet">
+      </div>
+
+    </div>
+  </div>
+  <div class="card-body">
+      <div class="card shadow-sm mt-3">
+        <div class="card-header bg-dark text-white">
+          <h1 class="d-inline"> <span class="fa fa-graduation-cap"></span> Les étudiants de stage </h1>
+          <span *ngIf="!updateStage.etudiants &&  !stage.status" class="fa fa-pencil fa-2x float-right" (click)="updateStage.etudiants  = !updateStage.etudiants" style="cursor: pointer"></span>
+          <span *ngIf="updateStage.etudiants" class="fa fa-check fa-2x float-right" (click)="updateStage.etudiants  = !updateStage.etudiants" style="cursor: pointer"></span>
+        </div>
+        <div class="card-body table-responsive">
+          <table class="table table-striped shadow-sm">
+            <thead>
+            <tr>
+              <td>CNE</td>
+              <td>Code d'appogé</td>
+              <td>Nom</td>
+              <td>Prénom</td>
+              <td>Adress</td>
+              <td>Téléphone</td>
+              <td>Email</td>
+              <td>Date de naissance</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let se of stage.stageEtudiants">
+              <td>{{se.etudiant.cin}}</td>
+              <td>{{se.etudiant.codeAppoge}}</td>
+              <td>{{se.etudiant.user.nom}}</td>
+              <td>{{se.etudiant.user.prenom}}</td>
+              <td>{{se.etudiant.user.adress}}</td>
+              <td>{{se.etudiant.user.tele}}</td>
+              <td>{{se.etudiant.user.email}}</td>
+              <td>{{se.etudiant.user.dateNaissance}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="updateStage.etudiants" class="card-footer">
+          <div  *ngFor="let se of stage.stageEtudiants">
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="cin">Cin*</label>
+                  <input type="text" class="form-control" placeholder="cin..." id="cin" [(ngModel)]="se.etudiant.cin" [class.border-warning]=" se.etudiant.cin =='' "  >
+              </div>
+              <div class="form-group col-md-6">
+                <label for="codeAppoge">Code d'appogé*</label>
+                <input type="text" class="form-control" placeholder="code d'appogé..." id="codeAppoge" [(ngModel)]="se.etudiant.codeAppoge" [class.border-warning]=" se.etudiant.codeAppoge =='' ">
+              </div>
+            </div>
+          </div>
+          <button *ngIf="updateStage.etudiants && stage.stageEtudiants.length<2" class="btn btn-success float-right" (click)="ajouterEtudiant = true"><span class="fa fa-plus"></span></button>
+          <div *ngIf="ajouterEtudiant" class="row">
+
+            <div class="form-group col-md-3">
+              <label for="cinM">Cin*</label>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="cin..." id="cinM" [(ngModel)]="etudiant.cin" [class.border-warning]=" etudiant.cin =='' "  >
+                <div class="input-group-append">
+                  <button class="btn btn-dark" (click)="findEtudiantByCin()"><span class="fa fa-pencil"></span></button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="McodeAppoge">Code d'appogé*</label>
+              <input type="text" class="form-control" placeholder="code d'appogé..." id="McodeAppoge" [(ngModel)]="etudiant.codeAppoge" [class.border-warning]=" etudiant.codeAppoge =='' ">
+            </div>
+            <div class="form-group col-md-3">
+              <label for="nom">Nom*</label>
+              <input type="text" class="form-control" placeholder="nom..." id="nom" [(ngModel)]="etudiant.user.nom" [class.border-warning]=" etudiant.user.nom =='' ">
+            </div>
+            <div class="form-group col-md-3">
+              <label for="prenom">Prénom</label>
+              <input type="text" class="form-control" placeholder="prénom..." id="prenom" [(ngModel)]="etudiant.user.prenom" [class.border-warning]=" etudiant.user.prenom =='' ">
+            </div>
+          </div>
+          <button *ngIf="ajouterEtudiant" class="btn-sm btn-danger float-right" (click)="ajouterEtudiant = false"><span class="fa fa-minus-circle"></span></button>
+        </div>
+      </div>
+    <div class="card shadow-sm mt-3">
+      <div class="card-header bg-dark text-white"><h1 class="d-inline"><span class="fa fa-briefcase"></span> Les Encadreurs de stage</h1>
+        <span *ngIf="!updateStage.encadreurs && !stage.status" class="fa fa-pencil fa-2x float-right" (click)="updateStage.encadreurs  = !updateStage.encadreurs" style="cursor: pointer"></span>
+        <span *ngIf="updateStage.encadreurs" class="fa fa-times fa-2x float-right" (click)="updateStage.encadreurs  = !updateStage.encadreurs" style="cursor: pointer"></span>
+      </div>
+      <div class="card-body table-responsive">
+        <table class="table table-striped shadow-sm">
+          <thead>
+          <tr>
+            <td>Nom</td>
+            <td>Prénom</td>
+            <td>Adress</td>
+            <td>Téléphone</td>
+            <td>Email</td>
+            <td>profession</td>
+            <td>Type</td>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let se of stage.stageEncadreurs">
+            <td>{{se.encadreur.user.nom}}</td>
+            <td>{{se.encadreur.user.prenom}}</td>
+            <td>{{se.encadreur.user.adress}}</td>
+            <td>{{se.encadreur.user.tele}}</td>
+            <td>{{se.encadreur.user.email}}</td>
+            <td>{{se.encadreur.profession}}</td>
+            <td>{{se.encadreur.type}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="updateStage.encadreurs" class="card-footer">
+        <div *ngFor="let e of stage.stageEncadreurs ">
+            <div class="row mt-2">
+              <div *ngIf="e.type == 'Encadreur de la faculté'" class="form-group col-md-3">
+                <label for="ref">Rpp*</label>
+                <input type="text" class="form-control" placeholder="ref..." id="ref" [(ngModel)]="e.encadreur.reference">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="nomE">Nom*</label>
+                <input type="text" class="form-control" placeholder="nom..." id="nomE" [(ngModel)]="e.encadreur.user.nom">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="prenomE">Prénom*</label>
+                <input type="text" class="form-control" placeholder="prénom..." id="prenomE" [(ngModel)]="e.encadreur.user.prenom">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="profession">Profession*</label>
+                <input type="text" class="form-control" placeholder="profession..." id="profession" [(ngModel)]="e.encadreur.profession" >
+              </div>
+              <div class="col-md-3 form-group">
+                <label for="type">Type Encadreur*</label>
+                <select  id="typeEncadreur" class="form-control text-center" [(ngModel)]="e.encadreur.type" id="type">
+                  <option [ngValue]="'--Type Encadreur--'"
+                          disabled
+                          selected>--Type Encadreur--</option>
+                  <option value="Encadreur de la faculté" >Encadreur de la faculté</option>
+                  <option value="Encadreur de l'organisme">Encadreur de l'organisme</option>
+                </select>
+              </div>
+            </div>
+            <div class="row" >
+              <div class="input-group col-md-6">
+                <div class="input-group-prepend">
+                  <button class="btn bg-dark"><span class="fa fa-user text-white"></span></button>
+                </div>
+                <input type="email" class="form-control" placeholder="email..." id="email" [(ngModel)]="e.encadreur.user.email">
+              </div>
+
+            </div>
+
+        </div>
+        <div *ngIf="updateStage.encadreurs && stage.stageEncadreurs.length<2" class="row">
+          <div class="col-3 offset-8">
+            <select   class="form-control text-center float-right" [(ngModel)]="typeEnc" >
+              <option [ngValue]="'--Type Encadreur--'"
+                      disabled
+                      selected>--Type Encadreur--</option>
+              <option value="Encadreur de la faculté" >Encadreur de la faculté</option>
+              <option value="Encadreur de l'organisme">Encadreur de l'organisme</option>
+            </select>
+          </div>
+          <div class="col-1">
+            <button  class="btn btn-success float-right" (click)="increaseEncadrants()"><span class="fa fa-plus"></span></button>
+          </div>
+        </div>
+
+        <div *ngIf="ajouterEncadreurs" >
+          <div *ngFor="let e of encadreurs;let i = index ">
+          <div *ngIf="e.type != '--Type Encadreur--'">
+            <div>
+              <button  class="btn-sm btn-danger float-right mt-2" (click)="decreaseEncadreur(i)"><span class="fa fa-minus-circle"></span></button>
+            </div>
+            <div class="row mt-2"  >
+              <div *ngIf="e.type == 'Encadreur de la faculté'" class="form-group col-md-3">
+                <label for="Mref">Rpp*</label>
+                <input type="text" class="form-control" placeholder="ref..." id="Mref" [(ngModel)]="e.reference">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="MnomE">Nom*</label>
+                <input type="text" class="form-control" placeholder="nom..." id="MnomE" [(ngModel)]="e.user.nom">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="MprenomE">Prénom*</label>
+                <input type="text" class="form-control" placeholder="prénom..." id="MprenomE" [(ngModel)]="e.user.prenom">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="Mprofession">Profession*</label>
+                <input type="text" class="form-control" placeholder="profession..." id="Mprofession" [(ngModel)]="e.profession" >
+              </div>
+            </div>
+            <div class="row" >
+              <div class="input-group col-md-6">
+                <div class="input-group-prepend">
+                  <button class="btn bg-dark"><span class="fa fa-user text-white"></span></button>
+                </div>
+                <input type="email" class="form-control" placeholder="email..." id="Memail" [(ngModel)]="e.user.email">
+              </div>
+              <div class="input-group col-md-6">
+                <div class="input-group-prepend">
+                  <button class="btn bg-dark"><span class="fa fa-lock text-white"></span></button>
+                </div>
+                <input type="text" class="form-control" placeholder="password..." id="Mpwd" disabled [(ngModel)]="e.user.motPass">
+                <div class="input-group-append">
+                  <button class="btn btn-primary" (click)="generateP(i)">Générer un mot de passe</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        </div>
+      </div>
+    </div>
+  <div class="card shadow-sm mt-3">
+    <div class="card-header bg-dark text-white"><h1 class="d-inline"><span class="fa fa-briefcase"></span> Les Jurys de stage</h1>
+      <span *ngIf="!updateStage.juries && !stage.status" class="fa fa-pencil fa-2x float-right" (click)="updateStage.juries  = !updateStage.juries" style="cursor: pointer"></span>
+      <span *ngIf="updateStage.juries" class="fa fa-times fa-2x float-right" (click)="updateStage.juries  = !updateStage.juries" style="cursor: pointer"></span>
+    </div>
+    <div class="card-body table-responsive">
+      <table class="table table-striped shadow-sm">
+        <thead>
+        <tr>
+          <td>Nom</td>
+          <td>Prénom</td>
+          <td>Adress</td>
+          <td>Téléphone</td>
+          <td>Email</td>
+          <td>profession</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let sm of stage.stageMembreJuries">
+          <td>{{sm.membreJury.user.nom}}</td>
+          <td>{{sm.membreJury.user.prenom}}</td>
+          <td>{{sm.membreJury.user.adress}}</td>
+          <td>{{sm.membreJury.user.tele}}</td>
+          <td>{{sm.membreJury.user.email}}</td>
+          <td>{{sm.membreJury.profession}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="updateStage.juries" class="card-footer">
+      <div *ngFor="let e of stage.stageMembreJuries ">
+        <div class="row mt-2">
+          <div  class="form-group col-md-3">
+            <label for="Jref">Rôle</label>
+            <input type="text" class="form-control" placeholder="ref..." id="Jref" [(ngModel)]="e.role">
+          </div>
+          <div class="form-group col-md-3">
+            <label for="JnomE">Nom*</label>
+            <input type="text" class="form-control" placeholder="nom..." id="JnomE" [(ngModel)]="e.membreJury.user.nom">
+          </div>
+          <div class="form-group col-md-3">
+            <label for="JprenomE">Prénom*</label>
+            <input type="text" class="form-control" placeholder="prénom..." id="JprenomE" [(ngModel)]="e.membreJury.user.prenom">
+          </div>
+          <div class="form-group col-md-3">
+            <label for="profession">Profession*</label>
+            <input type="text" class="form-control" placeholder="profession..." id="Jprofession" [(ngModel)]="e.membreJury.profession" >
+          </div>
+        </div>
+        <div class="row" >
+          <div class="input-group col-md-6">
+            <div class="input-group-prepend">
+              <button class="btn bg-dark"><span class="fa fa-user text-white"></span></button>
+            </div>
+            <input type="email" class="form-control" placeholder="email..." id="jemail" [(ngModel)]="e.membreJury.user.email">
+          </div>
+        </div>
+      </div>
+      <button *ngIf="updateStage.juries && stage.stageMembreJuries.length<3" class="btn btn-success float-right" (click)="ajouterJury()"><span class="fa fa-plus"></span></button>
+      <div *ngIf="ajouterJuries">
+        <div  *ngFor="let j of juries,let i = index">
+          <div class="row mt-2">
+            <div  class="form-group col-md-3">
+              <label for="Jrref">Rôle</label>
+              <input type="text" class="form-control" placeholder="ref..." id="Jrref" [(ngModel)]="juryRoles[i]">
+            </div>
+            <div class="form-group col-md-3">
+              <label for="JrnomE">Nom*</label>
+              <input type="text" class="form-control" placeholder="nom..." id="JrnomE" [(ngModel)]="j.user.nom">
+            </div>
+            <div class="form-group col-md-3">
+              <label for="JprenomE">Prénom*</label>
+              <input type="text" class="form-control" placeholder="prénom..." id="JrprenomE" [(ngModel)]="j.user.prenom">
+            </div>
+            <div class="form-group col-md-3">
+              <label for="jrprofession">Profession*</label>
+              <input type="text" class="form-control" placeholder="profession..." id="Jrprofession" [(ngModel)]="j.profession" >
+            </div>
+          </div>
+          <div class="row" >
+            <div class="input-group col-md-6">
+              <div class="input-group-prepend">
+                <button class="btn bg-dark"><span class="fa fa-user text-white"></span></button>
+              </div>
+              <input type="email" class="form-control" placeholder="email..." id="jremail" [(ngModel)]="j.user.email">
+            </div>
+            <div class="input-group col-md-6">
+              <div class="input-group-prepend">
+                <button class="btn bg-dark"><span class="fa fa-lock text-white"></span></button>
+              </div>
+              <input type="text" class="form-control" placeholder="password..." id="jMpwd" disabled [(ngModel)]="j.user.motPass">
+              <div class="input-group-append">
+                <button class="btn btn-primary" (click)=" generateJuryPWD(i)">Générer un mot de passe</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+  </div>
+    <div class="card shadow-sm mt-3">
+      <div class="card-header bg-dark text-white"><h1 class="d-inline"><span class="fa fa-building"></span> Structure D'acceuil</h1>
+        <span *ngIf="stage.organismeAccueil!=null && !stage.status" class="fa fa-pencil fa-2x float-right" style="cursor: pointer" (click)="updateStage.organisme = true"></span>
+        <span *ngIf="stage.organismeAccueil==null && !stage.status" class="fa fa-plus-circle fa-2x float-right" data-toggle="modal" data-target="#organismeModal"  style="cursor: pointer"></span>
+      </div>
+      <div *ngIf="stage.organismeAccueil!=null" class="card-body">
+        <div class="row">
+          <div class="col-md-3"><b>Raison social:</b> {{stage.organismeAccueil.raisonSociale}}</div>
+          <div class="col-md-3"><b>Adress:</b> {{stage.organismeAccueil.adress}}</div>
+          <div class="col-md-3"><b>Responsable:</b> {{stage.organismeAccueil.responsable}}</div>
+          <div class="col-md-3"><b>Email:</b> {{stage.organismeAccueil.email}}</div>
+          <div class="col-md-3"><b>Téléphone fix:</b> {{stage.organismeAccueil.tele}}</div>
+          <div class="col-md-3"><b>Téléphone Gsm:</b> {{stage.organismeAccueil.tele}}</div>
+          <div class="col-md-3"><b>Type:</b> {{stage.organismeAccueil.typeOrganisme.type}}</div>
+          <div class="col-md-3"><b>Type de service:</b> {{stage.organismeAccueil.typeServiceOrganisme.type}}</div>
+          <div class="col-md-3"><b>Ville:</b> {{stage.organismeAccueil.ville.nom}} {{stage.organismeAccueil.ville.pays.nom}}</div>
+        </div>
+      </div>
+      <div *ngIf="updateStage.organisme" class="card-footer">
+        <div class="row">
+          <div class="col-md-6">
+            <label for="raisonSocial">Raison sociale</label>
+            <input type="text" class="form-control" id="raisonSocial" placeholder="raison social..." [(ngModel)]="stage.organismeAccueil.raisonSociale">
+          </div>
+          <div class="col-md-6">
+            <label for="emailS">Email</label>
+            <input type="email" class="form-control" id="emailS" placeholder="email..." [(ngModel)]="stage.organismeAccueil.email">
+          </div>
+          <div class="col-md-6">
+            <label for="tele">Télé</label>
+            <input type="text" class="form-control" id="tele" placeholder="telephone..." [(ngModel)]="stage.organismeAccueil.tele">
+          </div>
+          <div class="col-md-6">
+            <label for="adress">Adress</label>
+            <input type="text" class="form-control" id="adress" placeholder="adress" [(ngModel)]="stage.organismeAccueil.adress">
+          </div>
+          <div class="col-md-6">
+            <label for="responsable">Responsable</label>
+            <input type="text" class="form-control" id="responsable" placeholder="responsable..." [(ngModel)]="stage.organismeAccueil.responsable">
+          </div>
+          <div class="col-md-6">
+            <label for="Mtype">Type</label>
+            <select  id="Mtype" class="form-control" [(ngModel)]="stage.organismeAccueil.typeOrganisme.type">
+              <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+              <option *ngFor="let type of typeOrganismes" value="{{type.type}}">{{type.type}}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="typeService">Type Service</label>
+            <select  id="typeService" class="form-control" [(ngModel)]="stage.organismeAccueil.typeServiceOrganisme.type">
+              <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+              <option *ngFor="let type of typeServiceOrganismes" value="{{type.type}}">{{type.type}}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="ville">Ville</label>
+            <select  id="ville" class="form-control" [(ngModel)]="stage.organismeAccueil.ville.nom">
+              <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+              <option *ngFor="let ville of villes" value="{{ville.nom}}">{{ville.nom}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card shadow-sm mt-3">
+      <div class="card-header bg-dark text-white"><h1 class="d-inline"><span class="fa fa-file-pdf-o"></span> Rapport de stage</h1>
+        <span *ngIf="stage.rapport!=null && !stage.rapport.valider" class="fa fa-pencil fa-2x float-right" style="cursor: pointer" (click)="updateStage.rapport = true"></span>
+        <span *ngIf="stage.rapport==null && !stage.rapport.valider" class="fa fa-plus-circle fa-2x float-right" style="cursor: pointer" data-toggle="modal" data-target="#ViewrapportModal"></span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3"><b>Titre:</b> {{stage.rapport.document.titre}}</div>
+          <div class="col-md-3"><b>Description:</b> {{stage.rapport.descreption}}</div>
+          <div class="col-md-3"><b>Validé:</b> <span *ngIf="stage.rapport.valider"><i  class="fa fa-check text-success"></i> Le {{stage.rapport.dateValidation}}</span>
+            <span *ngIf="!stage.rapport.valider"> Pas Encore Validé <span  class="fa fa-warning text-danger"></span> <span class="btn-sm btn-success fa fa-check mx-2"></span></span>
+          </div>
+          <div class="col-md-3"><b>Date dépôt:</b> {{stage.rapport.dateDepot}}</div>
+          <div class="col-md-3"><b>Date de soutenance:</b> {{stage.rapport.dateSoutenance}}</div>
+          <div class="col-md-3"><b>Locale de soutenance:</b> {{stage.rapport.localeSoutenance}}</div>
+          <div class="col-md-3"><b>Voir:</b> <a target="_blank" href="http://localhost:8091/file/display/{{stage.rapport.document.reference}}" class="btn-sm btn-warning"><span class="fa fa-file-pdf-o "></span></a>
+          </div>
+          <div class="col-md-3"><b>Telecharger:</b>  <a href="http://localhost:8091/files/{{stage.rapport.document.reference}}" class="btn-sm btn-danger "><span class="fa fa-download"></span></a></div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="updateStage.rapport" class="card-footer">
+      <app-rapport-form></app-rapport-form>
+    </div>
+  </div>
+  <div class="card-footer">
+    <button class="btn btn-outline-success btn-block" (click)="update()">Enregistre les changements</button>
+  </div>
+</div>
+<app-ajouter-organisme></app-ajouter-organisme>
+<app-rapport></app-rapport>

@@ -3,6 +3,7 @@ import {Encadreur} from "../models/encadreur.model";
 import {HttpClient} from "@angular/common/http";
 import {User} from "../models/user.model";
 import {StageEncadreur} from "../models/stage-encadreur.model";
+import {EncadreurPage} from "../models/pageModels/encadreur-page";
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,39 @@ import {StageEncadreur} from "../models/stage-encadreur.model";
 export class EncadreurService {
   private _encadreur:Encadreur;
   private _encadreurs:Array<Encadreur>;
-  url="localhost:8091/gestion-stage-api/encadreur"
+  private _pageEncadreurs:EncadreurPage;
+   tableElements = [];
+  url="http://localhost:8091/gestion-stage-api/encadreur"
   constructor(private http: HttpClient) { }
+  findByCoordinateur(id:number,page:number,size:number){
+    this.http.get<EncadreurPage>(this.url+"/coordinateur/id/"+id+"/page/"+page+"/size/"+size).subscribe(datas=>{
+      this.pageEncadreurs = datas;
+      this.fillTableElements(datas.totalPages);
+    })
+  }
+  search(seach:string){
+    const request = "/search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.email:*+"+seach+"* " +
+      "OR type:*"+seach+"* OR user.sexe:*"+seach+"* OR user.adress:*"+seach+"* OR qualite:*"+seach+"* OR profession:*"+seach+"*";
+    this.http.get<Array<Encadreur>>(this.url+request).subscribe(datas=>{
+      console.log(datas);
+      this.encadreurs = datas;
+    })
+  }
+  fillTableElements(size:number){
+    for(let i = 0;i<size;i++){
+      this.tableElements.push(i);
+    }
+  }
+  get pageEncadreurs(): EncadreurPage {
+    if(this._pageEncadreurs == null){
+      this._pageEncadreurs = new EncadreurPage();
+    }
+    return this._pageEncadreurs;
+  }
+
+  set pageEncadreurs(value: EncadreurPage) {
+    this._pageEncadreurs = value;
+  }
 
   get encadreur(): Encadreur {
     if(this._encadreur == null){

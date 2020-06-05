@@ -43,6 +43,11 @@ export class OrganismeService {
       this.pays = data
     })
   }
+  findVillesByPaysNom(nom){
+    this.httpClient.get<Array<Ville>>(this.url+"ville/pays/"+nom).subscribe(data=>{
+      this.villes = data
+    })
+  }
   get organismeAcceuil(): OrganismeAccueil {
     if(this._organismeAcceuil == null){
       this._organismeAcceuil = new OrganismeAccueil();

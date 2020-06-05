@@ -7,18 +7,30 @@
         </div>
         <div class="card-body">
           <div class="card">
-            <div class="card-header bg-dark text-white"><b>Sujet :</b> {{stage}}</div>
+            <div class="card-header bg-dark text-white"><b>Sujet :</b> {{stage.sujet}}</div>
             <div class="card-body">
               <ul class="list-group">
-                <li class="list-group-item"><b>Structure d'accueil:</b> NorSys</li>
-                <li class="list-group-item"><b>Encadrant:</b> {{encadrant}}</li>
-                <li class="list-group-item"><b>Date debut de stage:</b> 06-04-2020</li>
-                <li class="list-group-item"><b>Date fin de stage:</b> 06-06-2020</li>
+                <li class="list-group-item"><b><span class="fa fa-building"></span> tStructure d'accueil:</b>
+                  {{stage.organismeAccueil.adress}}
+                  {{stage.organismeAccueil.email}}
+                </li>
+                <li class="list-group-item"><b><span class="fa fa-user-circle"></span> Encadrant:</b>
+                  <span *ngFor="let e of stage.stageEncadreurs">
+                    <span class="mx-3">{{e.encadreur.user.nom}} {{e.encadreur.user.prenom}} <span class="fa " [class.fa-chevron-circle-down]="!showEnca" [class.fa-chevron-circle-up]="showEnca" (click)="showEncadreur(e.encadreur)"></span></span>
+                  </span>
+                  <ul *ngIf="showEnca" class="list-group list-group-flush">
+                    <li class="list-group-item text-center">{{EncadreurToBeShowen.type}}</li>
+                    <li class="list-group-item text-center"><span class="fa fa-envelope"></span> {{EncadreurToBeShowen.user.email}}</li>
+                    <li class="list-group-item text-center"><span class="fa fa-phone"></span> {{EncadreurToBeShowen.user.tele}}</li>
+                  </ul>
+                </li>
+                <li class="list-group-item"><b><span class="fa fa-calendar"></span> Date debut de stage:</b> {{stage.dateDebut}}</li>
+                <li class="list-group-item"><b><span class="fa fa-calendar"></span> Date fin de stage:</b> {{stage.dateFin}}</li>
               </ul>
             </div>
           </div>
         </div>
-        <div class="card-footer"><button class="btn btn-block btn-outline-success"  (click)="uploadRapport">Uploder Le rapport  <i class="fa fa-upload"></i></button></div>
+        <div class="card-footer"><button class="btn btn-block btn-outline-success"  data-toggle="modal" data-target="#rapportModal" (click)="setStageRef(stage.reference)">Uploder Le rapport  <i class="fa fa-upload"></i></button></div>
       </div>
     </div>
     <div class="col-md-6">
@@ -28,13 +40,20 @@
         </div>
         <div class="card-body">
           <ul class="list-group ">
-            <li class="list-group-item">
-              <p>Conception generale de projet.. <a href="#">Voir plus</a></p>
-              <p><i class="fa fa-user"></i> Taha benjelon </p>
-              <p><i class="fa fa-calendar-alt mx-2"></i> <span>Crée Le:12-04-2020</span><span class="mx-4">Date limit:20-04-2020</span></p>
-              <p>Uploader un rapport: <button class="btn btn-dark"><span class="fa fa-upload"></span></button></p>
-              <button class="btn btn-warning">pas encore valider</button><button class="btn btn-sm btn-outline-success float-right" disabled><i class="fa fa-check"></i></button>
+            <li *ngFor="let tache of taches" class="list-group-item">
+              <p>Conception generale de projet.. <button  class="btn btn-success btn-sm" data-toggle="modal" data-target="#tachedetails" (click)="showTache(tache)" >Voir plus</button></p>
+              <p>
+                <i class="fa fa-user"></i> {{tache.stageEncadreur.encadreur.user.nom}}  {{tache.stageEncadreur.encadreur.user.prenom}}
+              </p>
+
+              <p><i class="fa fa-calendar-alt mx-2"></i> <span>Crée Le <span class="fa fa-calendar">{{tache.dateCreation}}</span></span><span class="mx-4">Date limit:  <span class="fa fa-calendar">{{tache.dateLimit}}</span></span></p>
+              <p>Uploader un rapport: <button class="btn btn-dark "  data-toggle="modal" data-target="#rapportModal" (click)="setStageRef(stage.reference)"><span class="fa fa-upload"></span></button></p>
+
+              <button *ngIf="!tache.valider" class="btn btn-warning ">pas encore valider</button>
+              <button *ngIf="tache.valider" class="btn btn-sm btn-outline-success float-right" >
+                <i class="fa fa-check"></i> </button>
             </li>
+
           </ul>
         </div>
       </div>
@@ -43,7 +62,15 @@
   <div class="col-md-3">
     <ul class="list-group">
       <li class="list-group-item bg-warning">Archive des documents</li>
-      <li class="list-group-item">Rapport de stage <a href="#" class="btn btn-sm btn-outline-light text-dark"><i class="fa fa-eye"></i></a> <a href="#" class="btn btn-sm btn-outline-light text-dark"><i class="fa fa-download"></i></a></li>
+
+      <li class="list-group-item">Rapport de stage <a href="http://localhost:8091/file/display/{{stage.rapport.document.reference}}" class="btn btn-sm btn-outline-light text-dark"><i class="fa fa-eye"></i></a>
+        <a href="http://localhost:8091/files/{{stage.rapport.document.reference}}" class="btn btn-sm btn-outline-light text-dark"><i class="fa fa-download"></i></a></li>
     </ul>
   </div>
 </section>
+<app-rapport></app-rapport>
+<app-tachedetails></app-tachedetails>
+
+
+
+

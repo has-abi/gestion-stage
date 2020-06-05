@@ -15,8 +15,14 @@
       <a href="#" class="nav-link text-dark">Stages <span class="fa fa-bars"></span></a>
     </li>
     <li class="nav-item">
-      <a href="#" class="nav-link text-dark">Tâches <span class="fa fa-tasks"></span></a>
-    </li>
+        <div class="dropdown">
+          <button class="" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Taches
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <button class="dropdown-item" type="button" data-toggle="modal" data-target="#alltaches" (click)="showAllTaches()">validate taches</button>
+          </div>
+        </div>
     <li class="nav-item">
       <a href="#" class="nav-link text-dark">Forum <span class="fa fa-commenting"></span></a>
     </li>
@@ -40,5 +46,5 @@
     </li>
   </ul>
 </nav>
-
+<app-all-taches></app-all-taches>
 

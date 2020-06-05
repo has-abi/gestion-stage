@@ -14,17 +14,46 @@ export class StageService {
   private _stages:Array<Stage>;
   private _stagePage:StagePage;
   tableElements = [];
-
+  private _selectedStages:Array<Stage>;
+  stageMessage = {
+    "type":'',
+    "message":''
+  }
   url="http://localhost:8091/gestion-stage-api/stage/"
   constructor(private httpClient:HttpClient) { }
+  findById(id:number){
+    id = 1;
+    this.httpClient.get<Stage>(this.url+"id/"+id).subscribe(s=>{
+      this.stage = s;
+    })
+  }
   save(){
     this.stage.reference = this.getReference();
-    console.log(this.stage)
+    this.httpClient.post(this.url,this.stage).subscribe(resp=>{
+      console.log(resp)
+    })
+  }
+  update(){
 
+        this.httpClient.put(this.url,this.stage).subscribe(resp=>{
+          console.log(resp);
+          if(resp>0){
+
+            this.stageMessage.type="success";
+            this.stageMessage.message="stage modifier avec succée!"
+          }else{
+            this.stageMessage.type="error";
+            this.stageMessage.message="on ne peut pas modifier le stage!"
+          }
+        })
+
+
+    console.log(this.stageMessage);
   }
   findAllPages(page:number,size:number){
       return this.httpClient.get<StagePage>(this.url+"list/get?page="+page+"&size="+size).subscribe(data=>{
         this.stagePage = data
+        console.log(data.content)
         this.fillTableElements(data.totalPages);
       })
   }
@@ -112,4 +141,22 @@ export class StageService {
   set searchedStage(value: Stage) {
     this._searchedStage = value;
   }
+
+  get selectedStages(): Array<Stage> {
+    if(this._selectedStages == null){
+      this._selectedStages = new Array<Stage>();
+    }
+    return this._selectedStages;
+  }
+
+  set selectedStages(value: Array<Stage>) {
+    this._selectedStages = value;
+  }
+  validerLesChamps(){
+    return (this.stage.organismeAccueil.raisonSociale.length == 0  || this.stage.organismeAccueil.email.length == 0 || this.stage.organismeAccueil.adress.length == 0 ||
+      this.stage.organismeAccueil.responsable.length == 0 || this.stage.organismeAccueil.tele.length == 0 || this.stage.organismeAccueil.teleFix.length == 0
+      || this.stage.organismeAccueil.typeOrganisme.type == "--SELECT--" || this.stage.organismeAccueil.typeServiceOrganisme.type == "--SELECT--" || this.stage.organismeAccueil.ville.nom == "--SELECT--")
+
+  }
+
 }
