@@ -1,0 +1,268 @@
+<div class="card">
+  <div class="card-header">
+    <h1><span class="fa fa-cogs"></span> CONFIGURATION</h1>
+    <div class="card-body">
+      <app-organismes></app-organismes>
+      <div class="row mt-4">
+        <div class="col-md-4 my-2">
+          <div class="row p-0 m-0">
+            <div class="col-10 m-0 p-0">
+              <div class="dropdown">
+                <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false" style="border-radius: 0px;">
+                  Filières
+                </button>
+                <ul class="dropdown-menu shadow-sm w-100" role="menu">
+                  <li *ngFor="let f of filieres"  class="dropdown-item" style="min-width:200px">{{f.libelle}} <span class="fa fa-pencil float-right" (click)="updateElement('filiere',f)"></span></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-2 m-0 p-0">
+              <button class="btn btn-success btn-block shadow-sm" style="border-radius: 0px;" (click)="createElement('filiere')"><span class="fa" [class.fa-minus]="ajouterElement.element =='filiere'" [class.fa-plus]="ajouterElement.element !='filiere'" ></span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 my-2">
+          <div class="row p-0 m-0">
+            <div class="col-10 m-0 p-0">
+              <div class="dropdown">
+                <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false" style="border-radius: 0px;">
+                  Departements
+                </button>
+                <ul class="dropdown-menu shadow-sm w-100" role="menu">
+                  <li *ngFor="let d of departements"  class="dropdown-item">{{d.libelle}} <span class="fa fa-pencil float-right" (click)="updateElement('dep',d)"></span></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-2 m-0 p-0">
+              <button class="btn btn-success btn-block shadow-sm" style="border-radius: 0px;" (click)="createElement('dep')"><span class="fa" [class.fa-minus]="ajouterElement.element =='dep'" [class.fa-plus]="ajouterElement.element !='dep'"></span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 my-2">
+          <div class="row p-0 m-0">
+            <div class="col-10 m-0 p-0">
+              <div class="dropdown">
+                <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false" style="border-radius: 0px;">
+                  Villes
+                </button>
+                <ul class="dropdown-menu shadow-sm w-100" role="menu">
+                  <li *ngFor="let v of villes"  class="dropdown-item">{{v.nom}} <span class="fa fa-pencil float-right" (click)="updateElement('ville',v)"></span></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-2 m-0 p-0">
+              <button class="btn btn-success btn-block shadow-sm" style="border-radius: 0px;" (click)="createElement('ville')"><span class="fa" [class.fa-minus]="ajouterElement.element =='ville'" [class.fa-plus]="ajouterElement.element !='ville'"></span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 my-2">
+          <div class="row p-0 m-0">
+            <div class="col-10 m-0 p-0">
+              <div class="dropdown">
+                <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false" style="border-radius: 0px;">
+                  Pays
+                </button>
+                <ul class="dropdown-menu shadow-sm w-100" role="menu">
+                  <li *ngFor="let p of pays"  class="dropdown-item">{{p.nom}} <span class="fa fa-pencil float-right" (click)="updateElement('pays',p)"></span></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-2 m-0 p-0">
+              <button class="btn btn-success btn-block shadow-sm" style="border-radius: 0px;" (click)="createElement('pays')"><span class="fa" [class.fa-minus]="ajouterElement.element =='pays'" [class.fa-plus]="ajouterElement.element !='pays'"></span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 my-2">
+          <div class="row p-0 m-0">
+            <div class="col-10 m-0 p-0">
+              <div class="dropdown">
+                <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false" style="border-radius: 0px;">
+                  Type Organismes
+                </button>
+                <ul class="dropdown-menu shadow-sm w-100" role="menu">
+                  <li  *ngFor="let t of typeOrganismes" class="dropdown-item">{{t.type}} <span class="fa fa-pencil float-right" (click)="updateElement('type',t)"></span></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-2 m-0 p-0">
+              <button class="btn btn-success btn-block shadow-sm" style="border-radius: 0px;" (click)="createElement('type')"><span class="fa" [class.fa-minus]="ajouterElement.element =='type'" [class.fa-plus]="ajouterElement.element !='type'"></span></button>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-4 my-2">
+          <div class="row p-0 m-0">
+            <div class="col-10 m-0 p-0">
+              <div class="dropdown">
+                <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false" style="border-radius: 0px;">
+                  Type service organismes
+                </button>
+                <ul class="dropdown-menu shadow-sm w-100" role="menu">
+                  <li *ngFor="let s of typeServiceOrganismes"  class="dropdown-item">{{s.type}} <span class="fa fa-pencil float-right" (click)="updateElement('service',s)"></span></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-2 m-0 p-0">
+              <button (click)="createElement('service')" class="btn btn-success btn-block shadow-sm" style="border-radius: 0px;"><span class="fa" [class.fa-minus]="ajouterElement.element =='service'" [class.fa-plus]="ajouterElement.element !='service'"></span></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div *ngIf="ajouterElement.element == 'pays' && ajouterElement.ajouter == true" class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="pays">Pays*</label>
+            <input type="text" id="pays" class="form-control" placeholder="pays ..." [(ngModel)]="pay.nom">
+          </div>
+        </div>
+        <div class="col-2">
+          <button class="btn btn-primary btn-block " (click)="createPays()" [disabled]="validatePays()">Enregistrer <span class="fa fa-check"></span></button>
+        </div>
+
+      </div>
+      <flash-messages></flash-messages>
+      <div *ngIf="ajouterElement.element == 'ville' && ajouterElement.ajouter == true" class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="ville">Ville*</label>
+            <input type="text" id="ville" class="form-control" placeholder="ville ..." [(ngModel)]="ville.nom">
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="code">Code postale*</label>
+            <input type="text" id="code" class="form-control" placeholder="code postale ..." [(ngModel)]="ville.codePostal">
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="vpays">Pays*</label>
+            <select  id="vpays" class="form-control" [(ngModel)]="ville.pays.nom">
+              <option [ngValue]="'--SELECT--'" selected disabled>--SELECT--</option>
+              <option *ngFor="let p of pays" value="{{p.nom}}" >{{p.nom}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-primary btn-block" (click)="createVille()" [disabled]="validateVille()">Enregistrer <span class="fa fa-check"></span></button>
+        </div>
+
+      </div>
+      <div *ngIf="ajouterElement.element == 'type' && ajouterElement.ajouter == true" class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="typeO">Type organisme*</label>
+            <input type="text" id="typeO" class="form-control" placeholder="type d'Organisme ..." [(ngModel)]="type.type">
+          </div>
+        </div>
+        <div class="col-2">
+          <button class="btn btn-primary btn-block" (click)="createType()" [disabled]="validateType()">Enregistrer <span class="fa fa-check"></span></button>
+        </div>
+      </div>
+      <div *ngIf="ajouterElement.element == 'servie' && ajouterElement.ajouter == true" class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="typeS">Type Service organisme*</label>
+            <input type="text" id="typeS" class="form-control" placeholder="type service d'Organisme ..." [(ngModel)]="service.type">
+          </div>
+        </div>
+
+        <div class="col-2">
+          <button class="btn btn-primary btn-block" (click)="createService()" [disabled]="validateService()">Enregistrer <span class="fa fa-check"></span></button>
+        </div>
+      </div>
+
+      <div *ngIf="ajouterElement.element == 'dep' && ajouterElement.ajouter == true" class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="dep">Department*</label>
+            <input type="text" id="dep" class="form-control" placeholder="departement ..." [(ngModel)]="dep.libelle">
+          </div>
+        </div>
+        <div class="col-2">
+          <button class="btn btn-primary btn-block" (click)="createDep()" [disabled]="validateDep()">Enregistrer <span class="fa fa-check"></span></button>
+        </div>
+      </div>
+
+      <div *ngIf="ajouterElement.element == 'filiere' && ajouterElement.ajouter == true" class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="filiere">Filière*</label>
+            <input type="text" id="filiere" class="form-control" placeholder="filière ..." [(ngModel)]="filiere.libelle">
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="fdep">Département*</label>
+            <select  id="fdep" class="form-control" [(ngModel)]="filiere.departement.libelle">
+              <option [ngValue]="'--SELECT--'" selected disabled>--SELECT--</option>
+              <option *ngFor="let d of departements" value="{{d.libelle}}">{{d.libelle}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-primary btn-block" (click)="createFiliere()" [disabled]="validateFiliere()">Enregistrer <span class="fa fa-check"></span></button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="card-footer">
+    <div>
+      <h2 class="d-inline"><span class="fa fa-building"></span> Etabissement</h2>
+      <span class="fa fa-pencil fa-2x float-right" style="cursor: pointer" (click)="updateEtablissement =!updateEtablissement"></span>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="libelle">Libellé</label>
+          <input type="text" class="form-control" placeholder="nom..." id="libelle" [(ngModel)]="etablissement.libelle" [disabled]="!updateEtablissement">
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="adress">Adress</label>
+          <input type="text" class="form-control" placeholder="adress..." id="adress" [(ngModel)]="etablissement.adress" [disabled]="!updateEtablissement">
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="email" class="form-control" placeholder="E-mail..." id="email" [(ngModel)]="etablissement.email" [disabled]="!updateEtablissement">
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="doyen">Doyen</label>
+          <input type="text" class="form-control" placeholder="doyen..." id="doyen" [(ngModel)]="etablissement.doyen" [disabled]="!updateEtablissement">
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="gsm">GSM</label>
+          <input type="text" class="form-control" placeholder="gsm..." id="gsm" [(ngModel)]="etablissement.tele_gsm" [disabled]="!updateEtablissement">
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="fax">Fax</label>
+          <input type="text" class="form-control" placeholder="fax..." id="fax" [(ngModel)]="etablissement.tele_fix" [disabled]="!updateEtablissement">
+        </div>
+      </div>
+
+      <button *ngIf="updateEtablissement" class="btn btn-info btn-block" [disabled]="validateEtablissement()">Sauvegarder <span class="fa fa-check"></span></button>
+    </div>
+
+  </div>
+</div>

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {EncadreurService} from "../../../services/encadreur.service";
 import {Encadreur} from "../../../models/encadreur.model";
-
+import {User} from "../../../models/user.model";
+import {FlashMessagesService} from "angular2-flash-messages";
+import {UserService} from "../../../services/user.service";
+declare  let  bootbox:any;
 @Component({
   selector: 'app-list-encadreur',
   templateUrl: './list-encadreur.component.html',
@@ -17,7 +20,7 @@ export class ListEncadreurComponent implements OnInit {
     order:"asc",
     prop:"id"
     }
-  constructor(private encadreurService:EncadreurService) { }
+  constructor(private encadreurService:EncadreurService,private flashMessagesService:FlashMessagesService,private userService:UserService) { }
 
   ngOnInit(): void {
     this.findByCoordinateur();
@@ -82,5 +85,44 @@ export class ListEncadreurComponent implements OnInit {
     this.tableOrder.order = order;
     this.tableOrder.prop = prop;
   }
+delete = (encadreur:Encadreur) =>{
+
+  bootbox.confirm({
+    message: "Vous voulez vraiment supprimer l'encadreur?",
+    buttons: {
+      confirm: {
+        label: 'Confirmer',
+        className: 'btn-success'
+      },
+      cancel: {
+        label: 'Annuler',
+        className: 'btn-danger'
+      }
+    },
+    callback:(result)=>{
+      if(result){
+        this.encadreurService.delete(encadreur.reference).subscribe(resp=>{
+          if (resp > 0) {
+            this.flashMessagesService.show("encadreur supprimer avec succée!", {cssClass: 'alert-success', timeout: 5000});
+              this.encadreurs.splice(this.encadreurs.indexOf(encadreur),1);
+              this.pageEncadreurs.content.splice(this.pageEncadreurs.content.indexOf(encadreur),1);
+          } else {
+            this.flashMessagesService.show("Erreur dans la suppression!", {
+              cssClass: 'alert-danger',
+              timeout: 5000
+            });
+          }
+        })
+      }
+    }
+  })
+
+}
+
+updateEncadreur(encadreur:Encadreur){
+  this.userService.user = new User();
+  this.userService.user = encadreur.user;
+  this.encadreurService.encadreur = encadreur;
+}
 
 }

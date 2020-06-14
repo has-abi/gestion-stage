@@ -25,8 +25,32 @@ export class StageService {
   url="http://localhost:8091/gestion-stage-api/stage/"
   constructor(private httpClient:HttpClient) { }
 
-  findByCoordinateurId(id:number,page:number,size:number){
-    this.httpClient.get<StagePage>(this.url+"encadreur/id/"+id+"/page/"+page+"/size/"+size).subscribe(data=>{
+  findEtudinantActiveStages(id:number){
+    this.httpClient.get<Stage>(this.url+"etudiant/id/"+id).subscribe(stage=>{
+      this.stage = stage;
+    })
+  }
+
+  findCoordinateurActiveStages(id:number){
+    this.httpClient.get<Array<Stage>>(this.url+"coordinateur/id/"+id).subscribe(stages=>{
+      this.stages = stages;
+    })
+  }
+
+  findEncadreurActiveStages(id:number){
+    this.httpClient.get<Array<Stage>>(this.url+"encadreur/id/"+id).subscribe(stages=>{
+      this.stages = stages;
+    })
+  }
+
+  findJuryActiveStages(id:number){
+    this.httpClient.get<Array<Stage>>(this.url+"jury/id/"+id).subscribe(stages=>{
+      this.stages = stages;
+    })
+  }
+
+  findByCoordinateurId(id:number,page:number,size:number,sort:string){
+    this.httpClient.get<StagePage>(this.url+"coordinateur/id/"+id+"/page/"+page+"/size/"+size+"/sort/"+sort).subscribe(data=>{
       this.stagePage = data;
     })
   }
@@ -34,14 +58,23 @@ export class StageService {
     return this.httpClient.get<number>(this.url+"count");
   }
   findByEtudiantId(id:number,page:number,size:number){
+console.log("we get here");
     this.httpClient.get<StagePage>(this.url+"etudiant/id/"+id+"/page/"+page+"/size/"+size).subscribe(data=>{
       this.stagePage = data;
     })
   }
   findByJuryId(id:number,page:number,size:number){
-    this.httpClient.get<StagePage>(this.url+"jury/id/"+id+"/page/"+page+"/size/"+size).subscribe(data=>{
+    this.httpClient.get<StagePage>(this.url+"jury/id/"+id+"/page/"+page+"/size/"+size).subscribe(data=> {
       this.stagePage = data;
     })
+  }
+  findByEncadreurId(id:number,page:number,size:number){
+    this.httpClient.get<StagePage>(this.url+"encadreur/id/"+id+"/page/"+page+"/size/"+size).subscribe(data=>{
+      this.stagePage = data;
+    })
+  }
+  findById(id:number):Observable<Stage>{
+    return  this.httpClient.get<Stage>(this.url + "id/" + id);
   }
 
   save(stage:Stage):Observable<number>{

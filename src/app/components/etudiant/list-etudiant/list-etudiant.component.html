@@ -62,9 +62,9 @@
       <td>{{etudiant.nationalite}}</td>
       <td>{{etudiant.niveau}}</td>
       <td>
-        <div class="btn-group-sm">
-          <button class="btn-sm btn-primary"><span class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" title="Editer"></span></button>
-          <button class="btn-sm btn-danger"><span class="fa fa-trash"  data-toggle="tooltip" data-placement="top" title="Suprimer"></span></button>
+        <div class="btn-group btn-group-sm">
+          <button class="btn-sm btn-primary" data-target="#muserModal" data-toggle="modal" (click)="updateEtudiant(etudiant)"><span class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" title="Editer"></span></button>
+          <button class="btn-sm btn-danger" (click)="delete(etudiant)"><span class="fa fa-trash"  data-toggle="tooltip" data-placement="top" title="Suprimer"></span></button>
         </div>
       </td>
     </tr>
@@ -101,4 +101,4 @@
     </ul>
   </nav>
 </div>
-
+<app-user-update *ngIf="updateE"></app-user-update>

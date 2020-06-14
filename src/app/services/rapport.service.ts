@@ -9,11 +9,13 @@ import {RapportPage} from "../models/pageModels/rapport-page.model";
 })
 export class RapportService {
   url="http://localhost:8091/gestion-stage-api/rapport/";
+  urlRapportTache = "http://localhost:8091/gestion-stage-api/rapportTache/"
   private _stageRef:string;
   private _rapport:Rapport;
   private _rapports:Array<Rapport>;
   private _rapportPage:RapportPage;
   private _fileIsSelected = false;
+  private _tacheRef:string;
   tableElements = [];
   constructor(private http:HttpClient) { }
 
@@ -23,15 +25,45 @@ export class RapportService {
     formData.append('file', file);
     formData.append('titre', titre);
     formData.append('desc', desc);
-    formData.append('stageRef', this.stageRef);
-     console.log(formData)
-     console.log(this.stageRef)
-    const req = new HttpRequest('POST', this.url, formData, {
-      reportProgress: true,
-      responseType: 'json'
-    });
+    if(this.stageRef.length>0){
+      formData.append('ref', this.stageRef);
+      const req = new HttpRequest('POST', this.url, formData, {
+        reportProgress: true,
+        responseType: 'json'
+      });
+      return this.http.request(req);
+    }
+     if(this.tacheRef.length>0){
+       formData.append('ref', this.tacheRef);
+       const req = new HttpRequest('POST', this.urlRapportTache+"save", formData, {
+         reportProgress: true,
+         responseType: 'json'
+       });
+       return this.http.request(req);
+     }
+  }
 
-    return this.http.request(req);
+  update(file: File,titre:string,desc:string,ref:string): Observable<HttpEvent<any>>{
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    formData.append('titre', titre);
+    formData.append('desc', desc);
+    if(this.stageRef.length>0){
+      formData.append('ref', ref);
+      const req = new HttpRequest('PUT', this.url, formData, {
+        reportProgress: true,
+        responseType: 'json'
+      });
+      return this.http.request(req);
+    }
+    if(this.tacheRef.length>0){
+      formData.append('ref', ref);
+      const req = new HttpRequest('PUT', this.urlRapportTache+"update", formData, {
+        reportProgress: true,
+        responseType: 'json'
+      });
+      return this.http.request(req);
+    }
   }
   findAllRapports(page:number,size:number,sort:string){
     this.http.get<RapportPage>(this.url+"page/"+page+"/size/"+size+"/sort/"+sort).subscribe(data=>{
@@ -61,7 +93,21 @@ export class RapportService {
     return this.rapport;
   }
 
+  get tacheRef(): string {
+    if(this._tacheRef == null){
+      this._tacheRef = "";
+    }
+    return this._tacheRef;
+  }
+
+  set tacheRef(value: string) {
+    this._tacheRef = value;
+  }
+
   get stageRef(): string {
+    if(this._stageRef ==  null){
+      this._stageRef = "";
+    }
     return this._stageRef;
   }
 

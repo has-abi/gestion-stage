@@ -13,6 +13,7 @@ import {OrganismeService} from "../../../services/organisme.service";
 import {OrganismeAccueil} from "../../../models/organisme-accueil.model";
 import {Stage} from "../../../models/stage.model";
 import {CoordinateurService} from "../../../services/coordinateur.service";
+import {LocalStorageService} from "ngx-webstorage";
 
 @Component({
   selector: 'app-stage-create',
@@ -27,21 +28,27 @@ export class StageCreateComponent implements OnInit {
   typeEnc:string="--Type Encadreur--";
   constructor(private stageService: StageService,private etudiantService: EtudiantService,private encadreurService:EncadreurService,
               private juryService:JuryService,private flashMessagesService:FlashMessagesService,private passwordGeneratorService:PasswordGeneratorService
-              ,private organismeService:OrganismeService,private coordinateurService:CoordinateurService) { }
+              ,private organismeService:OrganismeService,private coordinateurService:CoordinateurService,private localStorage:LocalStorageService) { }
 
   ngOnInit(): void {
+    const user = this.localStorage.retrieve("logedUser");
+    this.coordinateurService.findByUserId(user.id).subscribe(coord=>{
+      this.etudiantService.findByFiliere(coord.filiere.id);
+      this.organismeService.findByFiliere(coord.filiere.id);
+      this.encadreurService.findByFiliere(coord.filiere.id);
+    })
+
     this.stage.stageEtudiants = [];
     this.etudiants.push(this.etudiant);
     this.coordinateurService.getCoordinateur();
   }
 
-
-
   increaseEtudiants(){
     this.etudiants.push(this.cloneEtudiant(new Etudiant()));
   }
   increaseEncadrants(){
-    this.ajouterEncadreur = true;
+	if(this.typeEnc != "--Type Encadreur--"){
+	 this.ajouterEncadreur = true;
     const e = new Encadreur();
     e.type = this.typeEnc;
     if(this.typeEnc == "Encadreur de l'organisme"){
@@ -49,11 +56,20 @@ export class StageCreateComponent implements OnInit {
       e.reference = "EO"+d.getTime();
     }
     this.encadreurs.push(this.cloneEncadreur(e));
-    console.log(this.encadreurs)
+	}
   }
   decreaseEtudiant(i:number){
       this.etudiants.splice(i,1);
+  }
 
+  get fEncadreurs(){
+    return this.encadreurService.fEncadreurs;
+  }
+  get fEtudiants(){
+    return this.etudiantService.fEtudiants
+  }
+  get organismes(){
+    return this.organismeService.organismeAcceuils;
   }
   decreaseEncadreur(i:number){
       this.encadreurs.splice(i,1);
@@ -93,8 +109,8 @@ export class StageCreateComponent implements OnInit {
         this.stage.stageEncadreurs.push(se);
       }
     })
-
-    this.stage.coordinateur = this.coordinateurService.coordinateur;
+    const user = this.localStorage.retrieve('logedUser')
+    this.coordinateurService.findByUserId(user.id).subscribe(coord=>this.stage.coordinateur= coord);
     this.stageService.save(this.stage).subscribe(resp=>{
       console.log(resp)
       if(resp>0){
@@ -107,7 +123,7 @@ export class StageCreateComponent implements OnInit {
         this.flashMessagesService.show('il y\'a un problème dans la création du stage! ', { cssClass: 'alert-danger', timeout: 6000 })
       }
     });
-    //this.flashMessagesService.show('stage est crée avec succée', { cssClass: 'alert-success', timeout: 6000 });
+
   }
   findEtudiantByCin(i:number) {
       if(this.etudiants[i].cin ){
@@ -168,16 +184,28 @@ export class StageCreateComponent implements OnInit {
     }
       return true;
   }
+
   validateEncadreurs(){
     if(this.encadreurs.length == 0) return  true;
     for(let i = 0;i<this.encadreurs.length;i++){
       if(((this.encadreurs[i].reference == undefined || this.encadreurs[i].reference.length == 0) ||(this.encadreurs[i].user.nom == undefined  || this.encadreurs[i].user.nom.length ==0) ||
         (this.encadreurs[i].user.prenom == undefined  || this.encadreurs[i].user.prenom.length == 0) || (this.encadreurs[i].user.email == undefined  || this.encadreurs[i].user.email.length == 0)) ||
-        (!this.encadreurs[i].user.motPass  == undefined  || this.encadreurs[i].user.motPass.length == 0)){
+        (this.encadreurs[i].user.motPass  == undefined  || this.encadreurs[i].user.motPass.length == 0)){
         return false;
       }
     }
       return true;
+  }
+
+  choisirEtud(e:Etudiant){
+    if(this.etudiants.length<2){
+      this.etudiants.push(e);
+    }
+  }
+  choisirEnca(e:Encadreur){
+    if(this.encadreurs.length<2){
+      this.encadreurs.push(e);
+    }
   }
 
 }

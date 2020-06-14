@@ -2,21 +2,13 @@
   <a  class="navbar-brand" (click)="switchCols()"><span class="fa fa-bars"></span></a>
 <ul class="navbar-nav ml-auto dropdown">
   <li class="nav-item mr-2 dropdown">
-    <img src="../../../../assets/portofolio.jpg" alt="" class="rounded-circle border-dark dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="height: 30px;width: 30px">
-    <ul class="dropdown-menu dropdown-cart" role="menu">
-      <li>
-                  <span class="item">
-                    <span class="item-left">
-                        <img src="http://lorempixel.com/50/50/" alt="" />
-                        <span class="item-info">
-                            <span>Item name</span>
-                            <span>23$</span>
-                        </span>
-                    </span>
-                    <span class="item-right">
-                        <button class="btn btn-xs btn-danger pull-right">x</button>
-                    </span>
-                </span>
+    <img src="../../../../assets/portofolio.jpg" alt="" class="rounded-circle border-dark dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="height: 40px;width: 40px">
+    <ul class="dropdown-menu shadow" role="menu">
+      <li class="dropdown-item">
+        <a href="#" class="text-dark btn-link text-decoration-none">Profile <span class="fa-pull-right fa fa-user-circle"></span></a>
+      </li>
+      <li class="dropdown-item">
+        <a href="#" class="text-dark btn-link text-decoration-none">Déconnexion <span class=" fa fa-sign-out"></span></a>
       </li>
     </ul>
   </li>

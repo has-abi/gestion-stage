@@ -5,10 +5,9 @@ export class Ville {
   id:number;
   nom:string;
   pays:Pays;
+  codePostal:number;
   organismesAccueils:Array<OrganismeAccueil>;
-
-  constructor() {
-    this.pays = new Pays();
-    this.organismesAccueils = new Array<OrganismeAccueil>();
-  }
+	constructor() {
+	this.pays = new Pays();
+	}
 }

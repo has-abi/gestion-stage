@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {EtudiantService} from "../../../services/etudiant.service";
-
+import {UserService} from "../../../services/user.service";
+import {FlashMessagesService} from "angular2-flash-messages";
+import {Etudiant} from "../../../models/etudiant.model";
+import {User} from "../../../models/user.model";
+declare let bootbox:any;
 @Component({
   selector: 'app-list-etudiant',
   templateUrl: './list-etudiant.component.html',
@@ -17,7 +21,8 @@ export class ListEtudiantComponent implements OnInit {
     order:"asc",
     prop:"id"
   }
-  constructor(private etudiantService:EtudiantService) { }
+  updateE = false;
+  constructor(private etudiantService:EtudiantService,private userService:UserService,private flashMessagesService:FlashMessagesService) { }
 
   ngOnInit(): void {
     this.findByCoordinateur();
@@ -81,5 +86,42 @@ export class ListEtudiantComponent implements OnInit {
     this.tableOrder.order = order;
     this.tableOrder.prop = prop;
   }
+  delete = (etudiant:Etudiant) =>{
+    bootbox.confirm({
+      message: "Vous voulez vraiment supprimer l'encadreur?",
+      buttons: {
+        confirm: {
+          label: 'Confirmer',
+          className: 'btn-success'
+        },
+        cancel: {
+          label: 'Annuler',
+          className: 'btn-danger'
+        }
+      },
+      callback:(result)=>{
+        if(result){
+          this.etudiantService.removeByCne(etudiant.cin).subscribe(resp=>{
+            if (resp > 0) {
+              this.flashMessagesService.show("Etudiant supprimer avec succée!", {cssClass: 'alert-success', timeout: 5000});
+              this.pageEtudiant.content.splice(this.pageEtudiant.content.indexOf(etudiant),1);
+              this.etudiants.splice(this.etudiants.indexOf(etudiant),1);
+            } else {
+              this.flashMessagesService.show("Erreur dans la suppression!", {
+                cssClass: 'alert-danger',
+                timeout: 5000
+              });
+            }
+          })
+        }
+      }
+    })
+  }
 
+  updateEtudiant(etudiant:Etudiant){
+    this.updateE = true;
+    this.userService.user = new User();
+    this.userService.user = etudiant.user;
+    this.etudiantService.etudiant = etudiant;
+  }
 }

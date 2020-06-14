@@ -12,16 +12,17 @@ import { AdminNavbarComponent } from './components/admin/admin-navbar/admin-navb
 import { MainComponent } from './components/admin/main/main.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { UtilisateurTableComponent } from './components/admin/tables/utilisateur-table/utilisateur-table.component';
-import { StageTablesComponent } from './components/admin/tables/stage-tables/stage-tables.component';
+import { CKEditorModule } from 'ckeditor4-angular';
+
+
+
 import { NavbarComponent } from './components/coordinateur/navbar/navbar.component';
 import { StageCreateComponent } from './components/stage/stage-create/stage-create.component';
-import { MainCoordinateurComponent } from './components/coordinateur/main-coordinateur/main-coordinateur.component';
 import { CoordinateurComponent } from './components/coordinateur/coordinateur/coordinateur.component';
 import { FlashMessagesModule } from "angular2-flash-messages";
 import { ListStagesComponent } from './components/stage/list-stages/list-stages.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
-import { CoordinateurAccueilComponent } from './components/coordinateur/coordinateur-accueil/coordinateur-accueil.component';
 import { EtudiantComponent } from './components/etudiant/etudiant.component';
 import { EtudiantNavbarComponent } from './components/etudiant/etudiant-navbar/etudiant-navbar.component';
 import { EtudiantMainComponent } from './components/etudiant/etudiant-main/etudiant-main.component';
@@ -41,9 +42,24 @@ import { MainEncadreurComponent } from './components/encadreur/main-encadreur/ma
 import { NavbarEncadreurComponent } from './components/encadreur/navbar-encadreur/navbar-encadreur.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { RapportTableComponent } from './components/admin/tables/rapport-table/rapport-table.component';
-import { ForumTableComponent } from './components/admin/tables/forum-table/forum-table.component';
 import { ForumComponent } from './components/forum/forum.component';
 import { UserCreateComponent } from './components/modals/user-create/user-create.component';
+import { OrganismeComponent } from './components/modals/organisme/organisme.component';
+import { TachedetailsComponent } from './components/modals/tachedetails/tachedetails.component';
+import { AllTachesComponent } from './components/modals/all-taches/all-taches.component';
+import { CoordinateurTableComponent } from './components/admin/tables/coordinateur-table/coordinateur-table.component';
+import { OrganismesComponent } from './components/admin/config/organismes/organismes.component';
+import { AutreComponent } from './components/admin/config/autre/autre.component';
+import { UserUpdateComponent } from './components/modals/user-update/user-update.component';
+import { PieComponent } from './components/statistics/pie/pie.component';
+import { ArchiveTachesComponent } from './components/tache/archive-taches/archive-taches.component';
+import { EncadreurComponent } from './components/encadreur/encadreur/encadreur.component';
+import { MainProfileComponent } from './components/main-profile/main-profile.component';
+import { JuryNavbarComponent } from './components/jury/jury-navbar/jury-navbar.component';
+import { JuryComponent } from './components/jury/jury.component';
+import { PlanningComponent } from './components/coordinateur/planning/planning.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,15 +68,13 @@ import { UserCreateComponent } from './components/modals/user-create/user-create
     MainComponent,
     AdminComponent,
     UtilisateurTableComponent,
-    StageTablesComponent,
     NavbarComponent,
     StageCreateComponent,
-    MainCoordinateurComponent,
     CoordinateurComponent,
     ListStagesComponent,
+    EtudiantComponent,
     LoginComponent,
     RegisterComponent,
-    CoordinateurAccueilComponent,
     EtudiantComponent,
     EtudiantNavbarComponent,
     EtudiantMainComponent,
@@ -80,9 +94,22 @@ import { UserCreateComponent } from './components/modals/user-create/user-create
     NavbarEncadreurComponent,
     StatisticsComponent,
     RapportTableComponent,
-    ForumTableComponent,
     ForumComponent,
-    UserCreateComponent
+    UserCreateComponent,
+    OrganismeComponent,
+    TachedetailsComponent,
+    AllTachesComponent,
+    CoordinateurTableComponent,
+    OrganismesComponent,
+    AutreComponent,
+    UserUpdateComponent,
+    PieComponent,
+    ArchiveTachesComponent,
+    EncadreurComponent,
+    MainProfileComponent,
+    JuryNavbarComponent,
+    JuryComponent,
+    PlanningComponent
   ],
   imports: [
     BrowserModule,
@@ -93,7 +120,8 @@ import { UserCreateComponent } from './components/modals/user-create/user-create
     FlashMessagesModule.forRoot(),
     ReactiveFormsModule,
     NgxWebstorageModule.forRoot(),
-    NgpSortModule
+    NgpSortModule,
+    CKEditorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

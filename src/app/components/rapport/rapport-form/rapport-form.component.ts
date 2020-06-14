@@ -30,12 +30,8 @@ export class RapportFormComponent implements OnInit {
     })
   }
   upload(rapportData) {
-    console.log("upload of rapport form")
-    console.log("inside upload")
-    console.log(this.titre.errors);
-    console.log(this.desc.errors);
+
     if(this.titre.errors == null && this.desc.errors == null ){
-      console.log("no errors")
       this.progress = 0;
       this.currentFile = this.selectedFile.item(0);
       this.rapportService.save(this.currentFile,rapportData.titre,rapportData.desc).subscribe(

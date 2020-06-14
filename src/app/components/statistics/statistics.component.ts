@@ -20,7 +20,7 @@ export class StatisticsComponent  {
   ngAfterViewInit() {
     this.configurationService.getAllFilieres();
     this.chartData(1);
-    this.selectedFiliere = this.filieres[0].libelle;
+    
   }
 
   ngOnDestroy() {
@@ -54,14 +54,20 @@ export class StatisticsComponent  {
           let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
           categoryAxis.dataFields.category = "nom";
           categoryAxis.title.text = "Villes ["+this.selectedFiliere+"]";
-
+          categoryAxis.renderer.grid.template.location = 0;
+          categoryAxis.renderer.minGridDistance = 2;
           let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
           valueAxis.title.text = "Nombre de stages";
           let series = chart.series.push(new am4charts.ColumnSeries());
           series.name = "Les stage de la filière par ville";
           series.columns.template.tooltipText = "Titre: {name}\nVille: {categoryX}\nValeur: {valueY}";
-          series.columns.template.fill = am4core.color("#4287f5"); // fill
-          series.columns.template.propertyFields.width = "50px";
+          series.heatRules.push({
+            "target": series.columns.template,
+            "property": "fill",
+            "min": am4core.color("#00b7ff"),
+            "max": am4core.color("#004d6b"),
+            "dataField": "valueY"
+          });
           series.dataFields.valueY = "nombreVille";
           series.dataFields.categoryX = "nom";
           this.chart = chart;

@@ -1,5 +1,5 @@
 <nav class="navbar  navbar-expand-lg navbar-light bg-white shadow">
-  <a  class="navbar-brand"><img src="../../../../assets/logoStage.png" alt="fstg logo" style="height:40px;width:160px">
+  <a routerLink="../encadreur/profile"  class="navbar-brand"><img src="../../../../assets/logoStage.png" alt="fstg logo" style="height:40px;width:160px">
   </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -15,29 +15,23 @@
         </div>
       </li>
       <li class="nav-item">
-        <a href="#" class="nav-link text-dark">Stages <span class="fa fa-bars"></span></a>
-      </li>
-      <li class="nav-item dropdown">
-        <a href="#" class="nav-link text-dark">Tâche <span class="fa fa-tasks"></span></a>
-        <ul class="dropdown-menu border-0 shadow">
-          <li class="dropdown-item">
-            <button class="btn btn-success btn-block">Créer Une tâche</button></li>
-          <li class="dropdown-item">Tout les tâches</li>
-        </ul>
-
+        <a routerLink="../encadreur/stage/archive" class="nav-link text-dark">Stages <span class="fa fa-bars"></span></a>
       </li>
       <li class="nav-item">
-        <a href="#" class="nav-link text-dark">Forum <span class="fa fa-commenting"></span></a>
+        <a routerLink="../encadreur/tache/archive" class="nav-link text-dark">Tâche <span class="fa fa-tasks"></span></a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="#" class="nav-link text-dark">Forum <span class="fa fa-commenting"></span></a>
       </li>
 
       <li class="nav-item dropleft mx-2">
         <img src="../../../../assets/portofolio.jpg" alt="profile" class="rounded-circle border-dark dropdown-toggle shadow-sm" data-toggle="dropdown" role="button" aria-expanded="false" style="height: 30px;width: 30px">
         <ul class="dropdown-menu shadow" role="menu">
           <li class="dropdown-item">
-            <a href="#" class="text-dark btn-link text-decoration-none">Profile <span class="fa-pull-right fa fa-user-circle"></span></a>
+            <a routerLink="#" class="text-dark btn-link text-decoration-none">Profile <span class="fa-pull-right fa fa-user-circle"></span></a>
           </li>
           <li class="dropdown-item">
-            <a href="#" class="text-dark btn-link text-decoration-none">Déconnexion <span class=" fa fa-sign-out"></span></a>
+            <a routerLink="#" class="text-dark btn-link text-decoration-none">Déconnexion <span class=" fa fa-sign-out"></span></a>
           </li>
         </ul>
       </li>

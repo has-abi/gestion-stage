@@ -1,21 +1,20 @@
 <div class="card ">
-  <div class="card-header bg-light">
+  <div class="card-header bg-primary">
     <div class="row">
-      <div class="col-sm-9">
-        <h1 class="text-dark"> <span class="fa fa-bars"></span> Stages</h1>
+      <div class="col-sm-8">
+        <h1 class="text-white"> <span class="fa fa-bars"></span> Stages</h1>
       </div>
-      <div class="col-ms-3">
-        <select class="form-control float-right shadow-sm d-inline" [(ngModel)]="selectedTable">
-          <option value="Stages" selected>Stages</option>
-          <option value="Etudiants">Etudiants</option>
-          <option value="Encadreurs">Encadreurs</option>
-          <option value="Juries">Juries</option>
+      <div class="col-sm-2">
+        <select class="form-control" [(ngModel)]="showenStages">
+          <option value="active">Active Stages</option>
+          <option value="tout">Tout Stages</option>
         </select>
       </div>
+
     </div>
 
   </div>
-  <div class="card-body ">
+  <div class="card-body">
     <app-list-etudiant *ngIf="selectedTable == 'Etudiants'"></app-list-etudiant>
     <app-list-encadreur *ngIf="selectedTable == 'Encadreurs'"></app-list-encadreur>
     <app-list-jury *ngIf="selectedTable == 'Juries'"></app-list-jury>
@@ -44,7 +43,7 @@
       </div>
     </div>
 
-    <div class="col-md-2  ">
+    <div  class="col-md-2 ">
       <div class="dropdown">
         <button class="btn btn-dark btn-block dropdown-toggle shadow-sm" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false" type="button" id="colsDropdown">Colonnes</button>
         <div class="dropdown-menu shadow-sm" aria-labelledby="colsDropdown">
@@ -53,13 +52,13 @@
           <div class="dropdown-item"><input type="checkbox" (change)="columns.dateDebut = !columns.dateDebut" [checked]="columns.dateDebut"> Date début</div>
           <div class="dropdown-item"><input type="checkbox" (change)="columns.dateFin = !columns.dateFin" [checked]="columns.dateFin"> Date Fin</div>
           <div class="dropdown-item"><input type="checkbox" (change)="columns.status = !columns.status" [checked]="columns.status"> Statu</div>
-          <div class="dropdown-item"><input type="checkbox" (change)="columns.etudiants = !columns.etudiants" [checked]="columns.etudiants"> Etudiants</div>
-          <div class="dropdown-item"><input type="checkbox" (change)="columns.encadreurs = !columns.encadreurs" [checked]="columns.encadreurs"> Encadreurs</div>
-          <div class="dropdown-item"><input type="checkbox" (change)="columns.juries = !columns.juries" [checked]="columns.juries"> Juries</div>
+          <div class="dropdown-item" *ngIf="role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE'"><input type="checkbox" (change)="columns.etudiants = !columns.etudiants" [checked]="columns.etudiants"> Etudiants</div>
+          <div class="dropdown-item" *ngIf="role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE'"><input type="checkbox" (change)="columns.encadreurs = !columns.encadreurs" [checked]="columns.encadreurs"> Encadreurs</div>
+          <div class="dropdown-item" *ngIf="role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE'"><input type="checkbox" (change)="columns.juries = !columns.juries" [checked]="columns.juries"> Juries</div>
           <div class="dropdown-item"><input type="checkbox" (change)="columns.rapport = !columns.rapport" [checked]="columns.rapport"> Rapport</div>
           <div class="dropdown-item"><input type="checkbox" (change)="columns.organisme = !columns.organisme" [checked]="columns.organisme"> struture d'accueil</div>
-          <div class="dropdown-item"><input type="checkbox" (change)="columns.convention = !columns.convention" [checked]="columns.convention">Convention</div>
-          <div class="dropdown-item"><input type="checkbox" (change)="columns.actions = !columns.actions" [checked]="columns.actions"> Actions</div>
+          <div class="dropdown-item" *ngIf="role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE'"><input type="checkbox" (change)="columns.convention = !columns.convention" [checked]="columns.convention">Convention</div>
+          <div class="dropdown-item" *ngIf="role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE'"><input type="checkbox" (change)="columns.actions = !columns.actions" [checked]="columns.actions"> Actions</div>
         </div>
       </div>
     </div>
@@ -73,7 +72,13 @@
         </ul>
       </div>
     </div>
-    <div *ngIf="selectedStages.length>0" class="col-md-3 mt-2 offset-5">
+    <div *ngIf="showenStages == 'active'" class="col-sm-4 offset-8 mt-3">
+      <div *ngIf="role == 'COORDINATEUR_ROLE' " class="btn-group float-right">
+        <a routerLink="../../../coordinateur/planning" class="btn btn-light shadow-sm" (click)="plannig()">Planning <span class="fa fa-calendar"></span></a>
+        <button class="btn btn-dark shadow-sm">PV <span class="fa fa-file"></span></button>
+      </div>
+    </div>
+    <div  *ngIf="selectedStages.length>0 && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')"  class="col-md-3 mt-2 offset-5">
       <div class="btn-group">
         <button class="btn btn-danger shadow-sm" (click)="deleteAll()">Suprimer <span class="fa fa-trash"></span></button>
         <button class="btn btn-primary mx-1 shadow-sm" (click)="activateAll()">Activer <span class="fa fa-check"></span></button>
@@ -92,13 +97,13 @@
             <th class="text-center" *ngIf="columns.dateDebut">Date Début</th>
             <th class="text-center" *ngIf="columns.dateFin">Date Fin</th>
             <th class="text-center" *ngIf="columns.status">Status</th>
-            <th class="text-center" *ngIf="columns.etudiants">Etudiants</th>
-            <th class="text-center" *ngIf="columns.encadreurs">Encadreurs</th>
-            <th class="text-center" *ngIf="columns.juries">Juries</th>
+            <th class="text-center" *ngIf="columns.etudiants && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')">Etudiants</th>
+            <th class="text-center" *ngIf="columns.encadreurs && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')">Encadreurs</th>
+            <th class="text-center" *ngIf="columns.juries && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')">Juries</th>
             <th class="text-center" *ngIf="columns.organisme">Organisme d'accueil</th>
             <th class="text-center" *ngIf="columns.rapport">Rapport</th>
-            <th class="text-center" *ngIf="columns.convention">Convention</th>
-            <th class="text-center" *ngIf="columns.actions">Actions</th>
+            <th class="text-center" *ngIf="columns.convention && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')">Convention</th>
+            <th class="text-center" *ngIf="columns.actions && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')">Actions</th>
           </tr>
           </thead>
           <tbody>
@@ -109,13 +114,13 @@
             <td *ngIf="columns.dateDebut">{{stage.dateDebut}}</td>
             <td *ngIf="columns.dateFin">{{stage.dateFin}}</td>
             <td *ngIf="columns.status"><span *ngIf="stage.statu == true" class="text-success font-weight-bold">
-             Active
+             <span class="badge badge-success">Active</span>
            </span>
               <span *ngIf="stage.statu == false" class=" font-weight-bold text-warning">
-            Inactive
+            <span class="badge badge-warning">Inactive</span>
            </span>
             </td>
-            <td *ngIf="columns.etudiants" class="text-center">
+            <td *ngIf="columns.etudiants && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')" class="text-center">
               <button class="btn bg-transparent border-0"><i class="fa "  (click)="showEtudiants(stage.id)" [class.fa-caret-down]="showEtudiant.id!=stage.id" [class.fa-caret-up]="showEtudiant.id==stage.id "></i></button>
               <ul *ngIf="showEtudiant.id == stage.id && showEtudiant.show" class="list-group list-group-flush">
                 <li class="list-group-item text-left" *ngFor="let se of stage.stageEtudiants">
@@ -125,7 +130,7 @@
                 </li>
               </ul>
             </td>
-            <td *ngIf="columns.encadreurs" class="text-center">
+            <td *ngIf="columns.encadreurs && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')" class="text-center">
               <button class="btn bg-transparent border-0"><i class="fa "  (click)="showEncadreurs(stage.id)" [class.fa-caret-down]="showEncadrant.id!=stage.id" [class.fa-caret-up]="showEncadrant.id==stage.id "></i></button>
               <ul *ngIf="showEncadrant.id == stage.id && showEncadrant.show" class="list-group list-group-flush">
                 <li class="list-group-item text-left" *ngFor="let se of stage.stageEncadreurs">
@@ -135,7 +140,7 @@
                 </li>
               </ul>
             </td>
-            <td *ngIf="columns.juries" class="text-center">
+            <td *ngIf="columns.juries && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')" class="text-center">
               <button class="btn bg-transparent border-0"><i class="fa "  (click)="showJuries(stage.id)" [class.fa-caret-down]="showjury.id!=stage.id" [class.fa-caret-up]="showjury.id==stage.id "></i></button>
               <ul *ngIf="showEtudiant.id == stage.id && showjury.show" class="list-group list-group-flush">
                 <li class="list-group-item text-left" *ngFor="let se of stage.stageMembreJuries">
@@ -152,13 +157,13 @@
               <button *ngIf="stage.rapport != null" class="btn btn-danger" data-toggle="modal" data-target="#ViewrapportModal" (click)="diaplayRapport(stage.rapport)"><span class="fa fa-file-pdf-o"></span></button>
               <button *ngIf="stage.rapport == null" class="btn btn-info" data-toggle="modal" data-target="#rapportModal" (click)="setStageRef(stage.reference)"><span class="fa fa-upload"></span></button>
             </td>
-            <td *ngIf="columns.convention">
+            <td *ngIf="columns.convention && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')">
               <button class="btn-sm btn-warning shadow-sm" data-toggle="modal" data-target="#conventionModal"  (click)="conventioner(stage)"><span class="fa fa-file"></span></button>
             </td>
-            <td *ngIf="columns.actions">
-              <div class="btn-group-sm">
-                <button class="btn-sm btn-danger" (click)="deleteStage(stage.reference)"><span class="fa fa-trash"  data-toggle="tooltip" data-placement="top" title="Suprimer"></span></button>
-                <button routerLink="/stage" class="btn-sm btn-success" (click)="stageView(stage)"><span class="fa fa-eye"  data-toggle="tooltip" data-placement="top" title="Détaill"></span></button>
+            <td *ngIf="columns.actions && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')">
+              <div class="btn-group btn-group-sm">
+                <button class="btn-sm btn-danger" (click)="delete(stage)" data-toggle="modal" data-target="#alertModal"><span class="fa fa-trash"  data-toggle="tooltip" data-placement="top" title="Suprimer"></span></button>
+                <button  class="btn-sm btn-success" (click)="stageView(stage)"><span class="fa fa-eye"  data-toggle="tooltip" data-placement="top" title="Détaill"></span></button>
               </div>
             </td>
           </tr>
@@ -201,81 +206,8 @@
     </nav>
   </div>
 </div>
-<div *ngIf="stageEtudiants.length>0" class="modal" id="etudiantModal" tabindex="-1" role="dialog" aria-labelledby="etudiantModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title">Etudiants :</h1>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <td>CNE</td>
-            <td>Code d'appogé</td>
-            <td>Nom</td>
-            <td>Prenom</td>
-            <td>Actions</td>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let se of stageEtudiants">
-            <td>{{se.etudiant.cin}}</td>
-            <td>{{se.etudiant.codeAppoge}}</td>
-            <td>{{se.etudiant.user.nom}}</td>
-            <td>{{se.etudiant.user.prenom}}</td>
-            <td><span class="fa fa-bars mx-2 text-warning" data-toggle="tooltip" data-placement="top" title="plus de details"></span><span class="fa fa-trash text-danger" data-toggle="tooltip" data-placement="top" title="suprimer"></span></td>
-          </tr>
-          </tbody>
-        </table>
-        <div class="card" *ngIf="modifyEtudiant">
-          <div class="card-header">
-            <h5>Modification</h5>
-          </div>
-          <div class="card-body">
-            <div *ngFor="let se of stageEtudiants">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="cne">CNE:</label>
-                    <input type="text" class="form-control" id="cne" [(ngModel)]="se.etudiant.cin">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="codeAppoge">Code d'appogé:</label>
-                    <input type="text" class="form-control" id="codeAppoge" [(ngModel)]="se.etudiant.codeAppoge">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="nom">Nom:</label>
-                    <input type="text" class="form-control" id="nom" [(ngModel)]="se.etudiant.user.nom">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="prenom">Prénom:</label>
-                    <input type="text" class="form-control" id="prenom" [(ngModel)]="se.etudiant.user.prenom">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-        <button type="button" class="btn " data-toggle="modal" data-target="etudiantModal" (click)="modifyEtudiant = !modifyEtudiant" [class.btn-success]="modifyEtudiant"  [class.btn-primary]="!modifyEtudiant">Modifier</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 <app-rapport></app-rapport>
 <app-rapport-display></app-rapport-display>
 <app-ajouter-organisme></app-ajouter-organisme>
-<app-convention></app-convention>
-
+<app-convention *ngIf="(role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')"></app-convention>

@@ -1,24 +1,21 @@
 <nav class="navbar  navbar-expand navbar-light bg-white shadow">
   <a  class="navbar-brand" routerLink="/etudiant/profile"><img src="../../../../assets/logoStage.png" alt="fstg logo" style="height:40px;width:160px">
   </a>
-
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
   <ul class="navbar-nav ml-auto">
-    <li class="nav-item" >
-      <div class="input-group">
-        <input   type="text" class="form-control shadow-sm"   placeholder="chercher ..."   [(ngModel)]="searchInput" [class.index]="searching" >
-        <div class="input-group-append">
-          <button class="btn shadow-sm text-white" style="background: orange"  (click)="search()"><i class="fa fa-search"></i></button>
-        </div>
-      </div>
+
+    <li class="nav-item">
+      <a routerLink="../etudiant/stage/archive" class="nav-link text-dark">Stages <span class="fa fa-bars"></span></a>
     </li>
     <li class="nav-item">
-      <a href="#" class="nav-link text-dark">Stages <span class="fa fa-bars"></span></a>
-    </li>
+
+          <a routerLink="../etudiant/tache/archive" class="nav-link text-dark">Taches <span class="fa fa-tasks"></span></a>
+
     <li class="nav-item">
-      <a href="#" class="nav-link text-dark">Tâches <span class="fa fa-tasks"></span></a>
-    </li>
-    <li class="nav-item">
-      <a href="#" class="nav-link text-dark">Forum <span class="fa fa-commenting"></span></a>
+      <a routerLink="#" class="nav-link text-dark">Forum <span class="fa fa-commenting"></span></a>
     </li>
     <li class="nav-item dropdown mr-5">
       <button class="bg-transparent border-0 dropdown-toggle nav-link text-dark" data-toggle="dropdown" aria-expanded="false" role="button">Autres <span class="fa fa-cog"></span></button>
@@ -39,6 +36,7 @@
       </ul>
     </li>
   </ul>
+  </div>
 </nav>
 
 

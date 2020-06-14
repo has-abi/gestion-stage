@@ -17,7 +17,8 @@ export class User {
   reponce:string;
   active:boolean;
   dateJoin:Date;
-  role:Role;
+  roles:Array<Role>;
+  token?:string;
   commentaires:Array<Commentaire>;
   sujetForums:Array<SujetForum>;
 

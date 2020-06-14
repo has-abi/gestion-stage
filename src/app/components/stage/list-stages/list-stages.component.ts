@@ -5,10 +5,13 @@ import {Stage} from "../../../models/stage.model";
 import {RapportService} from "../../../services/rapport.service";
 import {Rapport} from "../../../models/rapport.model";
 import {OrganismeService} from "../../../services/organisme.service";
-import {SessionStorageService} from "ngx-webstorage";
+import {LocalStorageService, SessionStorageService} from "ngx-webstorage";
 import {ConventionService} from "../../../services/convention.service";
 import {FlashMessagesService} from "angular2-flash-messages";
-
+import {AlertService} from "../../../services/alert.service";
+import {Tache} from "../../../models/tache.model";
+import {Router} from "@angular/router";
+declare let bootbox:any;
 @Component({
   selector: 'app-list-stages',
   templateUrl: './list-stages.component.html',
@@ -17,12 +20,14 @@ import {FlashMessagesService} from "angular2-flash-messages";
 export class ListStagesComponent implements OnInit {
   page:number = 0;
   size:number = 10;
+  showenStages = "active"
   searching = false;
   search = "-SELECT-";
   searchStage = "";
   modifyEtudiant = false;
   searchByDate = false;
-  selectedTable="Stages"
+  selectedTable="Stages";
+	sort = "desc"
   columns = {
     'id':false,
     'sujet':true,
@@ -35,7 +40,7 @@ export class ListStagesComponent implements OnInit {
     'actions':true,
     'juries':false,
     'rapport':false,
-    'convention':false
+    'convention':true
   }
   selectAll = false;
   tableOrder = {
@@ -54,28 +59,69 @@ export class ListStagesComponent implements OnInit {
     id:0,
     show:false
   }
+  role = ""
   constructor(private stageService: StageService,private stageEtudiantService:StageEtudiantService,
               private rapportService:RapportService,private organismeService:OrganismeService,
-              private sessionStorage:SessionStorageService,private conventionService:ConventionService,
-              private flashMessagesService:FlashMessagesService) { }
+              private sessionStorage:LocalStorageService,private conventionService:ConventionService,
+              private flashMessagesService:FlashMessagesService,private alertService:AlertService,private  router:Router) { }
 
   ngOnInit(): void {
-    this.findAllPages();
-
+    const user = this.sessionStorage.retrieve("logedUser");
+    this.role = user.roles[0].role;
+	console.log(user);
+	console.log(this.role);
+    if(this.role == "COORDINATEUR_ROLE"){
+      this.findByCoordinateur(user.id);
+    }
+    if(this.role == "ADMIN_ROLE"){
+      this.findAllPages();
+    }
+    if(this.role == "ETUDIANT_ROLE"){
+    console.log("equals")
+      this.findByEtudiant(user.id);
+    }
+    if(this.role == "ENCADREUR_ROLE"){
+      this.findByEncadreur(user.id);
+    }
+    if(this.role == "JURY_ROLE"){
+      this.findByJury(user.id);
+    }
   }
   deleteStage(stage:Stage){
-   this.stageService.deleteByReference(stage.reference).subscribe(resp=>{
-     if(resp>0){
-       this.flashMessagesService.show("stage supprimer avec succée!", { cssClass: 'alert-success', timeout: 5000 });
-        this.stagePage.content.splice(this.stagePage.content.indexOf(stage,0),1);
-     }else{
-       this.flashMessagesService.show("stagee ne peut pas être suprpimer!!", { cssClass: 'alert-danger', timeout: 5000 });
-     }
-   });
+      this.stageService.deleteByReference(stage.reference).subscribe(resp=>{
+        if(resp>0){
+          this.flashMessagesService.show("stage supprimer avec succée!", { cssClass: 'alert-success', timeout: 5000 });
+          this.stageService.stagePage.content.splice(this.stagePage.content.indexOf(stage,0),1);
+        }else{
+          this.flashMessagesService.show("stagee ne peut pas être suprpimer!!", { cssClass: 'alert-danger', timeout: 5000 });
+        }
+      });
 
   }
-
+  findByEtudiant(id:number){
+    return this.stageService.findByEtudiantId(id,this.page,this.size);
+  }
+  findByJury(id:number){
+    return this.stageService.findByJuryId(id,this.page,this.size);
+  }
+  findByEncadreur(id:number){
+    return this.stageService.findByEncadreurId(id,this.page,this.size);
+  }
+  findByCoordinateur(id:number){
+    return this.stageService.findByCoordinateurId(id,this.page,this.size,this.sort);
+  }
+  plannig(){
+    this.stageService.stages = this.stagePage.content;
+  }
   conventioner(cStage:Stage){
+    if(this.validateConvention(cStage)){
+      this.chargerConvention();
+    }else{
+      this.conventionSet(cStage);
+    }
+  }
+
+  conventionSet(cStage:Stage){
     this.conventionService.convention.organisme = cStage.organismeAccueil;
     this.conventionService.convention.dateDebutStage = this.getFormatDate(cStage.dateDebut);
     this.conventionService.convention.dateFinStage = this.getFormatDate(cStage.dateFin);
@@ -83,8 +129,7 @@ export class ListStagesComponent implements OnInit {
     cStage.stageEtudiants.forEach(se=>{
       this.conventionService.convention.etudiantCne.push(se.etudiant.cin);
     })
-    console.log(this.conventionService.convention.etudiantCne)
-    console.log(this.conventionService.convention.etudiantCne[0])
+
     cStage.stageEncadreurs.forEach(se=>{
       if(se.encadreur.type == "Encadreur de la faculté"){
         this.conventionService.convention.encadreurFaculte = se.encadreur;
@@ -94,6 +139,43 @@ export class ListStagesComponent implements OnInit {
     })
     this.conventionService.convention.sujetStage = cStage.sujet;
     console.log(this.conventionService.convention);
+  }
+
+  chargerConvention = () =>{
+    bootbox.confirm({
+      message: "les champ du convention sont incomplte penser modifier le stage en ajoutant les information neccessaires! ",
+      buttons: {
+        confirm: {
+          label: 'Annuler',
+          className: 'btn-info'
+        }
+      }
+    });
+  }
+  validateConvention(stage:Stage){
+    return !stage.sujet || stage.stageEncadreurs.length <2 || !stage.organismeAccueil.email || !stage.organismeAccueil.responsable ||
+      !stage.organismeAccueil.teleFix || !stage.organismeAccueil.raisonSociale || !stage.organismeAccueil.tele;
+  }
+  delete = (stage:Stage) =>{
+    bootbox.confirm({
+      message: "Vous voulez vraiment supprimer ce stage?",
+      buttons: {
+        confirm: {
+          label: 'Confirmer',
+          className: 'btn-success'
+        },
+        cancel: {
+          label: 'Annuler',
+          className: 'btn-danger'
+        }
+      },
+      callback:(result)=>{
+        if(result){
+          console.log("inside arrow")
+          this.deleteStage(stage);
+        }
+      }
+    })
   }
   getFormatDate(d:Date):string{
     let date = new Date(d);
@@ -264,15 +346,34 @@ export class ListStagesComponent implements OnInit {
   }
   stageView(stage:Stage){
     this.sessionStorage.store("stageToView",stage);
+    this.router.navigate(['coordinateur/stage']);
   }
   get organismeAccueil(){
     return this.organismeService.organismeAcceuil;
   }
 
-  deleteAll() {
-    this.selectedStages.forEach(stage=>{
-      this.deleteStage(stage);
+  deleteAll = () =>{
+    bootbox.confirm({
+      message: "Vous voulez vraiment supprimer ce stage?",
+      buttons: {
+        confirm: {
+          label: 'Confirmer',
+          className: 'btn-success'
+        },
+        cancel: {
+          label: 'Annuler',
+          className: 'btn-danger'
+        }
+      },
+      callback:(result)=>{
+        if(result){
+          this.selectedStages.forEach(stage=>{
+            this.deleteStage(stage);
+          })
+        }
+      }
     })
+
   }
   activateAll(){
     this.selectedStages.forEach(stage=>{

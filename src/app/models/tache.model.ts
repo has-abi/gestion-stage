@@ -1,18 +1,19 @@
 import {Stage} from "./stage.model";
-import {StageEncadreur} from "./stage-encadreur.model";
+import {Encadreur} from "./encadreur.model";
+import {RapportTache} from "./rapport-tache.model";
 
 export class Tache {
   id:number;
   contenu:string;
+  reference:string;
+  titre:string;
   dateCreation:Date;
-  dateLimit:Date;
+  dateLimite:Date;
   effectuer:boolean;
   valider:boolean;
   stage:Stage;
-  stageEncadreur:StageEncadreur;
+  encadreur:Encadreur;
+  dateValidation:Date;
+  rapportTache:RapportTache;
 
-  constructor() {
-    this.stage = new Stage();
-    this.stageEncadreur = new StageEncadreur();
-  }
 }

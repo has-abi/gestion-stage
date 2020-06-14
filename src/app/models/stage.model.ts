@@ -21,9 +21,11 @@ export class Stage {
   coordinateur:Coordinateur;
 
   constructor() {
+    this.organismeAccueil = new OrganismeAccueil();
     this.coordinateur = new Coordinateur();
     this.stageEtudiants = new Array<StageEtudiant>();
     this.stageEncadreurs = new Array<StageEncadreur>();
     this.stageMembreJuries = new Array<StageMembreJury>();
+	this.rapport = new Rapport();
   }
 }

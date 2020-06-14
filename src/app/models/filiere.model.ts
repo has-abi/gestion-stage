@@ -7,9 +7,4 @@ export class Filiere {
   libelle:string;
   etudiants:Array<Etudiant>;
   departement:Departement;
-
-  constructor() {
-    this.departement = new Departement();
-    this.etudiants = new Array<Etudiant>();
-  }
 }

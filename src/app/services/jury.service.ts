@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {MembreJury} from "../models/membre-jury.model";
 import {User} from "../models/user.model";
 import {JuryPage} from "../models/pageModels/jury-page";
-import {Encadreur} from "../models/encadreur.model";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,19 @@ export class JuryService {
   private _pagejury:JuryPage;
   tableElements = [];
   constructor(private http: HttpClient) { }
+
+  createJury(jury:MembreJury):Observable<number>{
+    return this.http.post<number>(this.url,jury);
+  }
+  findByUserId(id:number):Observable<MembreJury>{
+    return this.http.get<MembreJury>(this.url+"user/id/"+id);
+  }
+  update(jury:MembreJury):Observable<number>{
+    return this.http.put<number>(this.url,jury);
+  }
+  delete(reference:string):Observable<number>{
+    return this.http.delete<number>(this.url+"reference/"+reference);
+  }
   findByCoordinateur(id:number,page:number,size:number,sort:string){
     this.http.get<JuryPage>(this.url+"coordinateur/id/"+id+"/page/"+page+"/size/"+size+"/sort/"+sort).subscribe(datas=>{
       this.pagejury = datas;

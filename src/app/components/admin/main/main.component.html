@@ -1,12 +1,6 @@
 <div class="row card ">
   <div class="card-header bg-dark text-white">
     <h1><span class="fa fa-dashboard"></span> Dashboard</h1>
-    <div class="input-group">
-      <div class="input-group-prepend"> <button class="btn btn-sm bg-white" (click)="search = !search"><span class="fa fa-search-plus" [class.fa-search-plus]="!search" [class.fa-search-minus]="search"></span></button></div>
-      <input type="text" class="form-control" placeholder="Chercher ..." *ngIf="search" id="search">
-      <div *ngIf="search" class="input-group-append "><div class="input-group-text btn btn-primary"><span class="fa fa-search"></span> Chercher </div></div>
-    </div>
-
   </div>
   <div class="card-body row">
     <div class="col-md-3">
@@ -14,8 +8,8 @@
           <div class="card-body text-white">
             <h2><span class="fa fa-users"></span> Utilisateurs {{nombreUsers}}</h2>
           </div>
-          <div class="card-footer align-content-end">
-            <a href="#" class="card-link text-white" >voir plus <i class="fa fa-arrow-right"></i></a>
+          <div class="card-footer">
+            <a routerLink="../../admin/utilisateurs" class="text-decoration-none text-white float-right">Voir plus <span class="fa fa-plus"></span></a>
           </div>
         </div>
     </div>
@@ -24,8 +18,8 @@
         <div class="card-body text-white">
           <h2><span class="fa fa-tasks"></span> Stages {{nombreStages}}</h2>
         </div>
-        <div class="card-footer align-content-end">
-          <a href="#" class="card-link text-white" >voir plus <i class="fa fa-arrow-right"></i></a>
+        <div class="card-footer">
+          <a routerLink="../../admin/stages" class="text-decoration-none text-white float-right">Voir plus <span class="fa fa-plus"></span></a>
         </div>
       </div>
     </div>
@@ -34,9 +28,10 @@
         <div class="card-body text-dark">
           <h2><span class="fa fa-file-pdf-o"></span> Rapports {{nombreRepport}}</h2>
         </div>
-        <div class="card-footer align-content-end">
-          <a href="#" class="card-link text-dark" >voir plus <i class="fa fa-arrow-right"></i></a>
+        <div class="card-footer">
+          <a routerLink="../../admin/rapports" class="text-decoration-none text-dark float-right">Voir plus <span class="fa fa-plus"></span></a>
         </div>
+
       </div>
     </div>
     <div class="col-md-3">
@@ -44,8 +39,8 @@
         <div class="card-body text-white">
           <h2><span class="fa fa-commenting"></span> Forum {{nombreForum}}</h2>
         </div>
-        <div class="card-footer align-content-end">
-          <a href="#" class="card-link text-white" >voir plus <i class="fa fa-arrow-right"></i></a>
+        <div class="card-footer">
+          <a routerLink="/forum" class="text-decoration-none text-white float-right">Voir plus <span class="fa fa-plus"></span></a>
         </div>
       </div>
     </div>
@@ -53,5 +48,7 @@
   <app-utilisateur-table></app-utilisateur-table>
   <app-list-stages></app-list-stages>
   <app-rapport-table></app-rapport-table>
+  <app-statistics></app-statistics>
   </div>
+
 

@@ -1,0 +1,22 @@
+<div class="card shadow">
+  <div class="card-header bg-light">
+    <div class="row">
+      <div class="col-sm-8">
+        <h1 class="text-dark"><span class="fa fa-pie-chart"></span> Structures D'accueil par filière </h1>
+      </div>
+      <div class="col-sm-4">
+        <div class="dropdown">
+          <button class="btn bg-dark btn-block dropdown-toggle shadow-sm text-white" data-toggle="dropdown" aria-expanded="false">Changer la filière</button>
+          <ul class="dropdown-menu shadow-sm" role="menu">
+            <li *ngFor="let filiere of filieres" class="dropdown-item text-dark" (click)="getData(filiere.id)">{{filiere.libelle}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div id="piediv" style="width: 100%; height: 400px"></div>
+  </div>
+</div>
+
+

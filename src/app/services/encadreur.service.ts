@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {User} from "../models/user.model";
 import {StageEncadreur} from "../models/stage-encadreur.model";
 import {EncadreurPage} from "../models/pageModels/encadreur-page";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,30 @@ import {EncadreurPage} from "../models/pageModels/encadreur-page";
 export class EncadreurService {
   private _encadreur:Encadreur;
   private _encadreurs:Array<Encadreur>;
+  private _fEncadreurs:Array<Encadreur>;
   private _pageEncadreurs:EncadreurPage;
-   tableElements = [];
+  tableElements = [];
   url="http://localhost:8091/gestion-stage-api/encadreur"
+
   constructor(private http: HttpClient) { }
+
+  findByFiliere(id:number){
+    this.http.get<Array<Encadreur>>(this.url+"/filiere/id/"+id).subscribe(encads=>{
+      this.fEncadreurs = encads;
+    })
+  }
+  createEncadreur(encadreur:Encadreur):Observable<number>{
+    return this.http.post<number>(this.url+"/",encadreur);
+  }
+  findByUserId(id:number):Observable<Encadreur>{
+    return this.http.get<Encadreur>(this.url+"/user/id/"+id);
+  }
+  update(encadreur:Encadreur):Observable<number>{
+    return this.http.put<number>(this.url+"/",encadreur);
+  }
+  delete(reference:string):Observable<number>{
+    return this.http.delete<number>(this.url+"/reference/"+reference);
+  }
   findByCoordinateur(id:number,page:number,size:number,sort:string){
     this.http.get<EncadreurPage>(this.url+"/coordinateur/id/"+id+"/page/"+page+"/size/"+size+"/sort/"+sort).subscribe(datas=>{
       this.pageEncadreurs = datas;
@@ -69,6 +90,19 @@ export class EncadreurService {
   set encadreurs(value: Array<Encadreur>) {
     this._encadreurs = value;
   }
+
+
+  get fEncadreurs(): Array<Encadreur> {
+  if(this._fEncadreurs == null){
+    this._fEncadreurs ==  new Array<Encadreur>();
+  }
+    return this._fEncadreurs;
+  }
+
+  set fEncadreurs(value: Array<Encadreur>) {
+    this._fEncadreurs = value;
+  }
+
   cloneEncadreur(encadreur:Encadreur){
     const  e = new Encadreur();
     e.id = encadreur.id;

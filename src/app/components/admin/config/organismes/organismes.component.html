@@ -1,0 +1,180 @@
+<div class="card">
+  <div class="card-header"><h2><span class="fa fa-building"></span> Structures d'accueil</h2></div>
+  <div class="card-body table-responsive">
+    <div class="row">
+      <div class="col-md-5">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Chercher une Structure...." [(ngModel)]="searchInput"
+                 (input)="search()">
+          <div class="input-group-append">
+            <button class="btn btn-primary"><span class="fa fa-search"></span></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="dropdown">
+          <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false">
+           Type
+          </button>
+          <ul class="dropdown-menu shadow-sm" role="menu">
+            <li *ngFor="let type of typeOrganismes" class="dropdown-item" (click)="chargerParType(type.type)">{{type.type}}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="dropdown">
+          <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false">
+            Type service
+          </button>
+          <ul class="dropdown-menu shadow-sm" role="menu">
+            <li *ngFor="let servie of typeServiceOrganismes" class="dropdown-item" (click)="chargerParService(servie.type)">{{servie.type}}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="dropdown">
+          <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false">
+            ville
+          </button>
+          <ul class="dropdown-menu shadow-sm" role="menu">
+            <li *ngFor="let ville of villes" class="dropdown-item" (click)="chargerParVille(ville.nom)">{{ville.nom}}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-1">
+        <button class="btn btn-success" (click)="addOrga()"><span class="fa fa-plus"></span></button>
+      </div>
+
+    </div>
+
+    <table class="table table-striped mt-3 shadow">
+      <thead>
+      <tr>
+        <td>Raison sociale</td>
+        <td>Adress</td>
+        <td>E-mail</td>
+        <td>Gsm</td>
+        <td>Fax</td>
+        <td>Responsable</td>
+        <td>Ville</td>
+        <td>Type</td>
+        <td>Service</td>
+        <td>Actions</td>
+      </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let or of pageOrganisme.content">
+          <td>{{or.raisonSociale}}</td>
+          <td>{{or.adress}}</td>
+          <td>{{or.email}}</td>
+          <td>{{or.tele}}</td>
+          <td>{{or.teleFix}}</td>
+          <td>{{or.responsable}}</td>
+          <td>{{or.ville.nom}}</td>
+          <td>{{or.typeOrganisme.type}}</td>
+          <td>{{or.typeServiceOrganisme.type}}</td>
+          <td>
+            <div class="btn-group btn-group-sm">
+              <button class="btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Editer" (click)="update(or)"><span
+                class="fa fa-pencil"></span></button>
+              <button class="btn-sm btn-danger"><span class="fa fa-trash" data-toggle="tooltip" data-placement="top"
+                                                      title="Supprimer" (click)="deleteOrganisme(or)"></span></button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer ">
+	<div class="d-flex justify-content-center align-items-center">
+    <nav *ngIf="!searching" class="text-center m-auto mb-2">
+      <ul class="pagination">
+        <li class="page-item">
+          <select class="form-control" [(ngModel)]="size" (change)="resizePage()">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+          </select>
+        </li>
+        <li class="page-item" (click)="getIndexPage(0)"><a class="page-link">premier</a></li>
+        <li class="page-item" [class.disabled]="pageOrganisme.first">
+          <a class="page-link" aria-label="Previous" (click)="prevElements()">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <li class="page-item" *ngFor="let i of organismeElements" (click)="getIndexPage(i)"><a
+          class="page-link">{{i + 1}}</a></li>
+
+        <li class="page-item" (click)="nextElements()" [class.disabled]="pageOrganisme.last">
+          <a class="page-link" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+        <li class="page-item"><span class="page-link text-dark"><span
+          *ngIf="pageOrganisme.last">{{pageOrganisme.totalElements}}</span><span
+          *ngIf="!pageOrganisme.last">{{(pageOrganisme.number + 1) * size}}</span> de {{pageOrganisme.totalElements}}</span></li>
+        <li class="page-item" (click)="getIndexPage(pageOrganisme.totalPages-1)"><a class="page-link">dernier</a></li>
+      </ul>
+    </nav>
+	</div>
+    <flash-messages></flash-messages>
+    <div *ngIf="updateOrganisme || ajouterOrganisme" class="row mt-2">
+      <div class="col-md-12">
+        <button class="btn shadow-none btn-sm btn-danger" (click)="updateOrganisme = ajouterOrganisme = false"><span class="fa fa-minus-circle"></span></button>
+      </div>
+      <div class="col-md-6">
+        <label for="raisonSocial">Raison sociale</label>
+        <input type="text" class="form-control" id="raisonSocial" placeholder="raison social..." [(ngModel)]="organismeAccueil.raisonSociale">
+      </div>
+      <div class="col-md-6">
+        <label for="emailS">Email</label>
+        <input type="email" class="form-control" id="emailS" placeholder="email..." [(ngModel)]="organismeAccueil.email">
+      </div>
+      <div class="col-md-6">
+        <label for="tele">Télé</label>
+        <input type="text" class="form-control" id="tele" placeholder="telephone..." [(ngModel)]="organismeAccueil.tele">
+      </div>
+      <div class="col-md-6">
+        <label for="adress">Adress</label>
+        <input type="text" class="form-control" id="adress" placeholder="adress" [(ngModel)]="organismeAccueil.adress">
+      </div>
+      <div class="col-md-6">
+        <label for="responsable">Responsable</label>
+        <input type="text" class="form-control" id="responsable" placeholder="responsable..." [(ngModel)]="organismeAccueil.responsable">
+      </div>
+      <div class="col-md-6">
+        <label for="Mtype">Type</label>
+        <select  id="Mtype" class="form-control" [(ngModel)]="organismeAccueil.typeOrganisme.type">
+          <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+          <option *ngFor="let type of typeOrganismes" value="{{type.type}}">{{type.type}}</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="typeService">Type Service</label>
+        <select  id="typeService" class="form-control" [(ngModel)]="organismeAccueil.typeServiceOrganisme.type">
+          <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+          <option *ngFor="let type of typeServiceOrganismes" value="{{type.type}}">{{type.type}}</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="ville">Ville</label>
+        <select  id="ville" class="form-control" [(ngModel)]="organismeAccueil.ville.nom">
+          <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+          <option *ngFor="let ville of villes" value="{{ville.nom}}">{{ville.nom}}</option>
+        </select>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="pay">Pays</label>
+        <select  id="pay" name="pays" class="form-control" [(ngModel)]="organismeAccueil.ville.pays.nom">
+          <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+          <option *ngFor="let p of pays" value="{{p.nom}}">{{p.nom}}</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-block" [disabled]="validateOrganisme()" (click)="changeOrganisme()">Enregistrer <span class="fa fa-check"></span></button>
+    </div>
+  </div>
+</div>

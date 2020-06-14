@@ -1,0 +1,65 @@
+<div class="container container-fluid my-4">
+	<div class="text-center"><h1><span class="fa fa-tasks"></span> Archive des Tâches</h1></div>
+  <div class="row mx-5">
+    <div class="input-group">
+      <input type="text" class="form-control" (input)="search()" [(ngModel)]="searchInput" placeholder="Chercher une tache...">
+      <div class="input-group-append">
+        <button class="btn btn-outline-info"><span class="fa fa-search"></span></button></div>
+    </div>
+  </div>
+  <ul *ngIf="!searching"  class="list-group list-group-flush">
+    <li *ngFor="let tache of tachePage.content" class="list-group-item">
+
+      <div class="row">
+        <div class="col-md-6">
+          <p><b><span class="fa fa-square text-primary"></span> Titre:</b> {{tache.titre}}</p>
+          <p><b><span class="fa fa-user"></span> Encadreur: </b> {{tache.encadreur.user.nom}} {{tache.encadreur.user.prenom}}</p>
+          <p><b><span class="fa fa-calendar-check-o"></span> Créé Le:</b> {{tache.dateCreation| date:'medium'}}</p>
+          <p><b><span class="fa fa-calendar-check-o"></span> Date Limite:</b> {{tache.dateLimite| date:'medium'}}</p>
+          <p><b><span class="fa fa-file-pdf-o"></span> Rapport du tâche:</b>
+            <span *ngIf="tache.rapportTache!=null"><a  href="http://localhost:8091/files/{{tache.rapportTache.document.reference}}" class="btn btn-sm btn-light shadow-none">
+                  <span class="fa fa-download"></span></a>
+                  <a class="btn btn-sm btn-light shadow-none mx-2" target="_blank"  href="http://localhost:8091/file/display/{{tache.rapportTache.document.reference}}">
+                    <span class="fa fa-eye"></span></a>
+                  </span> <span *ngIf="!tache.valider" class="badge badge-warning">Pas encore valider</span> <span *ngIf="tache.valider" class="badge badge-success">Validé!</span>
+          </p>
+        </div>
+        <div class="col-md-6 bg-light">
+          <div [innerHTML]="tache.contenu"></div>
+          <p *ngIf="tache.valider"><span class="badge badge-primary">Validé Le {{tache.dateValidation| date:'medium'}}</span> </p>
+        </div>
+      </div>
+        </li>
+      </ul>
+
+  <div class="row d-flex justify-content-center align-items-center">
+    <nav *ngIf="!searching" class="text-center m-auto">
+      <ul  class="pagination">
+        <li class="page-item">
+          <select class="form-control" [(ngModel)]="size" (change)="resizePage()">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+          </select>
+        </li>
+        <li class="page-item" (click)="getIndexPage(0)"><a class="page-link" >premier</a></li>
+        <li class="page-item" [class.disabled]="tachePage.first">
+          <a class="page-link"  aria-label="Previous" (click)="prevElements()" >
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <li class="page-item" *ngFor="let i of tableElements" (click)="getIndexPage(i)"><a class="page-link">{{i+1}}</a></li>
+
+        <li class="page-item" (click)="nextElements()" [class.disabled]="tachePage.last">
+          <a class="page-link"  aria-label="Next" >
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+        <li class="page-item"><span class="page-link text-dark"><span *ngIf="tachePage.last">{{tachePage.totalElements}}</span><span *ngIf="!tachePage.last">{{(tachePage.number+1)*size}}</span> de {{tachePage.totalElements}}</span></li>
+        <li class="page-item" (click)="getIndexPage(tachePage.totalPages-1)"><a class="page-link" >dernier</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>

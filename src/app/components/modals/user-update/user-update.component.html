@@ -1,0 +1,94 @@
+<div  class="modal" id="muserModal" tabindex="-1" role="dialog" aria-labelledby="muserModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title"> <span class="fa fa-user"></span> Modification de {{user.nom}} {{user.prenom}} :</h1>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <flash-messages></flash-messages>
+        <div class="row mt-2">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="mnom">Nom</label>
+              <input type="text" class="form-control" id="mnom" [(ngModel)]="user.nom">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="mprenom">Prénom</label>
+              <input type="text" class="form-control" id="mprenom" [(ngModel)]="user.prenom">
+            </div>
+          </div>
+          <div class="col-md-6">
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" class="form-control" id="email" [(ngModel)]="user.email">
+          </div>
+        </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="dropdown">
+                <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false">
+                  Rôles
+                </button>
+                <ul class="dropdown-menu shadow-sm" role="menu">
+                  <li *ngFor="let role of roles,let i = index" (click)="addRoles(role)"  class="dropdown-item"><input type="checkbox" [checked]="!checkRole(role)"> {{role.role}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          </div>
+        <div *ngIf="checkEtdudiant(user)" class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="cne">CNE</label>
+              <input type="text"  id="cne" class="form-control" [(ngModel)]="etudiant.cin">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="codeappoge">code d'appogé</label>
+              <input type="text"  id="codeappoge" class="form-control" [(ngModel)]="etudiant.codeAppoge">
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="check(user,'ENCADREUR_ROLE') || check(user,'COORDINATEUR_ROLE') || check(user,'JURY_ROLE')" class="row" >
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="rpp">Rpp <span *ngIf="check(user,'ENCADREUR_ROLE')">(pour un encadreur de la faculté)</span></label>
+              <input type="text"  id="rpp" class="form-control" [(ngModel)]="rpp">
+            </div>
+          </div>
+          <div *ngIf="check(user,'COORDINATEUR_ROlE')" class="col-md-6">
+            <div class="form-group">
+              <select class="form-control" [(ngModel)]="coordinateur.filiere.libelle">
+                <option *ngFor="let f of filieres" value="{{f.libelle}}" >{{f.libelle}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="pwd">Mot de passe</label>
+              <div class="input-group">
+                <div class="input-group-append">
+                  <button class="btn btn-info" (click)="fillPwd()"><span class="fa fa-check"></span></button>
+                </div>
+                <input type="text" class="form-control" id="pwd" [(ngModel)]="password" disabled>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline-info btn btn-block my-2"   [disabled]="validate()" (click)="update()">Enregister <span class="fa fa-check"></span></button>
+      </div>
+    </div>
+</div>
+</div>

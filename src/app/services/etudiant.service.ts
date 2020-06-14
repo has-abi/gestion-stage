@@ -1,22 +1,51 @@
 import { Injectable } from '@angular/core';
+import {HttpClient, HttpEvent, HttpRequest} from "@angular/common/http";
+
 import {Etudiant} from "../models/etudiant.model";
-import {HttpClient} from "@angular/common/http";
 import {Filiere} from "../models/filiere.model";
 import {UserService} from "./user.service";
+
 import {EtudiantPage} from "../models/pageModels/etudiant-page";
 import {Observable} from "rxjs";
 
-@Injectable({
+import {Encadreur} from "../models/encadreur.model";
+
+ @Injectable({
   providedIn: 'root'
 })
 export class EtudiantService {
 
   private _etudiant:Etudiant;
   private _etudiants:Array<Etudiant>;
+  private _fEtudiants:Array<Etudiant>;
+  link="http://localhost:8091/gestion-stage-api/etudiant/";
   private _pageEtudiant:EtudiantPage;
   tableElements = [];
-  link="http://localhost:8091/gestion-stage-api/etudiant/"
   constructor(private http:HttpClient,private userService :UserService) { }
+  findByUserId(id:number):Observable<Etudiant>{
+    return this.http.get<Etudiant>(this.link+"user/id/"+id);
+  }
+  createEtudiant(etudiant:Etudiant):Observable<number>{
+    return this.http.post<number>(this.link,etudiant);
+  }
+  findByFiliere(id:number){
+    this.http.get<Array<Etudiant>>(this.link+"filiere/id/"+id).subscribe(etuds=>{
+      this.fEtudiants = etuds;
+    })
+  }
+
+  findByEncadreur(id:number){
+    this.http.get<Array<Etudiant>>(this.link+"encadreur/id/"+id).subscribe(etuds=>{
+      this.etudiants = etuds;
+    })
+  }
+
+   findByJury(id:number){
+     this.http.get<Array<Etudiant>>(this.link+"jury/id/"+id).subscribe(etuds=>{
+       this.etudiants = etuds;
+     })
+   }
+
   findByCoordinateur(id:number,page:number,size:number,sort:string){
     return this.http.get<EtudiantPage>(this.link+"coordinateur/id/"+id+"/page/"+page+"/size/"+size+"/sort/"+sort).subscribe(data=>{
       this._pageEtudiant = data;
@@ -26,9 +55,7 @@ export class EtudiantService {
   findByCodeAppoge(codeAppoge:string){
     this.http.get<Etudiant>(this.link+"codeAppoge/"+codeAppoge).subscribe(data=>this.etudiant = data);
   }
-  findByUserId(id:number){
-    this.http.get<Etudiant>(this.link+"user/id/"+id).subscribe(d=>this.etudiant = d);
-  }
+
   findAll(page:number,size:number,sort:string){
     this.http.get<EtudiantPage>(this.link+"page/"+page+"/size/"+size+"/sort/"+sort);
   }
@@ -54,6 +81,7 @@ export class EtudiantService {
       this.tableElements.push(i);
     }
   }
+
   findAllEtudiants(){
     return this.http.get<Array<Etudiant>>(this.link).subscribe(data=>{
       this.etudiants = data;
@@ -62,7 +90,7 @@ export class EtudiantService {
   findByCin(cin:string){
      this.http.get<Etudiant>(this.link+"cin/"+cin).subscribe(etudiant=>{
        if(etudiant != null) {
-         this.etudiant= etudiant
+         this.etudiant= etudiant;
        }
     })
   }
@@ -78,10 +106,11 @@ export class EtudiantService {
     this._etudiant = etudiant;
   }
 
+
   get etudiants(): Array<Etudiant> {
-    if(this._etudiants == null){
-      this._etudiants = new Array<Etudiant>();
-    }
+	if(this._etudiants == null){
+	this._etudiants = new Array<Etudiant>();
+	}
     return this._etudiants;
   }
 
@@ -96,15 +125,26 @@ export class EtudiantService {
     return e;
   }
 
-
-  get pageEtudiant(): EtudiantPage {
-    if(this._pageEtudiant == null){
-      this._pageEtudiant = new EtudiantPage();
+    get pageEtudiant(): EtudiantPage {
+    if(this._pageEtudiant==null){
+      this._pageEtudiant=new EtudiantPage();
     }
-    return this._pageEtudiant;
-  }
+      return this._pageEtudiant;
+    }
 
-  set pageEtudiant(value: EtudiantPage) {
+
+   get fEtudiants(): Array<Etudiant> {
+      if(this._fEtudiants == null){
+        this._fEtudiants == new Array<Etudiant>();
+      }
+       return this._fEtudiants;
+   }
+
+   set fEtudiants(value: Array<Etudiant>) {
+     this._fEtudiants = value;
+   }
+
+   set pageEtudiant(value: EtudiantPage) {
     this._pageEtudiant = value;
   }
   findByNiveau(niveau:string,page:number,size:number){
@@ -116,4 +156,6 @@ export class EtudiantService {
     })
   }
 
+
 }
+

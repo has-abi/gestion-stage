@@ -1,103 +1,122 @@
-<div  class="modal" id="rapportModal" tabindex="-1" role="dialog" aria-labelledby="rapportModal" aria-hidden="true">
+<div  class="modal" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title">Créer un Utilisateur :</h1>
+        <h1 class="modal-title"><span class="fa fa-user"></span> Créer un Utilisateur :</h1>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="userForm" (ngSubmit)="create(userForm.value)">
+
+        <form [formGroup]="userForm" >
+
           <div class="row">
+
             <div class="col-6">
               <div class="form-group">
-                <label for="uNom">Nom</label>
-                <input type="text" id="uNom" class="form-control">
+                <input type="text" id="unom" class="form-control"  formControlName="unom" required="true" placeholder="nom...">
+              </div>
+              <div *ngIf="unom.invalid && (unom.touched || unom.dirty)">
+                <div *ngIf="unom.errors.required" class="text-warning">Nom est obligatoire!</div>
               </div>
             </div>
+
             <div class="col-6">
               <div class="form-group">
-                <label for="uprenom">Prénom</label>
-                <input type="text" id="uprenom" class="form-control">
+                <input type="text" id="uprenom" class="form-control "formControlName="uprenom" required="true" placeholder="prénom..">
+              </div>
+              <div *ngIf="uprenom.invalid && (uprenom.touched || uprenom.dirty)">
+                <div *ngIf="uprenom.errors.required" class="text-warning">prénom est obligatoire!</div>
               </div>
             </div>
+
             <div class="col-6">
               <div class="form-group">
-                <label for="uemail">E-mail</label>
-                <input type="email" id="uemail" class="form-control">
+                <input type="email" id="uemail" class="form-control"  formControlName="uemail" required="true" email="true" placeholder="E-mail...">
+              </div>
+              <div *ngIf="uemail.invalid && (uemail.touched || uemail.dirty)">
+                <div *ngIf="uemail.errors" class="text-warning">Erreur dans E-mail!</div>
               </div>
             </div>
+
             <div class="col-6">
               <div class="form-group">
-                <label for="upwd"></label>
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="password..." id="upwd" disabled >
+                  <input type="text" class="form-control" placeholder="password..." id="upwd"  formControlName="upwd"  required="true" value="{{upwd.value}}">
                   <div class="input-group-append">
-                    <button class="btn btn-primary" (click)="generateP()">Générer un mot de passe</button>
+                    <button class="btn btn-primary" (click)="upwd.value = password"><span class="fa fa-lock"></span></button>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-6">
-              <div class="form-group">
-                <label for="role">Role</label>
-                <select class="form-control" id="role">
-                  <option value="'none'">--SELECT--</option>
-                  <option value="1">Etudiant</option>
-                  <option value="2">Coordinateur</option>
-                  <option value="3">Encadreur</option>
-                  <option value="4">Jury</option>
-                </select>
+
+            <div class="col-6 my-2">
+              <div class="dropdown">
+                <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false">Role</button>
+                <ul class="dropdown-menu shadow-sm" role="menu">
+                  <li class="dropdown-item" (click)="role = '1'">Etudiant</li>
+                  <li class="dropdown-item" (click)="role = '2'">Coordinateur</li>
+                </ul>
               </div>
             </div>
-            <div *ngIf="role == '1'" class="col-12">
+
+            <div *ngIf=" role == '1'" class="col-12">
               <div class="row">
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="cne">CNE</label>
-                    <input type="text" class="form-control" id="cne">
+                    <input type="text" class="form-control" id="cne"  formControlName="cne" required="true" placeholder="CNE...">
+                  </div>
+                  <div *ngIf="cne.invalid && (cne.touched || cne.dirty)">
+                    <div *ngIf="cne.errors.required" class="text-warning">CNE est obligatoire!</div>
+                    <div *ngIf="cne.errors.maxLength" class="text-warning">CNE contient 10 caractères!</div>
+                    <div *ngIf="cne.errors.minLength" class="text-warning">CNE contient 10 caractères!</div>
                   </div>
                 </div>
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="codeAppoge">Code appogé</label>
-                    <input type="text" class="form-control" id="codeAppoge">
+                    <input type="text" class="form-control" id= "codeAppoge"  formControlName="codeAppoge" required="true" placeholder="Code d'appogé...">
+                  </div>
+                  <div *ngIf="codeAppoge.invalid && (codeAppoge.touched || codeAppoge.dirty)">
+                    <div *ngIf="codeAppoge.errors.required" class="text-warning">code d'appogé est obligatoire!</div>
                   </div>
                 </div>
               </div>
             </div>
-            <div *ngIf="role == '2'" class="col-6">
+
+            <div *ngIf="role == '2'" class="col-12">
               <div class="row">
+
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="rpp">Rpp*</label>
-                    <input type="text" class="form-control" id="rpp">
+                    <input type="text" class="form-control" id="rpp"  formControlName="rpp" required="true" placeholder="Rpp...">
+                  </div>
+                  <div *ngIf="rpp.invalid && (rpp.touched || rpp.dirty)">
+                    <div *ngIf="rpp.errors.required" class="text-warning">Rpp est obligatoire!</div>
                   </div>
                 </div>
+
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="filiere">Filière*</label>
-                    <select  id="filiere" class="form-control">
-                      <option  [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
-                      <option *ngFor="let f of filieres" value="{{f.libelle}}">{{f.libelle}}</option>
-                    </select>
+                    <div class="dropdown">
+                      <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false">Filière</button>
+                      <ul class="dropdown-menu shadow-sm" role="menu">
+                        <li class="dropdown-item" (click)="selectedFiliere = 'test'">Test filiere</li>
+                        <li *ngFor="let f of filieres" class="dropdown-item" (click)="selectedFiliere = f.libelle">{{f.libelle}}</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
+
               </div>
-            </div>
-            <div class="col-6">
-              <button class="btn btn-primary">Enregistrer <span class="fa fa-check"></span></button>
             </div>
           </div>
+
         </form>
       </div>
       <div class="modal-footer">
-
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-
+        <button class="btn btn-outline-info btn btn-block my-2"  [disabled]="validate()" (click)="create(userForm.value)">Enregister <span class="fa fa-check"></span></button>
       </div>
     </div>
   </div>
 </div>
-

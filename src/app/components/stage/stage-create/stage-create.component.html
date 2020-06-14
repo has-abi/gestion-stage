@@ -27,8 +27,14 @@
     <div class="card shadow-sm ">
       <div class="card-header">
         <div class="row">
-          <div class="col-md-10">
+          <div class="col-md-7">
             <h2><span class="fa fa-graduation-cap"></span> Etudiant</h2>
+          </div>
+          <div class="col-md-3">
+            <select class="form-control float-right">
+              <option value="choisir" selected disabled>--CHOISIR--</option>
+              <option *ngFor="let e of fEtudiants" (click)="choisirEtud(e)">{{e.user.nom}} <span class="float-right">{{e.cin}}</span></option>
+            </select>
           </div>
           <div class="col-md-2">
                 <button class="btn btn-outline-success float-right" (click)="increaseEtudiants()"> <span class="fa fa-plus"></span></button>
@@ -69,8 +75,14 @@
     <div class="card mt-2 shadow-sm" >
       <div class="card-header">
         <div class="row">
-          <div class="col-md-9">
+          <div class="col-md-6">
             <h2><span class="fa fa-briefcase"></span>Encadreur<span class="text-danger small">(Optionel)</span></h2>
+          </div>
+          <div class="col-md-3">
+            <select class="form-control float-right">
+              <option value="choisir" selected disabled>--CHOISIR--</option>
+              <option *ngFor="let e of fEncadreurs" (click)="choisirEnca(e)">{{e.user.nom}} <span *ngIf="e.type == 'Encadreur de la faculté'">{{e.reference}}</span> <span *ngIf="e.type == 'Encadreur de l\'organisme'">{{e.user.prenom}}</span></option>
+            </select>
           </div>
           <div class="col-md-3">
             <div class="row">
@@ -140,8 +152,14 @@
     <div class="card mt-2 shadow-sm" >
       <div class="card-header">
         <div class="row">
-          <div class="col-md-10">
+          <div class="col-md-7">
             <h2><span class="fa fa-building"></span> Structure d'accueil<span class="text-danger small">(Optionel)</span></h2>
+          </div>
+          <div class="col-md-3">
+            <select class="form-control float-right">
+              <option value="--CHOISIR--" disabled selected>--CHOISIR--</option>
+              <option *ngFor="let o of organismes" (click)="stage.organismeAccueil = o">{{o.raisonSociale}}</option>
+            </select>
           </div>
           <div class="col-md-2">
             <button class="btn btn-outline-success float-right" (click)="toggleOrganisme()"><span class="fa fa-plus" [class.fa-minus]="ajouterStructure"></span></button>

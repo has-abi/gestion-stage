@@ -5,6 +5,7 @@ import {TypeOrganisme} from "../models/type-organisme.model";
 import {TypeServiceOrganisme} from "../models/type-service-organisme.model";
 import {Ville} from "../models/ville.model";
 import {Pays} from "../models/pays.model";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,24 @@ export class OrganismeService {
   private _pays:Array<Pays>;
   url="http://localhost:8091/gestion-stage-api/"
   constructor(private httpClient:HttpClient) { }
+
+    findByFiliere(id:number){
+    this.httpClient.get<Array<OrganismeAccueil>>(this.url+"organismeAccueil/filiere/id/"+id).subscribe(orgs=>{
+      this.organismeAcceuils = orgs;
+    })
+    }
+
+    createOrganisme():Observable<number>{
+    return this.httpClient.post<number>(this.url+"organismeAccueil/",this.organismeAcceuil);
+    }
+
+    updateOrganisme():Observable<number>{
+      return this.httpClient.put<number>(this.url+"organismeAccueil/",this.organismeAcceuil);
+    }
+    deleteOrganisme(id:number):Observable<number>{
+      return this.httpClient.delete<number>(this.url+"organismeAccueil/id/"+id);
+    }
+
   findAll(){
       this.httpClient.get<Array<OrganismeAccueil>>(this.url+"organismeAccueil/").subscribe(data=>{
         this.organismeAcceuils = data

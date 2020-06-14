@@ -5,6 +5,9 @@
   border-radius: 50%;
 }
 .admin-logo{
-  width:200px;
+  width:160px;
   height: 80px;
+}
+.cursor{
+  cursor: pointer;
 }

@@ -5,7 +5,5 @@ export class Pays {
   nom:string;
   villes:Array<Ville>;
 
-  constructor() {
-    this.villes = new Array<Ville>();
-  }
+
 }

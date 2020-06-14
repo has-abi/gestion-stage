@@ -3,6 +3,7 @@ import {User} from "../models/user.model";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {UserPage} from "../models/pageModels/user-page.model";
+import {Role} from "../models/role.model";
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,36 @@ export class UserService {
   private _user:User;
   private _users:Array<User>;
   private _userPage:UserPage;
+  private _roles:Array<Role>;
   tableElements = [];
   url="http://localhost:8091/gestion-stage-api/user"
   constructor(private httpClient: HttpClient) { }
+
+  removeUser(id:number):Observable<number>{
+    return this.httpClient.delete<number>(this.url+"/id/"+id);
+  }
+
+    getRoles(){
+        this.httpClient.get<Array<Role>>("http://localhost:8091/gestion-stage-api/role/").subscribe(datas=>{
+          this.roles = datas;
+        })
+    }
+
+  get roles(): Array<Role> {
+    if(this._roles == null){
+      this._roles = new Array<Role>();
+    }
+    return this._roles;
+  }
+
+  set roles(value: Array<Role>) {
+    this._roles = value;
+  }
+
+  updateUser():Observable<number>{
+    return this.httpClient.put<number>(this.url+"/",this.user);
+  }
+
   findAll(page:number,size:number,sort:string){
     this.httpClient.get<UserPage>(this.url+"/page/"+page+"/size/"+size+"/sort/"+sort).subscribe(us=>{
       this.userPage = us;
