@@ -4,6 +4,7 @@ import {StageService} from "../../../services/stage.service";
 import {Stage} from "../../../models/stage.model";
 import {Encadreur} from "../../../models/encadreur.model";
 import {TacheService} from "../../../services/tache.service";
+import {LocalStorageService} from "ngx-webstorage";
 
 @Component({
   selector: 'app-etudiant-navbar',
@@ -11,16 +12,19 @@ import {TacheService} from "../../../services/tache.service";
   styleUrls: ['./etudiant-navbar.component.css']
 })
 export class EtudiantNavbarComponent implements OnInit {
-  searchInput:string;
-  searching = false;
-  constructor(private etudiantService:EtudiantService,private stageService: StageService,private tacheService :TacheService) { }
+  picture= "";
+  constructor(private localStorage:LocalStorageService) { }
 
   ngOnInit(): void {
-    this.tacheService.findAllTaches();
+    this.profilePic();
+    console.log(this.picture);
   }
-  search(){
-
-
+  profilePic(){
+    const user = this.localStorage.retrieve("logedUser");
+    if(user.photo != null){
+      this.picture = 'http://localhost:8091/gestion-stage-api/user/image/'+user.photo;
+    }else{
+      this.picture = '../../../../assets/unnamed.png';
+    }
   }
-  
 }

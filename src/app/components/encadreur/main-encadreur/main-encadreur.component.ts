@@ -46,6 +46,7 @@ export class MainEncadreurComponent implements OnInit {
     if (this.etudiant.id == e.id) {
       this.showEtud = false;
     } else {
+      this.etudiant = e;
       this.showEtud = true;
     }
   }

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import {User} from "../models/user.model";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {UserPage} from "../models/pageModels/user-page.model";
 import {Role} from "../models/role.model";
+import {AuthentificationService} from "./auth/authentification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -16,14 +17,14 @@ export class UserService {
   private _roles:Array<Role>;
   tableElements = [];
   url="http://localhost:8091/gestion-stage-api/user"
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient,private authentificationService:AuthentificationService) { }
 
   removeUser(id:number):Observable<number>{
-    return this.httpClient.delete<number>(this.url+"/id/"+id);
+    return this.httpClient.delete<number>(this.url+"/id/"+id,{headers:this.authentificationService.getHeaders()});
   }
 
     getRoles(){
-        this.httpClient.get<Array<Role>>("http://localhost:8091/gestion-stage-api/role/").subscribe(datas=>{
+        this.httpClient.get<Array<Role>>("http://localhost:8091/gestion-stage-api/role/",{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
           this.roles = datas;
         })
     }
@@ -40,11 +41,11 @@ export class UserService {
   }
 
   updateUser():Observable<number>{
-    return this.httpClient.put<number>(this.url+"/",this.user);
+    return this.httpClient.put<number>(this.url+"/",this.user,{headers:this.authentificationService.getHeaders()});
   }
 
   findAll(page:number,size:number,sort:string){
-    this.httpClient.get<UserPage>(this.url+"/page/"+page+"/size/"+size+"/sort/"+sort).subscribe(us=>{
+    this.httpClient.get<UserPage>(this.url+"/page/"+page+"/size/"+size+"/sort/"+sort,{headers:this.authentificationService.getHeaders()}).subscribe(us=>{
       this.userPage = us;
       this.fillTableElements(us.totalPages)
     })
@@ -55,31 +56,31 @@ export class UserService {
     }
   }
   countusers():Observable<number>{
-    return  this.httpClient.get<number>(this.url+"/count");
+    return  this.httpClient.get<number>(this.url+"/count",{headers:this.authentificationService.getHeaders()});
   }
 
   searchUsers(search:string){
-    this.httpClient.get<Array<User>>(this.url+"/search?search=nom:*"+search+"* OR prenom:*"+search+"* OR email:*"+search+"* OR sexe:*"+search).subscribe(datas=>{
+    this.httpClient.get<Array<User>>(this.url+"/search?search=nom:*"+search+"* OR prenom:*"+search+"* OR email:*"+search+"* OR sexe:*"+search,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.users = datas;
     })
   }
 
   findUsersByNom(nom:string){
-    this.httpClient.get<Array<User>>(this.url+"/nom/"+nom).subscribe(datas=>{
+    this.httpClient.get<Array<User>>(this.url+"/nom/"+nom,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.users = datas;
     })
   }
   findUsersByPrenom(prenom:string){
-    this.httpClient.get<Array<User>>(this.url+"/prenom/"+prenom).subscribe(datas=>{
+    this.httpClient.get<Array<User>>(this.url+"/prenom/"+prenom,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.users = datas;
     })
   }
   findByEmail(email:string):Observable<User>{
-    return this.httpClient.get<User>(this.url+"/email/"+email);
+    return this.httpClient.get<User>(this.url+"/email/"+email,{headers:this.authentificationService.getHeaders()});
   }
 
   findByReference(ref:string):Observable<User>{
-    return this.httpClient.get<User>(this.url+"/reference/"+ref);
+    return this.httpClient.get<User>(this.url+"/reference/"+ref,{headers:this.authentificationService.getHeaders()});
   }
 
   get user(): User {

@@ -25,6 +25,7 @@
     "@angular/router": "~9.0.6",
     "@auth0/angular-jwt": "^4.1.2",
     "angular2-flash-messages": "^3.0.1",
+    "angular2-jwt": "^0.2.3",
     "bootbox": "^5.4.0",
     "bootstrap": "^4.4.1",
     "ckeditor4-angular": "^1.2.0",

@@ -6,6 +6,7 @@ import {TypeServiceOrganisme} from "../models/type-service-organisme.model";
 import {Ville} from "../models/ville.model";
 import {Pays} from "../models/pays.model";
 import {Observable} from "rxjs";
+import {AuthentificationService} from "./auth/authentification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -18,52 +19,52 @@ export class OrganismeService {
   private _villes:Array<Ville>;
   private _pays:Array<Pays>;
   url="http://localhost:8091/gestion-stage-api/"
-  constructor(private httpClient:HttpClient) { }
+  constructor(private httpClient:HttpClient,private authentificationService:AuthentificationService) { }
 
     findByFiliere(id:number){
-    this.httpClient.get<Array<OrganismeAccueil>>(this.url+"organismeAccueil/filiere/id/"+id).subscribe(orgs=>{
+    this.httpClient.get<Array<OrganismeAccueil>>(this.url+"organismeAccueil/filiere/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(orgs=>{
       this.organismeAcceuils = orgs;
     })
     }
 
     createOrganisme():Observable<number>{
-    return this.httpClient.post<number>(this.url+"organismeAccueil/",this.organismeAcceuil);
+    return this.httpClient.post<number>(this.url+"organismeAccueil/",this.organismeAcceuil,{headers:this.authentificationService.getHeaders()});
     }
 
     updateOrganisme():Observable<number>{
-      return this.httpClient.put<number>(this.url+"organismeAccueil/",this.organismeAcceuil);
+      return this.httpClient.put<number>(this.url+"organismeAccueil/",this.organismeAcceuil,{headers:this.authentificationService.getHeaders()});
     }
     deleteOrganisme(id:number):Observable<number>{
-      return this.httpClient.delete<number>(this.url+"organismeAccueil/id/"+id);
+      return this.httpClient.delete<number>(this.url+"organismeAccueil/id/"+id,{headers:this.authentificationService.getHeaders()});
     }
 
   findAll(){
-      this.httpClient.get<Array<OrganismeAccueil>>(this.url+"organismeAccueil/").subscribe(data=>{
+      this.httpClient.get<Array<OrganismeAccueil>>(this.url+"organismeAccueil/",{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
         this.organismeAcceuils = data
       })
   }
   findAllTypeOrganisme(){
-    this.httpClient.get<Array<TypeOrganisme>>(this.url+"typeOrganisme/").subscribe(data=>{
+    this.httpClient.get<Array<TypeOrganisme>>(this.url+"typeOrganisme/",{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
       this.typeOrganismes = data
     })
   }
   findAllTypeServiceOrganisme(){
-    this.httpClient.get<Array<TypeServiceOrganisme>>(this.url+"typeServiceOrganisme/").subscribe(data=>{
+    this.httpClient.get<Array<TypeServiceOrganisme>>(this.url+"typeServiceOrganisme/",{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
       this.typeServiceOrganismes = data
     })
   }
   findAllVille(){
-    this.httpClient.get<Array<Ville>>(this.url+"ville/").subscribe(data=>{
+    this.httpClient.get<Array<Ville>>(this.url+"ville/",{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
       this.villes = data
     })
   }
   findAllPays(){
-    this.httpClient.get<Array<Pays>>(this.url+"pays/").subscribe(data=>{
+    this.httpClient.get<Array<Pays>>(this.url+"pays/",{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
       this.pays = data
     })
   }
   findVillesByPaysNom(nom){
-    this.httpClient.get<Array<Ville>>(this.url+"ville/pays/"+nom).subscribe(data=>{
+    this.httpClient.get<Array<Ville>>(this.url+"ville/pays/"+nom,{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
       this.villes = data
     })
   }

@@ -11,6 +11,7 @@ import {Pays} from "../models/pays.model";
 import {TypeServiceOrganisme} from "../models/type-service-organisme.model";
 import {TypeOrganisme} from "../models/type-organisme.model";
 import {Etablissement} from "../models/etablissement.model";
+import {AuthentificationService} from "./auth/authentification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -31,21 +32,21 @@ export class ConfigurationService {
   private typeUrl = "http://localhost:8091/gestion-stage-api/typeOrganisme/"
   private serviceUrl = "http://localhost:8091/gestion-stage-api/typeServiceOrganisme/"
   private etabUrl ="http://localhost:8091/gestion-stage-api/etablissement/"
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient,private authentificationService: AuthentificationService) { }
   findByVilleNom(ville:string,page:number,size:number){
-    this.http.get<OrganismePage>(this.organismeUrl+"ville/"+ville+"/page/"+page+"/size/"+size).subscribe(datas=>{
+    this.http.get<OrganismePage>(this.organismeUrl+"ville/"+ville+"/page/"+page+"/size/"+size,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this._organismePage = datas
       this.fillTableElements(datas.totalPages);
     })
   }
   findByType(type:string,page:number,size:number){
-    this.http.get<OrganismePage>(this.organismeUrl+"type/"+type+"/page/"+page+"/size/"+size).subscribe(datas=>{
+    this.http.get<OrganismePage>(this.organismeUrl+"type/"+type+"/page/"+page+"/size/"+size,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this._organismePage = datas
       this.fillTableElements(datas.totalPages);
     })
   }
   findByService(service:string,page:number,size:number){
-    this.http.get<OrganismePage>(this.organismeUrl+"typeService/"+service+"/page/"+page+"/size/"+size).subscribe(datas=>{
+    this.http.get<OrganismePage>(this.organismeUrl+"typeService/"+service+"/page/"+page+"/size/"+size,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this._organismePage = datas
       this.fillTableElements(datas.totalPages);
     })
@@ -53,10 +54,10 @@ export class ConfigurationService {
   searchOrganisme(search:string):Observable<Array<OrganismeAccueil>>{
     const request = "search?search=raisonSociale:*"+search+"* OR responsable:*"+search+"* OR ville.nom:*"+search+"* OR typeOrganisme.type:*"
     +search+"* OR typeServiceOrganisme.type:*"+search;
-    return  this.http.get<Array<OrganismeAccueil>>(this.organismeUrl+request);
+    return  this.http.get<Array<OrganismeAccueil>>(this.organismeUrl+request,{headers:this.authentificationService.getHeaders()});
   }
   getAllFilieres(){
-    this.http.get<Array<Filiere>>(this.filUrl).subscribe(datas=>{
+    this.http.get<Array<Filiere>>(this.filUrl,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.filieres = datas;
     })
   }
@@ -67,64 +68,64 @@ export class ConfigurationService {
     }
   }
   getAllorganismes(page:number,size:number){
-    this.http.get<OrganismePage>(this.organismeUrl+"page/"+page+"/size/"+size).subscribe(datas=>{
+    this.http.get<OrganismePage>(this.organismeUrl+"page/"+page+"/size/"+size,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this._organismePage = datas
       this.fillTableElements(datas.totalPages);
     })
   }
 
   findDepartements(){
-    this.http.get<Array<Departement>>(this.depUrl).subscribe(datas=>{
+    this.http.get<Array<Departement>>(this.depUrl,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.departements = datas
     })
   }
   createVille(ville:Ville):Observable<number>{
-    return this.http.post<number>(this.villeUrl,ville);
+    return this.http.post<number>(this.villeUrl,ville,{headers:this.authentificationService.getHeaders()});
   }
   createPays(pays:Pays):Observable<number>{
-    return this.http.post<number>(this.paysUrl,pays);
+    return this.http.post<number>(this.paysUrl,pays,{headers:this.authentificationService.getHeaders()});
   }
 
   createFiliere(filiere:Filiere):Observable<number>{
-    return this.http.post<number>(this.filUrl,filiere);
+    return this.http.post<number>(this.filUrl,filiere,{headers:this.authentificationService.getHeaders()});
   }
   createDep(dep:Departement):Observable<number>{
-    return this.http.post<number>(this.depUrl,dep);
+    return this.http.post<number>(this.depUrl,dep,{headers:this.authentificationService.getHeaders()});
   }
 
   createService(service:TypeServiceOrganisme):Observable<number>{
-    return this.http.post<number>(this.serviceUrl,service);
+    return this.http.post<number>(this.serviceUrl,service,{headers:this.authentificationService.getHeaders()});
   }
   createType(type:TypeOrganisme):Observable<number>{
-    return this.http.post<number>(this.typeUrl,type);
+    return this.http.post<number>(this.typeUrl,type,{headers:this.authentificationService.getHeaders()});
   }
 
   updateVille(ville:Ville):Observable<number>{
-    return this.http.put<number>(this.villeUrl,ville);
+    return this.http.put<number>(this.villeUrl,ville,{headers:this.authentificationService.getHeaders()});
   }
   updatePays(pays:Pays):Observable<number>{
-    return this.http.put<number>(this.paysUrl,pays);
+    return this.http.put<number>(this.paysUrl,pays,{headers:this.authentificationService.getHeaders()});
   }
 
   updateFiliere(filiere:Filiere):Observable<number>{
-    return this.http.put<number>(this.filUrl,filiere);
+    return this.http.put<number>(this.filUrl,filiere,{headers:this.authentificationService.getHeaders()});
   }
   updateDep(dep:Departement):Observable<number>{
-    return this.http.put<number>(this.depUrl,dep);
+    return this.http.put<number>(this.depUrl,dep,{headers:this.authentificationService.getHeaders()});
   }
 
   updateService(service:TypeServiceOrganisme):Observable<number>{
-    return this.http.put<number>(this.serviceUrl,service);
+    return this.http.put<number>(this.serviceUrl,service,{headers:this.authentificationService.getHeaders()});
   }
   updateType(type:TypeOrganisme):Observable<number>{
-    return this.http.put<number>(this.typeUrl,type);
+    return this.http.put<number>(this.typeUrl,type,{headers:this.authentificationService.getHeaders()});
   }
 
   updateEtablissement():Observable<number>{
-    return  this.http.put<number>(this.etabUrl,this.etablisement);
+    return  this.http.put<number>(this.etabUrl,this.etablisement,{headers:this.authentificationService.getHeaders()});
   }
   getEtablissement(){
-    this.http.get<Array<Etablissement>>(this.etabUrl).subscribe(datas=>{
+    this.http.get<Array<Etablissement>>(this.etabUrl,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.etablisement = datas[0];
     })
   }

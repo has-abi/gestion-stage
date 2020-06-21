@@ -1,0 +1,83 @@
+<div  class="modal" id="juryModal" tabindex="-1" role="dialog" aria-labelledby="juryModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title"><span class="fa fa-briefcase"></span> Ajout du jury</h1>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <select class="form-control">
+              <option value="--ChOISIR--">--ChOISIR--</option>
+              <option *ngFor="let j of juries" (click)="addJury(j.user)">{{j.user.nom}}  {{j.user.prenom}}</option>
+              <option value="" *ngFor="let e of encadreurs" (click)="addJury(e.user)"><span *ngIf="check(e)">{{e.user.nom}}  {{e.user.prenom}}</span></option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="le type de jury..." id="type" [(ngModel)]="type">
+            </div>
+          </div>
+          <div *ngIf="ajouterJuries">
+            <div  *ngFor="let j of stageJuries,let i = index">
+              <div class="row mt-2 p-2">
+                <div  class="form-group col-md-12">
+                  <label for="Jrref">Rôle</label>
+                  <input type="text" class="form-control" placeholder="role..." id="Jrref" [(ngModel)]="j.role">
+                </div>
+                <div class="form-group col-md-12">
+                  <label for="JrnomE">Nom*</label>
+                  <input type="text" class="form-control" placeholder="nom..." id="JrnomE" [(ngModel)]="j.membreJury.user.nom">
+                </div>
+                <div class="form-group col-md-12">
+                  <label for="JrprenomE">Prénom*</label>
+                  <input type="text" class="form-control" placeholder="prénom..." id="JrprenomE" [(ngModel)]="j.membreJury.user.prenom">
+                </div>
+                <div class="form-group col-md-12">
+                  <label for="jrprofession">Profession*</label>
+                  <input type="text" class="form-control" placeholder="profession..." id="Jrprofession" [(ngModel)]="j.membreJury.profession" >
+                </div>
+              </div>
+              <div class="row p-2" >
+                <div class="input-group col-md-12">
+                  <div class="input-group-prepend">
+                    <button class="btn bg-dark"><span class="fa fa-user text-white"></span></button>
+                  </div>
+                  <input type="email" class="form-control" placeholder="email..." id="jremail" [(ngModel)]="j.membreJury.user.username">
+                </div>
+                <div class="input-group col-md-12 my-2">
+                  <div class="input-group-prepend">
+                    <button class="btn bg-dark"><span class="fa fa-lock text-white"></span></button>
+                  </div>
+                  <input type="text" class="form-control" placeholder="password..." id="jMpwd" disabled [(ngModel)]="j.membreJury.user.password">
+                  <div class="input-group-append">
+                    <button class="btn btn-primary" (click)=" generateJuryPWD(i)">Générer un mot de passe</button>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-group btn-group-sm float-right">
+                <button class="btn btn-sm btn-success " (click)="addToStage(i)"><span class="fa fa-check"></span></button>
+                <button class="btn-sm btn-danger " (click)="removeJury(i)"><span class="fa fa-minus"></span></button>
+              </div>
+
+            </div>
+          </div>
+        <div class="col-md-12">
+          <div class="btn-group float-right">
+            <button class="btn btn-success " (click)="affecter()">Affecter</button>
+            <button class="btn btn-primary " (click)="ajouterMembre()"><span class="fa fa-user-plus"></span></button>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+

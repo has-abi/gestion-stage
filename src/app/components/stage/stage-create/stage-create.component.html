@@ -16,7 +16,7 @@
       </div>
       <div class="input-group col-md-6">
         <div class="input-group-prepend " (click)="ajouterSujet = !ajouterSujet">
-          <div class="input-group-text bg-warning" style="cursor: pointer">Ajouter le Sujet <span  class="fa fa-chevron-circle-right" [class.fa-chevron-circle-right]="!ajouterSujet" [class.fa-chevron-circle-left]="ajouterSujet"></span></div>
+          <div class="input-group-text btn btn-light" style="cursor: pointer">Ajouter le Sujet <span  class="fa fa-chevron-circle-right mx-2" [class.fa-chevron-circle-right]="!ajouterSujet" [class.fa-chevron-circle-left]="ajouterSujet"></span></div>
         </div>
         <input type="text" class="form-control" *ngIf="ajouterSujet" placeholder="sujet de stage..."  [(ngModel)]="stage.sujet">
       </div>
@@ -31,8 +31,8 @@
             <h2><span class="fa fa-graduation-cap"></span> Etudiant</h2>
           </div>
           <div class="col-md-3">
-            <select class="form-control float-right">
-              <option value="choisir" selected disabled>--CHOISIR--</option>
+            <select class="form-control float-right text-center">
+              <option class="text-center" value="choisir" selected disabled>--CHOISIR--</option>
               <option *ngFor="let e of fEtudiants" (click)="choisirEtud(e)">{{e.user.nom}} <span class="float-right">{{e.cin}}</span></option>
             </select>
           </div>
@@ -79,8 +79,8 @@
             <h2><span class="fa fa-briefcase"></span>Encadreur<span class="text-danger small">(Optionel)</span></h2>
           </div>
           <div class="col-md-3">
-            <select class="form-control float-right">
-              <option value="choisir" selected disabled>--CHOISIR--</option>
+            <select class="form-control float-right text-center">
+              <option class="text-center" value="choisir" selected disabled>--CHOISIR--</option>
               <option *ngFor="let e of fEncadreurs" (click)="choisirEnca(e)">{{e.user.nom}} <span *ngIf="e.type == 'Encadreur de la faculté'">{{e.reference}}</span> <span *ngIf="e.type == 'Encadreur de l\'organisme'">{{e.user.prenom}}</span></option>
             </select>
           </div>
@@ -132,13 +132,13 @@
                 <div class="input-group-prepend">
                   <button class="btn bg-dark"><span class="fa fa-user text-white"></span></button>
                 </div>
-                <input type="email" class="form-control" placeholder="email..." id="email" [(ngModel)]="e.user.email">
+                <input type="email" class="form-control" placeholder="email..." id="email" [(ngModel)]="e.user.username">
               </div>
               <div class="input-group col-md-6">
                 <div class="input-group-prepend">
                   <button class="btn bg-dark"><span class="fa fa-lock text-white"></span></button>
                 </div>
-                <input type="text" class="form-control" placeholder="password..." id="pwd" disabled [(ngModel)]="e.user.motPass">
+                <input type="text" class="form-control" placeholder="password..." id="pwd" disabled [(ngModel)]="e.user.password">
                 <div class="input-group-append">
                   <button class="btn btn-primary" (click)="generateP(i)">Générer un mot de passe</button>
                 </div>
@@ -156,9 +156,9 @@
             <h2><span class="fa fa-building"></span> Structure d'accueil<span class="text-danger small">(Optionel)</span></h2>
           </div>
           <div class="col-md-3">
-            <select class="form-control float-right">
-              <option value="--CHOISIR--" disabled selected>--CHOISIR--</option>
-              <option *ngFor="let o of organismes" (click)="stage.organismeAccueil = o">{{o.raisonSociale}}</option>
+            <select class="form-control float-right text-center">
+              <option class="text-center" value="--CHOISIR--" disabled selected>--CHOISIR--</option>
+              <option *ngFor="let o of organismes" (click)="addOrg(o)">{{o.raisonSociale}}</option>
             </select>
           </div>
           <div class="col-md-2">
@@ -195,28 +195,28 @@
           <div class="col-md-3">
             <label for="type">Type</label>
             <select  id="type" class="form-control" [(ngModel)]="stage.organismeAccueil.typeOrganisme.type">
-              <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+              <option class="text-center" [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
               <option *ngFor="let type of typeOrganismes" value="{{type.type}}">{{type.type}}</option>
             </select>
           </div>
           <div class="col-md-3">
             <label for="typeService">Type Service</label>
             <select  id="typeService" class="form-control" [(ngModel)]="stage.organismeAccueil.typeServiceOrganisme.type">
-              <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+              <option class="text-center" [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
               <option *ngFor="let type of typeServiceOrganismes" value="{{type.type}}">{{type.type}}</option>
             </select>
           </div>
           <div class="col-md-3">
             <label for="pays">Pays</label>
             <select  id="pays" class="form-control" [(ngModel)]="stage.organismeAccueil.ville.pays.nom">
-              <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+              <option class="text-center" [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
               <option *ngFor="let p of pays" value="{{p.nom}}">{{p.nom}}</option>
             </select>
           </div>
           <div class="col-md-3">
             <label for="ville">Ville</label>
             <select  id="ville" class="form-control" [(ngModel)]="stage.organismeAccueil.ville.nom">
-              <option [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
+              <option class="text-center" [ngValue]="'--SELECT--'" disabled selected>--SELECT--</option>
               <option *ngFor="let ville of villes" value="{{ville.nom}}">{{ville.nom}}</option>
             </select>
           </div>

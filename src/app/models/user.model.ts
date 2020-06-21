@@ -10,8 +10,8 @@ export class User {
   dateNaissance:Date;
   tele:string;
   adress:string;
-  email:string;
-  motPass:string;
+  username:string;
+  password:string;
   photo:string;
   question:string;
   reponce:string;
@@ -22,9 +22,4 @@ export class User {
   commentaires:Array<Commentaire>;
   sujetForums:Array<SujetForum>;
 
-
-  constructor() {
-    this.sujetForums = new Array<SujetForum>();
-    this.commentaires = new Array<Commentaire>();
-  }
 }

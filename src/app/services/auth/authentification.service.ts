@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {LocalStorageService, SessionStorageService} from "ngx-webstorage";
 import {User} from "../../models/user.model";
 import {Router} from "@angular/router";
@@ -10,6 +10,7 @@ import {Router} from "@angular/router";
 export class AuthentificationService {
   private _user:User;
   private _loginError:string;
+  private _jwtToken:string = null;
   url="http://localhost:8091/gestion-stage-api/user/";
   constructor(private httpClient:HttpClient,private sessionStorage:LocalStorageService,private router:Router) { }
   login(){
@@ -22,12 +23,16 @@ export class AuthentificationService {
         }else if(resp == -2){
           this.loginError = "Mot de passe incorrect!"
         }else if(resp == 1){
-          this.findByEmail(this.user.email);
+          this.findByEmail(this.user.username);
 
         }else{
           this.loginError = "Erreur survenu!"
         }
       });
+  }
+
+  springLogin(){
+    return this.httpClient.post("http://localhost:8091/login",this.user,{observe:'response'});
   }
   findByEmail(email:string){
     this.httpClient.get<User>(this.url+"email/"+email).subscribe(user=>{
@@ -41,7 +46,7 @@ export class AuthentificationService {
           }else if(r.role == "ADMIN_ROLE"){
             this.router.navigate(['admin/profile'])
           }else if(r.role == "ENCADREUR_ROLE"){
-		console.log("we are in");
+		      console.log("we are in");
             this.router.navigate(["encadreur/profile"])
           }
           this.sessionStorage.store("userRole",r.role);
@@ -69,5 +74,22 @@ export class AuthentificationService {
 
   set user(value: User) {
     this._user = value;
+  }
+
+
+  get jwtToken(): string {
+    if(this._jwtToken == null){
+      this._jwtToken = this.sessionStorage.retrieve("jwt");
+    }
+    return this._jwtToken;
+  }
+
+  set jwtToken(value: string) {
+    this._jwtToken = value;
+  }
+
+  getHeaders():HttpHeaders{
+    const headers = new HttpHeaders({'Authorization':this.jwtToken});
+    return  headers;
   }
 }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {StageService} from "../../services/stage.service";
+import {LocalStorageService} from "ngx-webstorage";
 
 @Component({
   selector: 'app-jury',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class JuryComponent implements OnInit {
 
-  constructor() { }
+  constructor(private stageService:StageService,private localStorage:LocalStorageService) { }
 
   ngOnInit(): void {
   }

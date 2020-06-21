@@ -1,8 +1,8 @@
 <div class="card ">
-  <div class="card-header bg-primary">
+  <div class="card-header bg-light">
     <div class="row">
       <div class="col-sm-8">
-        <h1 class="text-white"> <span class="fa fa-bars"></span> Stages</h1>
+        <h1 class="text-dark"> <span class="fa fa-bars"></span> Stages</h1>
       </div>
       <div class="col-sm-2">
         <select class="form-control" [(ngModel)]="showenStages">
@@ -52,8 +52,8 @@
           <div class="dropdown-item"><input type="checkbox" (change)="columns.dateDebut = !columns.dateDebut" [checked]="columns.dateDebut"> Date début</div>
           <div class="dropdown-item"><input type="checkbox" (change)="columns.dateFin = !columns.dateFin" [checked]="columns.dateFin"> Date Fin</div>
           <div class="dropdown-item"><input type="checkbox" (change)="columns.status = !columns.status" [checked]="columns.status"> Statu</div>
-          <div class="dropdown-item" *ngIf="role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE'"><input type="checkbox" (change)="columns.etudiants = !columns.etudiants" [checked]="columns.etudiants"> Etudiants</div>
-          <div class="dropdown-item" *ngIf="role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE'"><input type="checkbox" (change)="columns.encadreurs = !columns.encadreurs" [checked]="columns.encadreurs"> Encadreurs</div>
+          <div class="dropdown-item" ><input type="checkbox" (change)="columns.etudiants = !columns.etudiants" [checked]="columns.etudiants"> Etudiants</div>
+          <div class="dropdown-item" ><input type="checkbox" (change)="columns.encadreurs = !columns.encadreurs" [checked]="columns.encadreurs"> Encadreurs</div>
           <div class="dropdown-item" *ngIf="role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE'"><input type="checkbox" (change)="columns.juries = !columns.juries" [checked]="columns.juries"> Juries</div>
           <div class="dropdown-item"><input type="checkbox" (change)="columns.rapport = !columns.rapport" [checked]="columns.rapport"> Rapport</div>
           <div class="dropdown-item"><input type="checkbox" (change)="columns.organisme = !columns.organisme" [checked]="columns.organisme"> struture d'accueil</div>
@@ -74,8 +74,8 @@
     </div>
     <div *ngIf="showenStages == 'active'" class="col-sm-4 offset-8 mt-3">
       <div *ngIf="role == 'COORDINATEUR_ROLE' " class="btn-group float-right">
-        <a routerLink="../../../coordinateur/planning" class="btn btn-light shadow-sm" (click)="plannig()">Planning <span class="fa fa-calendar"></span></a>
-        <button class="btn btn-dark shadow-sm">PV <span class="fa fa-file"></span></button>
+        <button  class="btn btn-light shadow-sm" (click)="plannig()">Planning <span class="fa fa-calendar"></span></button>
+        <a href="http://localhost:8091/pv/coordinateur/id/{{idCoord}}" class="btn btn-dark shadow-sm" (click)=" chargerPv()">PV <span class="fa fa-file"></span></a>
       </div>
     </div>
     <div  *ngIf="selectedStages.length>0 && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')"  class="col-md-3 mt-2 offset-5">
@@ -91,7 +91,7 @@
         <table class="table table-striped   my-4  shadow">
           <thead>
           <tr>
-            <th class="text-center"><input type="checkbox" (click)="addAllToSelectedStages()" ></th>
+            <th *ngIf="role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE'" class="text-center"><input type="checkbox" (click)="addAllToSelectedStages()" ></th>
             <th class="text-center" *ngIf="columns.id">ID</th>
             <th class="text-center" *ngIf="columns.sujet">Sujet</th>
             <th class="text-center" *ngIf="columns.dateDebut">Date Début</th>
@@ -108,12 +108,12 @@
           </thead>
           <tbody>
           <tr *ngFor="let stage of stagePage.content | sortBy: tableOrder.order:tableOrder.prop">
-            <td><input type="checkbox" [checked]="existeInSelectedStage(stage)" (click)="addToSelectedStages(stage)"></td>
-            <td *ngIf="columns.id">{{stage.id}}</td>
-            <td *ngIf="columns.sujet">{{stage.sujet}}</td>
-            <td *ngIf="columns.dateDebut">{{stage.dateDebut}}</td>
-            <td *ngIf="columns.dateFin">{{stage.dateFin}}</td>
-            <td *ngIf="columns.status"><span *ngIf="stage.statu == true" class="text-success font-weight-bold">
+            <td *ngIf="role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE'"><input type="checkbox" [checked]="existeInSelectedStage(stage)" (click)="addToSelectedStages(stage)"></td>
+            <td *ngIf="columns.id" class="text-center">{{stage.id}}</td>
+            <td *ngIf="columns.sujet" class="text-center">{{stage.sujet}}</td>
+            <td *ngIf="columns.dateDebut" class="text-center">{{stage.dateDebut}}</td>
+            <td *ngIf="columns.dateFin" class="text-center">{{stage.dateFin}}</td>
+            <td *ngIf="columns.status" class="text-center"><span *ngIf="stage.statu == true" class="text-success font-weight-bold">
              <span class="badge badge-success">Active</span>
            </span>
               <span *ngIf="stage.statu == false" class=" font-weight-bold text-warning">
@@ -136,7 +136,7 @@
                 <li class="list-group-item text-left" *ngFor="let se of stage.stageEncadreurs">
                   <p><b>Nom et Prénom :</b>{{se.encadreur.user.nom}} {{se.encadreur.user.prenom}}</p>
                   <p><b>Télé:</b> {{se.encadreur.user.tele}}</p>
-                  <p><b>Email :</b> {{se.encadreur.user.email}}</p>
+                  <p><b>Email :</b> {{se.encadreur.user.username}}</p>
                 </li>
               </ul>
             </td>
@@ -146,7 +146,7 @@
                 <li class="list-group-item text-left" *ngFor="let se of stage.stageMembreJuries">
                   <p><b>Nom et Prénom :</b>{{se.membreJury.user.nom}} {{se.membreJury.user.prenom}}</p>
                   <p><b>Télé:</b> {{se.membreJury.user.tele}}</p>
-                  <p><b>Email :</b> {{se.membreJury.user.email}}</p>
+                  <p><b>Email :</b> {{se.membreJury.user.username}}</p>
                 </li>
               </ul>
             </td>

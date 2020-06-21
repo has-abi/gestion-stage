@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {HttpClient, HttpEvent, HttpRequest} from "@angular/common/http";
 import {Rapport} from "../models/rapport.model";
 import {RapportPage} from "../models/pageModels/rapport-page.model";
+import {AuthentificationService} from "./auth/authentification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class RapportService {
   private _fileIsSelected = false;
   private _tacheRef:string;
   tableElements = [];
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient,private authentificationService:AuthentificationService) { }
 
    save(file: File,titre:string,desc:string): Observable<HttpEvent<any>> {
      console.log("inside save")
@@ -29,7 +30,8 @@ export class RapportService {
       formData.append('ref', this.stageRef);
       const req = new HttpRequest('POST', this.url, formData, {
         reportProgress: true,
-        responseType: 'json'
+        responseType: 'json',
+        headers:this.authentificationService.getHeaders()
       });
       return this.http.request(req);
     }
@@ -37,7 +39,8 @@ export class RapportService {
        formData.append('ref', this.tacheRef);
        const req = new HttpRequest('POST', this.urlRapportTache+"save", formData, {
          reportProgress: true,
-         responseType: 'json'
+         responseType: 'json',
+         headers:this.authentificationService.getHeaders()
        });
        return this.http.request(req);
      }
@@ -52,7 +55,8 @@ export class RapportService {
       formData.append('ref', ref);
       const req = new HttpRequest('PUT', this.url, formData, {
         reportProgress: true,
-        responseType: 'json'
+        responseType: 'json',
+        headers:this.authentificationService.getHeaders()
       });
       return this.http.request(req);
     }
@@ -60,19 +64,20 @@ export class RapportService {
       formData.append('ref', ref);
       const req = new HttpRequest('PUT', this.urlRapportTache+"update", formData, {
         reportProgress: true,
-        responseType: 'json'
+        responseType: 'json',
+        headers:this.authentificationService.getHeaders()
       });
       return this.http.request(req);
     }
   }
   findAllRapports(page:number,size:number,sort:string){
-    this.http.get<RapportPage>(this.url+"page/"+page+"/size/"+size+"/sort/"+sort).subscribe(data=>{
+    this.http.get<RapportPage>(this.url+"page/"+page+"/size/"+size+"/sort/"+sort,{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
       this.rapportPage = data;
       this.fillTableElements(data.totalPages);
     })
   }
   search(search:string){
-    this.http.get<Array<Rapport>>(this.url+"search?search=document.titre:*"+search+"* OR descreption:*"+search+"* localeSoutenance:*"+search).subscribe(data=>{
+    this.http.get<Array<Rapport>>(this.url+"search?search=document.titre:*"+search+"* OR descreption:*"+search+"* localeSoutenance:*"+search,{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
       this.rapports = data;
     })
   }
@@ -82,10 +87,10 @@ export class RapportService {
     }
   }
   countRapport():Observable<number>{
-    return this.http.get<number>(this.url+"count");
+    return this.http.get<number>(this.url+"count",{headers:this.authentificationService.getHeaders()});
   }
   validerRapport(){
-    this.http.put(this.url+"reference",this.rapport.reference).subscribe(resp=>{
+    this.http.put(this.url+"reference",this.rapport.reference,{headers:this.authentificationService.getHeaders()}).subscribe(resp=>{
       if(resp>0){
         this.rapport.valider = true;
       }

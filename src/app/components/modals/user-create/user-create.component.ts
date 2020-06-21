@@ -72,8 +72,8 @@ export class UserCreateComponent implements OnInit {
     const user = new User();
     user.nom = userData.unom;
     user.prenom = userData.uprenom;
-    user.email = userData.uemail;
-    user.motPass = userData.upwd
+    user.username = userData.uemail;
+    user.password = userData.upwd
     if(this.role = '1'){
       const e = new Etudiant();
       e.user = user;

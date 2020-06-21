@@ -58,6 +58,7 @@ import { MainProfileComponent } from './components/main-profile/main-profile.com
 import { JuryNavbarComponent } from './components/jury/jury-navbar/jury-navbar.component';
 import { JuryComponent } from './components/jury/jury.component';
 import { PlanningComponent } from './components/coordinateur/planning/planning.component';
+import { JuryAddComponent } from './components/modals/jury-add/jury-add.component';
 
 
 @NgModule({
@@ -109,7 +110,8 @@ import { PlanningComponent } from './components/coordinateur/planning/planning.c
     MainProfileComponent,
     JuryNavbarComponent,
     JuryComponent,
-    PlanningComponent
+    PlanningComponent,
+    JuryAddComponent
   ],
   imports: [
     BrowserModule,

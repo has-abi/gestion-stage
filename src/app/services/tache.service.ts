@@ -5,6 +5,7 @@ import {error} from "@angular/compiler/src/util";
 import {Stage} from "../models/stage.model";
 import {Observable} from "rxjs";
 import {TachePage} from "../models/pageModels/tache-page.model";
+import {AuthentificationService} from "./auth/authentification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,9 @@ export class TacheService {
   private _tachePage:TachePage;
   private url="http://localhost:8091/gestion-stage-api/tache/";
   tacheElements = [];
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient,private authentificationService:AuthentificationService) { }
   findAllTaches(){
-    this.http.get<Array<Tache>>(this.url).subscribe(
+    this.http.get<Array<Tache>>(this.url,{headers:this.authentificationService.getHeaders()}).subscribe(
       data=>{
         this.taches=data;
       }, error=>{
@@ -27,20 +28,20 @@ export class TacheService {
   }
 
   findByEncadeur(id:number,page:number,size:number){
-    this.http.get<TachePage>(this.url+"encadreur/id/"+id+"/page/"+page+"/size/"+size).subscribe(datas=>{
+    this.http.get<TachePage>(this.url+"encadreur/id/"+id+"/page/"+page+"/size/"+size,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
         this.tachePage = datas
       this.fillTableElements(datas.totalPages);
     })
   }
   findByEtudiant(id:number,page:number,size:number){
-    this.http.get<TachePage>(this.url+"etudiant/id/"+id+"/page/"+page+"/size/"+size).subscribe(datas=>{
+    this.http.get<TachePage>(this.url+"etudiant/id/"+id+"/page/"+page+"/size/"+size,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.tachePage = datas
       this.fillTableElements(datas.totalPages);
     })
   }
   search(search:string){
     const request = "search?search=titre:*"+search+"* OR contenu:*"+search+"*";
-    this.http.get<Array<Tache>>(this.url+request).subscribe(datas=>{
+    this.http.get<Array<Tache>>(this.url+request,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.taches = datas;
     })
   }
@@ -71,24 +72,24 @@ export class TacheService {
     this._tache = value;
   }
   create(tache:Tache):Observable<number>{
-    return this.http.post<number>(this.url,tache);
+    return this.http.post<number>(this.url,tache,{headers:this.authentificationService.getHeaders()});
   }
 
   update(tache:Tache):Observable<number>{
-    return this.http.put<number>(this.url,tache);
+    return this.http.put<number>(this.url,tache,{headers:this.authentificationService.getHeaders()});
   }
 
   deleteByReference(ref:string):Observable<number>{
-    return  this.http.delete<number>(this.url+"delete/reference/"+ref);
+    return  this.http.delete<number>(this.url+"delete/reference/"+ref,{headers:this.authentificationService.getHeaders()});
   }
 
 
   findByStageRef(ref:string):Observable<Array<Tache>>{
-    return this.http.get<Array<Tache>>( this.url+"stage/reference/"+ref);
+    return this.http.get<Array<Tache>>( this.url+"stage/reference/"+ref,{headers:this.authentificationService.getHeaders()});
   }
 
   validerTache(ref:string):Observable<number>{
-    return this.http.put<number>(this.url+"valider/reference/"+ref,null);
+    return this.http.put<number>(this.url+"valider/reference/"+ref,null,{headers:this.authentificationService.getHeaders()});
   }
 
   get taches(): Array<Tache> {

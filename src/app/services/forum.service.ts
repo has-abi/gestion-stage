@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {SujetForum} from "../models/sujet-forum.model";
 import {ForumPage} from "../models/pageModels/forum-page.model";
 import {Commentaire} from "../models/commentaire.model";
+import {AuthentificationService} from "./auth/authentification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -17,29 +18,29 @@ export class ForumService {
   private _commentaire:Commentaire;
   private _commentaires:Array<Commentaire>;
   tableElements = [];
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient,private authentificationService:AuthentificationService) { }
   countForum():Observable<number>{
-    return this.http.get<number>(this.url+"count");
+    return this.http.get<number>(this.url+"count",{headers:this.authentificationService.getHeaders()});
   }
   findAllSujets(page:number,size:number,sort:string){
-    this.http.get<ForumPage>(this.url+"page/"+page+"/size/"+size+"/sort/"+sort).subscribe(datas=>{
+    this.http.get<ForumPage>(this.url+"page/"+page+"/size/"+size+"/sort/"+sort,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.forumPage = datas;
       this.fillTableElements(datas.totalPages);
     })
   }
   findById(id:number){
-    this.http.get<SujetForum>(this.url+"id/"+id).subscribe(res=>{
+    this.http.get<SujetForum>(this.url+"id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(res=>{
       this.sujetForum = res;
     })
   }
   findByContentContains(content:string){
-    this.http.get<Array<SujetForum>>(this.url+"content/"+content).subscribe(datas=>{
+    this.http.get<Array<SujetForum>>(this.url+"content/"+content,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.sujetForums = datas;
     })
   }
 
   searchSujet(search:string){
-    this.http.get<Array<SujetForum>>(this.url+"search?search=content:*"+search+"*");
+    this.http.get<Array<SujetForum>>(this.url+"search?search=content:*"+search+"*",{headers:this.authentificationService.getHeaders()});
   }
 
   save():Observable<number>{
@@ -51,7 +52,7 @@ export class ForumService {
   }
 
   removeByRef(ref:string):Observable<number>{
-    return this.http.delete<number>(this.url+"remove/reference/"+ref);
+    return this.http.delete<number>(this.url+"remove/reference/"+ref,{headers:this.authentificationService.getHeaders()});
   }
 
   fillTableElements(size:number) {
@@ -61,31 +62,31 @@ export class ForumService {
   }
 
   findCommentaireBySujet(id:number){
-    this.http.get<Array<Commentaire>>(this.urlComment+"sujetForum/id/"+id).subscribe(comments=>{
+    this.http.get<Array<Commentaire>>(this.urlComment+"sujetForum/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(comments=>{
       this.commentaires = comments;
     })
   }
 
   findCommentaireByUser(id:number){
-    this.http.get<Array<Commentaire>>(this.urlComment+"user/id/"+id).subscribe(comments=>{
+    this.http.get<Array<Commentaire>>(this.urlComment+"user/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(comments=>{
       this.commentaires = comments;
     })
   }
 
   findCommentaireByCommentaire(id:number){
-    this.http.get<Array<Commentaire>>(this.urlComment+"commentaire/id/"+id).subscribe(comments=>{
+    this.http.get<Array<Commentaire>>(this.urlComment+"commentaire/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(comments=>{
       this.commentaires = comments;
     })
   }
   createCommentaire(comment:Commentaire):Observable<number>{
-    return this.http.post<number>(this.urlComment,comment);
+    return this.http.post<number>(this.urlComment,comment,{headers:this.authentificationService.getHeaders()});
   }
 
   updateCommentaire(comment:Commentaire):Observable<number>{
-    return this.http.put<number>(this.urlComment,comment);
+    return this.http.put<number>(this.urlComment,comment,{headers:this.authentificationService.getHeaders()});
     }
     removeCommentaire(id:number):Observable<number>{
-        return this.http.delete<number>(this.urlComment+"id/"+id);
+        return this.http.delete<number>(this.urlComment+"id/"+id,{headers:this.authentificationService.getHeaders()});
     }
 
 

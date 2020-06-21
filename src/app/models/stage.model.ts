@@ -17,15 +17,15 @@ export class Stage {
   stageEtudiants:Array<StageEtudiant>;
   stageEncadreurs:Array<StageEncadreur>;
   stageMembreJuries:Array<StageMembreJury>;
+  dateSoutenance:Date;
+  localeSoutenance:string;
   rapport:Rapport;
   coordinateur:Coordinateur;
 
   constructor() {
-    this.organismeAccueil = new OrganismeAccueil();
     this.coordinateur = new Coordinateur();
     this.stageEtudiants = new Array<StageEtudiant>();
     this.stageEncadreurs = new Array<StageEncadreur>();
     this.stageMembreJuries = new Array<StageMembreJury>();
-	this.rapport = new Rapport();
   }
 }

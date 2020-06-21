@@ -130,7 +130,7 @@ export class OrganismeFormComponent implements OnInit {
       this.organismeAccueil.ville.nom = formData.ville;
       this.organismeAccueil.ville.pays.nom = formData.pay;
       this.stage.organismeAccueil = this.organismeAccueil;
-      this.stageService.update();
+      this.stageService.update(this.stage);
       console.log(this.stage);
       console.log(this.organismeAccueil);
     }

@@ -110,19 +110,24 @@ export class StageCreateComponent implements OnInit {
       }
     })
     const user = this.localStorage.retrieve('logedUser')
-    this.coordinateurService.findByUserId(user.id).subscribe(coord=>this.stage.coordinateur= coord);
-    this.stageService.save(this.stage).subscribe(resp=>{
-      console.log(resp)
-      if(resp>0){
-        this.flashMessagesService.show('stage est crée avec succée!', { cssClass: 'alert-success', timeout: 6000 })
-        this.stage = new Stage();
-        this.etudiantService.etudiants = new Array<Etudiant>();
-        this.encadreurService.encadreurs = new Array<Encadreur>();
-        this.stage.organismeAccueil =  null;
-      }else{
-        this.flashMessagesService.show('il y\'a un problème dans la création du stage! ', { cssClass: 'alert-danger', timeout: 6000 })
-      }
+    this.coordinateurService.findByUserId(user.id).subscribe(coord=>{
+      this.stage.coordinateur= coord
+      this.stageService.save(this.stage).subscribe(resp=>{
+        console.log(this.stage)
+        console.log(resp)
+        if(resp>0){
+          this.flashMessagesService.show('stage est crée avec succée!', { cssClass: 'alert-success', timeout: 6000 })
+          this.stage = new Stage();
+          this.etudiantService.etudiants = new Array<Etudiant>();
+          this.encadreurService.encadreurs = new Array<Encadreur>();
+          this.stage.organismeAccueil =  null;
+        }else{
+          this.flashMessagesService.show('il y\'a un problème dans la création du stage! ', { cssClass: 'alert-danger', timeout: 6000 })
+        }
+      });
+
     });
+    console.log(this.stage);
 
   }
   findEtudiantByCin(i:number) {
@@ -132,7 +137,7 @@ export class StageCreateComponent implements OnInit {
       }
   }
   generateP(i:number){
-      this.encadreurs[i].user.motPass = this.passwordGeneratorService.getRandomPassword();
+      this.encadreurs[i].user.password = this.passwordGeneratorService.getRandomPassword();
   }
   get typeOrganismes(){
     return this.organismeService.typeOrganismes;
@@ -164,7 +169,7 @@ export class StageCreateComponent implements OnInit {
     }
   }
   validateInputs() {
-    return this.stage.dateDebut  && this.stage.dateFin && this.validateOrganisme() && this.validateEtuiants() && this.validateEncadreurs();
+    return this.stage.dateDebut  && this.stage.dateFin && this.validateEtuiants() && this.validateEncadreurs();
   }
   validateOrganisme(){
     if(this.stage.organismeAccueil != null){
@@ -176,6 +181,7 @@ export class StageCreateComponent implements OnInit {
 
   }
   validateEtuiants(){
+
     for(let i = 0;i<this.etudiants.length;i++) {
       if((this.etudiants[i].cin == undefined  || this.etudiants[i].cin.length != 10) || (this.etudiants[i].codeAppoge == undefined  || this.etudiants[i].codeAppoge.length ==0)
         || (this.etudiants[i].user.nom == undefined || this.etudiants[i].user.nom.length==0) || (this.etudiants[i].user.prenom == undefined  || this.etudiants[i].user.prenom.length==0)){
@@ -189,8 +195,8 @@ export class StageCreateComponent implements OnInit {
     if(this.encadreurs.length == 0) return  true;
     for(let i = 0;i<this.encadreurs.length;i++){
       if(((this.encadreurs[i].reference == undefined || this.encadreurs[i].reference.length == 0) ||(this.encadreurs[i].user.nom == undefined  || this.encadreurs[i].user.nom.length ==0) ||
-        (this.encadreurs[i].user.prenom == undefined  || this.encadreurs[i].user.prenom.length == 0) || (this.encadreurs[i].user.email == undefined  || this.encadreurs[i].user.email.length == 0)) ||
-        (this.encadreurs[i].user.motPass  == undefined  || this.encadreurs[i].user.motPass.length == 0)){
+        (this.encadreurs[i].user.prenom == undefined  || this.encadreurs[i].user.prenom.length == 0) || (this.encadreurs[i].user.username == undefined  || this.encadreurs[i].user.username.length == 0)) ||
+        (this.encadreurs[i].user.password  == undefined  || this.encadreurs[i].user.password.length == 0)){
         return false;
       }
     }
@@ -199,13 +205,22 @@ export class StageCreateComponent implements OnInit {
 
   choisirEtud(e:Etudiant){
     if(this.etudiants.length<2){
+      if(!this.validateEtuiants()){
+        this.etudiants.splice(0,1);
+      }
       this.etudiants.push(e);
     }
   }
   choisirEnca(e:Encadreur){
     if(this.encadreurs.length<2){
+      this.ajouterEncadreur = true;
       this.encadreurs.push(e);
+      console.log(this.encadreurs)
     }
+  }
+  addOrg(o:OrganismeAccueil){
+    this.stage.organismeAccueil = o;
+
   }
 
 }

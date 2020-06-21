@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {RapportService} from "../../../services/rapport.service";
+import {LocalStorageService} from "ngx-webstorage";
 
 @Component({
   selector: 'app-rapport-display',
@@ -12,9 +13,12 @@ export class RapportDisplayComponent implements OnInit {
   progress = 0;
   message = '';
   modifierRapport = false;
-  constructor(private rapportService:RapportService) { }
+  role = "";
+  constructor(private rapportService:RapportService,private sessionStorage:LocalStorageService) { }
 
   ngOnInit(): void {
+    const user = this.sessionStorage.retrieve("logedUser");
+    this.role = user.roles[0].role;
   }
   get rapport(){
     return this.rapportService.rapport;

@@ -20,7 +20,7 @@ export class StatisticsComponent  {
   ngAfterViewInit() {
     this.configurationService.getAllFilieres();
     this.chartData(1);
-    
+
   }
 
   ngOnDestroy() {
@@ -64,8 +64,8 @@ export class StatisticsComponent  {
           series.heatRules.push({
             "target": series.columns.template,
             "property": "fill",
-            "min": am4core.color("#00b7ff"),
-            "max": am4core.color("#004d6b"),
+            "min": am4core.color("#ffdd00"),
+            "max": am4core.color("#ffbb00"),
             "dataField": "valueY"
           });
           series.dataFields.valueY = "nombreVille";

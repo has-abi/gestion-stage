@@ -26,7 +26,7 @@
                   </span>
                   <ul *ngIf="showEnca" class="list-group list-group-flush">
                     <li class="list-group-item text-center">{{EncadreurToBeShowen.type}}</li>
-                    <li class="list-group-item text-center"><span class="fa fa-envelope"></span> {{EncadreurToBeShowen.user.email}}</li>
+                    <li class="list-group-item text-center"><span class="fa fa-envelope"></span> {{EncadreurToBeShowen.user.username}}</li>
                     <li class="list-group-item text-center"><span class="fa fa-phone"></span> {{EncadreurToBeShowen.user.tele}}</li>
                   </ul>
                 </li>
@@ -36,8 +36,8 @@
                   <a href="http://localhost:8091/files/{{stage.rapport.document.reference}}" class="btn btn-sm btn-light shadow-none mx-2"><span class="fa fa-download "></span></a>
                   <a target="_blank"  href="http://localhost:8091/file/display/{{stage.rapport.document.reference}}" class="btn btn-sm btn-light shadow-none"><span class="fa fa-eye" ></span></a>
                   <span *ngIf="!stage.statu" class="fa fa-pencil mx-2" data-toggle="modal" data-target="#ViewrapportModal" (click)="diaplayRapport(stage.rapport)"></span>
-                  <span *ngIf="stage.statu" class="badge badge-primary">Validé</span>
-                  <span *ngIf="stage.statu" class="badge badge-warning">pas encore validé</span>
+                  <span *ngIf="stage.statu" class="badge badge-primary mx-2">Validé</span>
+                  <span *ngIf="!stage.statu" class="badge badge-warning">pas encore validé</span>
                 </li>
               </ul>
             </div>
@@ -64,7 +64,7 @@
                   <a class="btn btn-sm btn-light shadow-none mx-2" target="_blank"  href="http://localhost:8091/file/display/{{tache.rapportTache.document.reference}}">
                     <span class="fa fa-eye"></span></a> <span *ngIf="!tache.valider" class="fa fa-pencil" (click)="updateRapportTache(tache)">
 
-                  </span> <span *ngIf="tache.valider" class="badge badge-warning">Pas encore valider</span> <span *ngIf="tache.valider" class="badge badge-success">Validé!</span></span>
+                  </span> <span *ngIf="!tache.valider && tache.effectuer" class="badge badge-warning mx-1">Pas encore valider</span> <span *ngIf="tache.valider && tache.effectuer" class="badge badge-success">Validé!</span></span>
               </p>
               <div class="d-flex justify-content-end">
                 <button class="btn btn-sm shadow-none btn-light" (click)="showContenu(tache)"><span class="fa fa-bars"></span></button>

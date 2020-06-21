@@ -1,88 +1,60 @@
-<div class="container mt-4">
-  <div class="text-center">
-    <h1><span class="fa fa-calendar-check-o"></span> Le Planning des soutenance</h1>
-  </div>
-  <div class="row mt-4"><div class="col-md-6">
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <div class="input-group-text">
-          <span class="fa fa-calendar" ></span> Date des soutenances
-        </div>
-      </div>
-      <input type="date" class="form-control">
+<div class="card">
+  <div class="card-header">
+    <div class="text-center">
+      <h1><span class="fa fa-calendar-check-o"></span> Le Planning des soutenance</h1>
     </div>
   </div>
-    <div class="col-md-6">
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <div class="input-group-text">
-          <span class="fa fa-info"></span>  Plus d'infos
+  <div class="card-body">
+
+    <div class="container mt-4">
+
+      <div class="row mt-4"><div class="col-md-6">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <span class="fa fa-calendar" ></span> Date des soutenances
+            </div>
           </div>
+          <input type="date" class="form-control" [(ngModel)]="dateSoutenance">
         </div>
-        <input type="text" class="form-control" placeholder="info..."  [(ngModel)]="plusInfos">
       </div>
-    </div>
-  </div>
-  <table class="table table-striped mt-2">
-    <thead>
-    <tr>
-      <th class="text-center"><span class="fa fa-building"></span> Salle ou Amphi</th>
-      <th class="text-center"><span class="fa fa-graduation-cap"></span> Nom & prénom</th>
-      <th class="text-center"><span class="fa fa-file-text"></span> Sujet</th>
-      <th class="text-center"><span class="fa fa-university"></span> Jury</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let stage of stages">
-      <td  class="text-center" ><input type="text" class="form-control" placeholder="salle ou amphi..." ></td>
-      <td  class="text-center"><span *ngFor="let se  of stage.stageEtudiants">{{se.etudiant.user.nom}} {{se.etudiant.user.prenom}}</span></td>
-      <td  class="text-center">{{stage.sujet}}</td>
-      <td  class="text-center"><button *ngIf="stage.stageMembreJuries.length == 0" (click)="ajouetrJury =!ajouetrJury" class="btn btn-success btn-sm shadow-none">Ajouter <span class="fa fa-plus"></span></button><span *ngIf="stage.stageMembreJuries.length>0"><span *ngFor="let sj of  stage.stageMembreJuries"> {{sj.membreJury.user.nom}} {{sj.membreJury.user.prenom}}</span> </span></td>
-    </tr>
-    <tr *ngIf="ajouetrJury">
-      <div class="row">
         <div class="col-md-6">
-          <select class="form-control">
-            <option value="" selected disabled>Choisir un jury de la liste</option>
-          </select>
-        </div>
-      </div>
-      <div class="row mt-2">
-        <div class="form-group col-md-3">
-          <label for="ref">Rpp*</label>
-          <input type="text" class="form-control" placeholder="ref..." id="ref" [(ngModel)]="jury.reference">
-        </div>
-        <div class="form-group col-md-3">
-          <label for="nomE">Nom*</label>
-          <input type="text" class="form-control" placeholder="nom..." id="nomE" [(ngModel)]="jury.user.nom">
-        </div>
-        <div class="form-group col-md-3">
-          <label for="prenomE">Prénom*</label>
-          <input type="text" class="form-control" placeholder="prénom..." id="prenomE" [(ngModel)]="jury.user.prenom">
-        </div>
-      </div>
-      <div class="row" >
-        <div class="input-group col-md-6">
-          <div class="input-group-prepend">
-            <button class="btn bg-dark"><span class="fa fa-user text-white"></span></button>
-          </div>
-          <input type="email" class="form-control" placeholder="email..." id="email" [(ngModel)]="jury.user.email">
-        </div>
-        <div class="input-group col-md-6">
-          <div class="input-group-prepend">
-            <button class="btn bg-dark"><span class="fa fa-lock text-white"></span></button>
-          </div>
-          <input type="text" class="form-control" placeholder="password..." id="pwd" disabled [(ngModel)]="jury.user.motPass">
-          <div class="input-group-append">
-            <button class="btn btn-primary" (click)="generateP()">Générer un mot de passe</button>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="fa fa-info"></span>  Plus d'infos
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="info..."  [(ngModel)]="plusInfos">
           </div>
         </div>
-        <div class="col-md-12">
-          <button class="btn btn-success" (click)="ajouterJury()">Ajouter</button>
-        </div>
       </div>
-    </tr>
-    </tbody>
-  </table>
-  <button class="btn btn-primary float-right" (click)="view()">Générer le planning</button>
+      <table class="table table-striped mt-2">
+        <thead>
+        <tr>
+          <th class="text-center"><span class="fa fa-building"></span> Salle ou Amphi</th>
+          <th class="text-center"><span class="fa fa-graduation-cap"></span> Nom & prénom</th>
+          <th class="text-center"><span class="fa fa-file-text"></span> Sujet</th>
+          <th class="text-center"><span class="fa fa-university"></span> Jury</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let stage of stages">
+          <td  class="text-center" ><input type="text" class="form-control form-control-sm" placeholder="salle ou amphi..." [(ngModel)]="stage.localeSoutenance"></td>
+          <td  class="text-center"><span *ngFor="let se  of stage.stageEtudiants">{{se.etudiant.user.nom}} {{se.etudiant.user.prenom}}</span></td>
+          <td  class="text-center">{{stage.sujet}}</td>
+          <td  class="text-center"><button *ngIf="stage.stageMembreJuries.length == 0"data-toggle="modal" data-target="#juryModal" (click)="ajouterJury(stage)" class="btn btn-success btn-sm shadow-none">Ajouter
+            <span class="fa fa-plus"></span></button>
+            <span *ngIf="stage.stageMembreJuries.length>0"><span *ngFor="let sj of  stage.stageMembreJuries"> {{sj.membreJury.user.nom}} {{sj.membreJury.user.prenom}} | </span>
+              <span *ngIf="stage.stageMembreJuries.length<3" class="fa fa-user-plus text-primary" data-toggle="modal" data-target="#juryModal"  style="cursor: pointer" (click)="ajouterJury(stage)"></span>
+          </span></td>
+        </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-primary float-right" (click)="view()">Générer le planning</button>
+    </div>
+
+  </div>
+
 </div>
+<app-jury-add></app-jury-add>

@@ -11,6 +11,7 @@ import {FlashMessagesService} from "angular2-flash-messages";
 import {AlertService} from "../../../services/alert.service";
 import {Tache} from "../../../models/tache.model";
 import {Router} from "@angular/router";
+import {CoordinateurService} from "../../../services/coordinateur.service";
 declare let bootbox:any;
 @Component({
   selector: 'app-list-stages',
@@ -60,14 +61,18 @@ export class ListStagesComponent implements OnInit {
     show:false
   }
   role = ""
+  idCoord
   constructor(private stageService: StageService,private stageEtudiantService:StageEtudiantService,
               private rapportService:RapportService,private organismeService:OrganismeService,
               private sessionStorage:LocalStorageService,private conventionService:ConventionService,
-              private flashMessagesService:FlashMessagesService,private alertService:AlertService,private  router:Router) { }
+              private flashMessagesService:FlashMessagesService,private alertService:AlertService,private  router:Router,
+              private coordinateurService:CoordinateurService) { }
 
   ngOnInit(): void {
+    this.stageService.tableElements = [];
     const user = this.sessionStorage.retrieve("logedUser");
     this.role = user.roles[0].role;
+    this.idCoord = user.id;
 	console.log(user);
 	console.log(this.role);
     if(this.role == "COORDINATEUR_ROLE"){
@@ -112,6 +117,26 @@ export class ListStagesComponent implements OnInit {
   }
   plannig(){
     this.stageService.stages = this.stagePage.content;
+    if(1){
+      this.router.navigate(['coordinateur/planning'])
+    }else {
+      this.flashMessagesService.show("stage ou plusieur stage ne contient pas de jurie penser  a verifier que tout les stage a des jury!!", { cssClass: 'alert-warning', timeout: 5000 });
+    }
+
+  }
+
+  chargerPv(){
+    const user = this.sessionStorage.retrieve("logedUser");
+    this.coordinateurService.chargerPv(user.id);
+  }
+
+  checkJuries(){
+    for(let i = 0;i<this.stages.length;i++){
+      if(this.stages[i].stageMembreJuries.length == 0){
+        return false;
+      }
+    }
+    return true;
   }
   conventioner(cStage:Stage){
     if(this.validateConvention(cStage)){
@@ -346,6 +371,7 @@ export class ListStagesComponent implements OnInit {
   }
   stageView(stage:Stage){
     this.sessionStorage.store("stageToView",stage);
+    this.sessionStorage.retrieve(("stageToView"))
     this.router.navigate(['coordinateur/stage']);
   }
   get organismeAccueil(){

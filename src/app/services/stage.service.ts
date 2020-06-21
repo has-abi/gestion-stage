@@ -5,6 +5,7 @@ import {HttpClient} from "@angular/common/http";
 import {StagePage} from "../models/pageModels/stage-page.model";
 import {Coordinateur} from "../models/coordinateur.model";
 import {Observable} from "rxjs";
+import {AuthentificationService} from "./auth/authentification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -23,81 +24,85 @@ export class StageService {
     "message":''
   }
   url="http://localhost:8091/gestion-stage-api/stage/"
-  constructor(private httpClient:HttpClient) { }
+  constructor(private httpClient:HttpClient,private authentificationService:AuthentificationService) { }
 
   findEtudinantActiveStages(id:number){
-    this.httpClient.get<Stage>(this.url+"etudiant/id/"+id).subscribe(stage=>{
+    this.httpClient.get<Stage>(this.url+"etudiant/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(stage=>{
       this.stage = stage;
     })
   }
 
   findCoordinateurActiveStages(id:number){
-    this.httpClient.get<Array<Stage>>(this.url+"coordinateur/id/"+id).subscribe(stages=>{
+    this.httpClient.get<Array<Stage>>(this.url+"coordinateur/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(stages=>{
       this.stages = stages;
     })
   }
 
   findEncadreurActiveStages(id:number){
-    this.httpClient.get<Array<Stage>>(this.url+"encadreur/id/"+id).subscribe(stages=>{
+    this.httpClient.get<Array<Stage>>(this.url+"encadreur/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(stages=>{
       this.stages = stages;
     })
   }
 
   findJuryActiveStages(id:number){
-    this.httpClient.get<Array<Stage>>(this.url+"jury/id/"+id).subscribe(stages=>{
+    this.httpClient.get<Array<Stage>>(this.url+"jury/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(stages=>{
       this.stages = stages;
     })
   }
 
   findByCoordinateurId(id:number,page:number,size:number,sort:string){
-    this.httpClient.get<StagePage>(this.url+"coordinateur/id/"+id+"/page/"+page+"/size/"+size+"/sort/"+sort).subscribe(data=>{
+    this.httpClient.get<StagePage>(this.url+"coordinateur/id/"+id+"/page/"+page+"/size/"+size+"/sort/"+sort,{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
       this.stagePage = data;
+      this.fillTableElements(data.totalPages);
     })
   }
   countStages():Observable<number>{
-    return this.httpClient.get<number>(this.url+"count");
+    return this.httpClient.get<number>(this.url+"count",{headers:this.authentificationService.getHeaders()});
   }
   findByEtudiantId(id:number,page:number,size:number){
-console.log("we get here");
-    this.httpClient.get<StagePage>(this.url+"etudiant/id/"+id+"/page/"+page+"/size/"+size).subscribe(data=>{
+    this.httpClient.get<StagePage>(this.url+"etudiant/id/"+id+"/page/"+page+"/size/"+size,{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
       this.stagePage = data;
+      this.fillTableElements(data.totalPages);
     })
   }
   findByJuryId(id:number,page:number,size:number){
-    this.httpClient.get<StagePage>(this.url+"jury/id/"+id+"/page/"+page+"/size/"+size).subscribe(data=> {
+    this.httpClient.get<StagePage>(this.url+"jury/id/"+id+"/page/"+page+"/size/"+size,{headers:this.authentificationService.getHeaders()}).subscribe(data=> {
       this.stagePage = data;
+      this.fillTableElements(data.totalPages);
     })
   }
   findByEncadreurId(id:number,page:number,size:number){
-    this.httpClient.get<StagePage>(this.url+"encadreur/id/"+id+"/page/"+page+"/size/"+size).subscribe(data=>{
+    this.httpClient.get<StagePage>(this.url+"encadreur/id/"+id+"/page/"+page+"/size/"+size,{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
       this.stagePage = data;
+      this.fillTableElements(data.totalPages);
     })
   }
   findById(id:number):Observable<Stage>{
-    return  this.httpClient.get<Stage>(this.url + "id/" + id);
+    return  this.httpClient.get<Stage>(this.url + "id/" + id,{headers:this.authentificationService.getHeaders()});
   }
 
   save(stage:Stage):Observable<number>{
     stage.reference = this.getReference();
-    return this.httpClient.post<number>(this.url,stage);
+    return this.httpClient.post<number>(this.url,stage,{headers:this.authentificationService.getHeaders()});
   }
 
-  update():Observable<number>{
-       return  this.httpClient.put<number>(this.url,this.stage);
+  update(stage:Stage):Observable<number>{
+    console.log("service update")
+       return  this.httpClient.put<number>(this.url,stage,{headers:this.authentificationService.getHeaders()});
   }
   deleteByReference(reference:string):Observable<number>{
-    return this.httpClient.delete<number>(this.url+"reference/"+reference);
+    return this.httpClient.delete<number>(this.url+"reference/"+reference,{headers:this.authentificationService.getHeaders()});
   }
 
   findAllPages(page:number,size:number){
-      return this.httpClient.get<StagePage>(this.url+"list/get?page="+page+"&size="+size).subscribe(data=>{
+      return this.httpClient.get<StagePage>(this.url+"list/get?page="+page+"&size="+size,{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
         this.stagePage = data
         console.log(data.content)
         this.fillTableElements(data.totalPages);
       })
   }
-  findByDateDebut(dateDebut:string,page:number,size:number){
-    this.httpClient.get<StagePage>(this.url+"dateDebut/"+dateDebut+"/page/"+page+"/size/"+size).subscribe(data=>{
+  findByDateDebut(dateDebut:string,page:number,size:number,){
+    this.httpClient.get<StagePage>(this.url+"dateDebut/"+dateDebut+"/page/"+page+"/size/"+size,{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
       this.stagePage = data
      this.fillTableElements(data.totalPages);
     })
@@ -108,25 +113,25 @@ console.log("we get here");
     }
   }
   findByDateFin(dateFin:string,page:number,size:number){
-    this.httpClient.get<StagePage>(this.url+"dateFin/"+dateFin+"/page/"+page+"/size/"+size).subscribe(data=>{
+    this.httpClient.get<StagePage>(this.url+"dateFin/"+dateFin+"/page/"+page+"/size/"+size,{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
       this.stagePage = data;
       this.fillTableElements(data.totalPages);
     })
   }
   findByOrganisme(page:number,size:number){
-    this.httpClient.get<StagePage>(this.url+"organismeAccueil/"+this.searchedStage.organismeAccueil.raisonSociale+"/page/"+page+"/size/"+size).subscribe(data=>{
+    this.httpClient.get<StagePage>(this.url+"organismeAccueil/"+this.searchedStage.organismeAccueil.raisonSociale+"/page/"+page+"/size/"+size,{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
       this.stagePage = data;
       this.fillTableElements(data.totalPages);
     })
   }
   findBysujet(page:number,size:number){
-    this.httpClient.get<StagePage>(this.url+"sujet/"+this.searchedStage.sujet+"/page/"+page+"/size/"+size).subscribe(data=>{
+    this.httpClient.get<StagePage>(this.url+"sujet/"+this.searchedStage.sujet+"/page/"+page+"/size/"+size,{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
       this.stagePage = data;
       this.fillTableElements(data.totalPages);
     })
   }
   getAllStages(){
-    return this.httpClient.get<Array<Stage>>(this.url+"dateFin/"+this.searchedStage.dateFin).subscribe(data=>{
+    return this.httpClient.get<Array<Stage>>(this.url+"dateFin/"+this.searchedStage.dateFin,{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
           this.stages = data;
     })
   }

@@ -14,6 +14,7 @@ export class ListEncadreurComponent implements OnInit {
     page = 0;
     size =10;
     id=1;
+    sort = "asc";
     searchInput ="";
     searching = false;
     tableOrder = {
@@ -31,7 +32,7 @@ export class ListEncadreurComponent implements OnInit {
   encadreurView(encadreur:Encadreur){
   }
   findByCoordinateur(){
-    this.encadreurService.findByCoordinateur(this.id,this.page,this.size,"asc");
+    this.encadreurService.findByCoordinateur(this.id,this.page,this.size,this.sort);
   }
   nextElements(){
     if(this.page<=this.pageEncadreurs.totalPages){

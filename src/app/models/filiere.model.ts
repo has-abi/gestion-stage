@@ -5,6 +5,8 @@ import {Departement} from "./departement.model";
 export class Filiere {
   id:number;
   libelle:string;
+  abbr:string;
+  diplome:string;
   etudiants:Array<Etudiant>;
   departement:Departement;
 }

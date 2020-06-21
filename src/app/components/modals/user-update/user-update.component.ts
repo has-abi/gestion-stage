@@ -58,7 +58,7 @@ export class UserUpdateComponent implements OnInit {
 		}
 	}
   validate(){
-    let checkUser = this.user.nom.length== 0 || this.user.prenom.length == 0 || this.user.email.length == 0 || this.user.roles.length == 0;
+    let checkUser = this.user.nom.length== 0 || this.user.prenom.length == 0 || this.user.username.length == 0 || this.user.roles.length == 0;
     if(this.checkEtdudiant(this.user)){
       return checkUser || !this.etudiant.cin ||this.etudiant.cin.length == 0  || !this.etudiant.codeAppoge ||this.etudiant.codeAppoge.length == 0;
     }else if(this.check(this.user,"COORDINATEUR_ROLE")){
@@ -139,7 +139,7 @@ export class UserUpdateComponent implements OnInit {
   }
   update(){
     if(this.password.length>0){
-      this.user.motPass = this.password;
+      this.user.password = this.password;
     }
     if(this.check(this.user,"ENCADREUR_ROLE")){
       this.updateEncadreur();

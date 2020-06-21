@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col-md-6">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Chercher un encadreur" [(ngModel)]="searchInput" (input)="search()">
+        <input type="text" class="form-control" placeholder="Chercher un etudiant.." [(ngModel)]="searchInput" (input)="search()">
         <div class="input-group-append">
           <button class="btn bg-dark text-white"><span class="fa fa-search"></span></button>
         </div>
@@ -58,7 +58,7 @@
       <td>{{etudiant.user.prenom}}</td>
       <td>{{etudiant.user.adress}}</td>
       <td>{{etudiant.user.tele}}</td>
-      <td>{{etudiant.user.email}}</td>
+      <td>{{etudiant.user.username}}</td>
       <td>{{etudiant.nationalite}}</td>
       <td>{{etudiant.niveau}}</td>
       <td>

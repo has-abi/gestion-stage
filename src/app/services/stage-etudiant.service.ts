@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {StageEtudiant} from "../models/stage-etudiant.model";
+import {AuthentificationService} from "./auth/authentification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,9 @@ export class StageEtudiantService {
   private _stageEtudiants:Array<StageEtudiant>;
   private _stageEtudiant:StageEtudiant;
   url="http://localhost:8091/gestion-stage-api/stage-etudiant/"
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient,private  authentificationService:AuthentificationService) { }
   findByStageReference(ref:string){
-    this.httpClient.get<Array<StageEtudiant>>(this.url+"stage/reference/"+ref).subscribe(data=>{
+    this.httpClient.get<Array<StageEtudiant>>(this.url+"stage/reference/"+ref,{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
         this.stageEtudiants = data;
     })
   }

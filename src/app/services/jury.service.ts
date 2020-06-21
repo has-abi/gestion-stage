@@ -4,32 +4,37 @@ import {MembreJury} from "../models/membre-jury.model";
 import {User} from "../models/user.model";
 import {JuryPage} from "../models/pageModels/jury-page";
 import {Observable} from "rxjs";
+import {AuthentificationService} from "./auth/authentification.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class JuryService {
-  private url ="localhost:8091/gestion-stage-api/jury/";
+  private url ="http://localhost:8091/gestion-stage-api/jury/";
   private _jury:MembreJury;
   private _juries:Array<MembreJury>;
   private _pagejury:JuryPage;
   tableElements = [];
-  constructor(private http: HttpClient) { }
-
+  constructor(private http: HttpClient,private  authentificationService:AuthentificationService) { }
+findByfiliere(id:number){
+    this.http.get<Array<MembreJury>>(this.url+"filiere/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
+      this.juries = datas;
+    })
+}
   createJury(jury:MembreJury):Observable<number>{
-    return this.http.post<number>(this.url,jury);
+    return this.http.post<number>(this.url,jury,{headers:this.authentificationService.getHeaders()});
   }
   findByUserId(id:number):Observable<MembreJury>{
-    return this.http.get<MembreJury>(this.url+"user/id/"+id);
+    return this.http.get<MembreJury>(this.url+"user/id/"+id,{headers:this.authentificationService.getHeaders()});
   }
   update(jury:MembreJury):Observable<number>{
-    return this.http.put<number>(this.url,jury);
+    return this.http.put<number>(this.url,jury,{headers:this.authentificationService.getHeaders()});
   }
   delete(reference:string):Observable<number>{
-    return this.http.delete<number>(this.url+"reference/"+reference);
+    return this.http.delete<number>(this.url+"reference/"+reference,{headers:this.authentificationService.getHeaders()});
   }
   findByCoordinateur(id:number,page:number,size:number,sort:string){
-    this.http.get<JuryPage>(this.url+"coordinateur/id/"+id+"/page/"+page+"/size/"+size+"/sort/"+sort).subscribe(datas=>{
+    this.http.get<JuryPage>(this.url+"coordinateur/id/"+id+"/page/"+page+"/size/"+size+"/sort/"+sort,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.pagejury = datas;
       this.pagejury.content = datas.content;
     })
@@ -37,7 +42,7 @@ export class JuryService {
   search(seach:string){
     const request = "search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.email:*+"+seach+"* " +
       "OR role:*"+seach+"* OR user.sexe:*"+seach+"* OR user.adress:*"+seach+"* OR profession:*"+seach+"*";
-    this.http.get<Array<MembreJury>>(this.url+request).subscribe(datas=>{
+    this.http.get<Array<MembreJury>>(this.url+request,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       console.log(datas);
       this.juries = datas;
     })

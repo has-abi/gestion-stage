@@ -3,6 +3,7 @@ import {Coordinateur} from "../models/coordinateur.model";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {CoordinateurPage} from "../models/pageModels/coordinateur-page.model";
+import {AuthentificationService} from "./auth/authentification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,26 +15,28 @@ export class CoordinateurService {
   private _coordinateurPage: CoordinateurPage;
   tableElements = [];
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient,private authentificationService:AuthentificationService) {
   }
   findByUserId(id:number):Observable<Coordinateur>{
-    return this.httpClient.get<Coordinateur>(this.url+"user/id/"+id);
+    return this.httpClient.get<Coordinateur>(this.url+"user/id/"+id,{headers:this.authentificationService.getHeaders()});
   }
-
+  chargerPv(id:number){
+    this.httpClient.get("http://localhost:8091/pv/coordinateur/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe();
+  }
   update(coordinateur:Coordinateur):Observable<number>{
-    return  this.httpClient.put<number>(this.url,coordinateur);
+    return  this.httpClient.put<number>(this.url,coordinateur,{headers:this.authentificationService.getHeaders()});
   }
   delete(reference:string):Observable<number>{
-    return this.httpClient.delete<number>(this.url+"reference/"+reference);
+    return this.httpClient.delete<number>(this.url+"reference/"+reference,{headers:this.authentificationService.getHeaders()});
   }
   getCoordinateur() {
-    this.httpClient.get<Coordinateur>(this.url + "reference/cord7485").subscribe(c => {
+    this.httpClient.get<Coordinateur>(this.url + "reference/cord7485",{headers:this.authentificationService.getHeaders()}).subscribe(c => {
       this.coordinateur = c;
     })
   }
 
   findAll(page: number, size: number, sort: string) {
-    this.httpClient.get<CoordinateurPage>(this.url + "page/" + page + "/size/" + size).subscribe(datas => {
+    this.httpClient.get<CoordinateurPage>(this.url + "page/" + page + "/size/" + size,{headers:this.authentificationService.getHeaders()}).subscribe(datas => {
       this.coordinateurPage = datas;
       this.fillTableElements(datas.totalPages);
     })
@@ -48,7 +51,7 @@ export class CoordinateurService {
   search(search: string) {
     const request = "search?search=user.nom:*" + search + "* OR user.prenom:*" + search + "* OR user.email:*" + search + "* OR " +
       "reference:*" + search + "* OR user.sexe:*" + search + "* OR user.adress:*" + search;
-    this.httpClient.get<Array<Coordinateur>>(this.url + request).subscribe(datas => {
+    this.httpClient.get<Array<Coordinateur>>(this.url + request,{headers:this.authentificationService.getHeaders()}).subscribe(datas => {
       this.coordinatuers = datas
     })
   }

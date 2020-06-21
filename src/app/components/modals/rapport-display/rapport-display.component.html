@@ -51,7 +51,7 @@
         <button *ngIf="modifierRapport" class="btn-sm btn-light"><span class="fa fa-check"></span></button>
       </div>
       <div class="modal-footer">
-        <button *ngIf="!rapport.valider" class="btn btn-info shadow-sm" (click)="modifierRapport = !modifierRapport">Modifier <span class="fa" [class.fa-plus]="!modifierRapport" [class.fa-minus]="modifierRapport"></span></button>
+        <button *ngIf="!rapport.valider && role == 'COORDINATEUR_ROLE'" class="btn btn-info shadow-sm" (click)="modifierRapport = !modifierRapport">Modifier <span class="fa" [class.fa-plus]="!modifierRapport" [class.fa-minus]="modifierRapport"></span></button>
         <button type="button" class="btn bg-dark text-white shadow-sm" data-dismiss="modal">Fermer</button>
       </div>
     </div>

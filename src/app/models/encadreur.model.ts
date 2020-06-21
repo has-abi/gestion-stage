@@ -10,10 +10,7 @@ export class Encadreur {
   type:string;
   user:User;
   stageEncadreurs:Array<StageEncadreur>;
-
-
   constructor() {
     this.user = new User();
-    this.stageEncadreurs = new Array<StageEncadreur>();
   }
 }

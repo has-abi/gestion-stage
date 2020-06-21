@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {AuthentificationService} from "../../../services/auth/authentification.service";
-import {SessionStorageService} from "ngx-webstorage";
+import {LocalStorageService, SessionStorageService} from "ngx-webstorage";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -10,7 +10,7 @@ import {SessionStorageService} from "ngx-webstorage";
 export class LoginComponent implements OnInit {
   loginForm;
   constructor(private formBuilder:FormBuilder,private authentificationService:AuthentificationService,
-              private sessionStorage:SessionStorageService) { }
+              private sessionStorage:LocalStorageService) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -25,9 +25,16 @@ export class LoginComponent implements OnInit {
   }
   submitLogin(userData){
     if(this.email.errors == null && this.pwd.errors == null){
-        this.user.email = userData.email;
-        this.user.motPass = userData.pwd;
-        this.loginUser();
+        this.user.username = userData.email;
+        this.user.password = userData.pwd;
+        //this.loginUser();
+      this.authentificationService.springLogin().subscribe(resp=>{
+        const jwt = resp.headers.get('Authorization')
+        this.sessionStorage.store('jwt',jwt);
+        this.authentificationService.findByEmail(this.user.username);
+      },error => {
+        console.log("error")
+      })
     }
   }
 
