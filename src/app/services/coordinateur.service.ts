@@ -18,9 +18,11 @@ export class CoordinateurService {
   constructor(private httpClient: HttpClient,private authentificationService:AuthentificationService) {
   }
   findByUserId(id:number):Observable<Coordinateur>{
+	
     return this.httpClient.get<Coordinateur>(this.url+"user/id/"+id,{headers:this.authentificationService.getHeaders()});
   }
   chargerPv(id:number){
+	console.log(this.authentificationService.getHeaders())
     this.httpClient.get("http://localhost:8091/pv/coordinateur/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe();
   }
   update(coordinateur:Coordinateur):Observable<number>{

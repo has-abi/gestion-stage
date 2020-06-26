@@ -12,6 +12,7 @@ import {AlertService} from "../../../services/alert.service";
 import {Tache} from "../../../models/tache.model";
 import {Router} from "@angular/router";
 import {CoordinateurService} from "../../../services/coordinateur.service";
+import {AuthentificationService} from "../../../services/auth/authentification.service";
 declare let bootbox:any;
 @Component({
   selector: 'app-list-stages',
@@ -66,7 +67,7 @@ export class ListStagesComponent implements OnInit {
               private rapportService:RapportService,private organismeService:OrganismeService,
               private sessionStorage:LocalStorageService,private conventionService:ConventionService,
               private flashMessagesService:FlashMessagesService,private alertService:AlertService,private  router:Router,
-              private coordinateurService:CoordinateurService) { }
+              private coordinateurService:CoordinateurService,private authentificationService:AuthentificationService) { }
 
   ngOnInit(): void {
     this.stageService.tableElements = [];
@@ -92,6 +93,9 @@ export class ListStagesComponent implements OnInit {
       this.findByJury(user.id);
     }
   }
+get jwtToken(){
+	return this.authentificationService.jwtToken;
+}
   deleteStage(stage:Stage){
       this.stageService.deleteByReference(stage.reference).subscribe(resp=>{
         if(resp>0){

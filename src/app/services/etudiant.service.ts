@@ -26,6 +26,12 @@ export class EtudiantService {
   findByUserId(id:number):Observable<Etudiant>{
     return this.http.get<Etudiant>(this.link+"user/id/"+id,{headers:this.authentificationService.getHeaders()});
   }
+  sendCode(cne:string,username:string){
+    this.http.get("http://localhost:8091/gestion-stage-api/mail/username/"+username+"/cne/"+cne);
+  }
+  confirmEtudiant(cne:string,codeAppoge:string):Observable<number>{
+    return this.http.get<number>(this.link+"confirm/cne/"+cne+"/codeAppoge/"+codeAppoge);
+  }
   createEtudiant(etudiant:Etudiant):Observable<number>{
     return this.http.post<number>(this.link,etudiant,{headers:this.authentificationService.getHeaders()});
   }

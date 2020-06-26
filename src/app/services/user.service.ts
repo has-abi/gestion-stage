@@ -18,7 +18,9 @@ export class UserService {
   tableElements = [];
   url="http://localhost:8091/gestion-stage-api/user"
   constructor(private httpClient: HttpClient,private authentificationService:AuthentificationService) { }
-
+  confirmUser(username:string,code:string):Observable<number>{
+    return this.httpClient.get<number>(this.url+"/confirm/code/"+code+"/username/"+username);
+  }
   removeUser(id:number):Observable<number>{
     return this.httpClient.delete<number>(this.url+"/id/"+id,{headers:this.authentificationService.getHeaders()});
   }
