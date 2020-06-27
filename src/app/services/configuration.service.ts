@@ -122,6 +122,7 @@ export class ConfigurationService {
   }
 
   updateEtablissement():Observable<number>{
+    console.log(this.etablisement)
     return  this.http.put<number>(this.etabUrl,this.etablisement,{headers:this.authentificationService.getHeaders()});
   }
   getEtablissement(){

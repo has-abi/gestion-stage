@@ -23,9 +23,9 @@
             </div>
           </li>
           <li class="list-group-item"><b>Fichier:</b> Voir:
-            <a target="_blank" href="http://localhost:8091/file/display/{{rapport.document.reference}}" class="btn-sm btn-success"><span class="fa fa-file-pdf-o "></span></a>
+            <button  class="btn-sm btn-success" (click)="display()"><span class="fa fa-file-pdf-o "></span></button>
             Telecharger:
-            <a  href="http://localhost:8091/files/{{rapport.document.reference}}" class="btn-sm btn-primary"><span class="fa fa-download "></span></a>
+            <button  (click)="download()" class="btn-sm btn-primary"><span class="fa fa-download "></span></button>
             <div *ngIf="modifierRapport" class="form-group">
               <div *ngIf="currentFile" class="progress">
                 <div

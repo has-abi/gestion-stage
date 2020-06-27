@@ -261,7 +261,7 @@
         </div>
       </div>
 
-      <button *ngIf="updateEtablissement" class="btn btn-info btn-block" [disabled]="validateEtablissement()">Sauvegarder <span class="fa fa-check"></span></button>
+      <button *ngIf="updateEtablissement" class="btn btn-info btn-block"  (click)="updateEtab()">Sauvegarder <span class="fa fa-check"></span></button>
     </div>
 
   </div>

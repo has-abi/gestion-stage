@@ -30,4 +30,11 @@ export class RapportDisplayComponent implements OnInit {
     this.selectedFiles = event.target.files;
   }
 
+  display(){
+    this.rapportService.diplayRapport(this.rapport.document.reference)
+  }
+  download(){
+    this.rapportService.getRapport(this.rapport.document.reference)
+  }
+
 }

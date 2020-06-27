@@ -18,14 +18,12 @@ export class CoordinateurService {
   constructor(private httpClient: HttpClient,private authentificationService:AuthentificationService) {
   }
   findByUserId(id:number):Observable<Coordinateur>{
-	
+
     return this.httpClient.get<Coordinateur>(this.url+"user/id/"+id,{headers:this.authentificationService.getHeaders()});
   }
   chargerPv(id:number){
-	console.log("charger le pv");
  	this.httpClient.get("http://localhost:8091/pv/coordinateur/id/"+id,{headers:this.authentificationService.getHeaders(), responseType: 'blob' as 'json'}).subscribe(
         (response: any) =>{
-	console.log(response);
             let dataType = response.type;
             let binaryData = [];
             binaryData.push(response);

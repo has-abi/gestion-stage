@@ -24,7 +24,7 @@ export class ConventionComponent implements OnInit {
 
   }
   downloadConvention(){
-    pdfMake.createPdf(this.convention()).save();
+    pdfMake.createPdf(this.convention()).download("convention");
   }
   openConvention(){
     pdfMake.createPdf(this.convention()).open();

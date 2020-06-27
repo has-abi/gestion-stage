@@ -19,12 +19,12 @@ export class AutreComponent implements OnInit {
     element: "",
     ajouter: false
   }
-  filiere:Filiere; 
+  filiere:Filiere;
   dep:Departement;
-  ville:Ville; 
-  pay:Pays 
-  type:TypeOrganisme; 
-  service:TypeServiceOrganisme; 
+  ville:Ville;
+  pay:Pays
+  type:TypeOrganisme;
+  service:TypeServiceOrganisme;
   updateEtablissement = false;
   constructor(private configurationService: ConfigurationService, private organismeService: OrganismeService,
               private flashMessagesService: FlashMessagesService) {
@@ -325,8 +325,9 @@ export class AutreComponent implements OnInit {
     return this.dep.libelle.length == 0;
   }
   validateEtablissement(){
-    return this.etablissement.libelle.length == 0 || this.etablissement.adress.length == 0 || this.etablissement.email.length == 0 ||
-      this.etablissement.doyen.length == 0 || this.etablissement.tele_fix.length == 0 || this.etablissement.tele_gsm.length == 0 ;
+    return (this.etablissement.libelle == undefined || this.etablissement.libelle.length == 0) || (this.etablissement.adress == undefined || this.etablissement.adress.length == 0 ) || (this.etablissement.email == undefined || this.etablissement.email.length == 0 ) ||
+      (this.etablissement.doyen == undefined || this.etablissement.doyen.length == 0) || (this.etablissement.tele_fix == undefined || this.etablissement.tele_fix.length == 0 ) || (this.etablissement.tele_gsm == undefined || this.etablissement.tele_gsm.length == 0 );
   }
+
 
 }

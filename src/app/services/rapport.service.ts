@@ -21,7 +21,6 @@ export class RapportService {
   constructor(private http:HttpClient,private authentificationService:AuthentificationService) { }
 
    save(file: File,titre:string,desc:string): Observable<HttpEvent<any>> {
-     console.log("inside save")
     const formData: FormData = new FormData();
     formData.append('file', file);
     formData.append('titre', titre);
@@ -45,7 +44,33 @@ export class RapportService {
        return this.http.request(req);
      }
   }
-
+  getRapport(ref:string){
+    this.http.get("http://localhost:8091/files/"+ref,{headers:this.authentificationService.getHeaders(), responseType: 'blob' as 'json'}).subscribe(
+      (response: any) =>{
+        let dataType = response.type;
+        let binaryData = [];
+        binaryData.push(response);
+        let downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
+        downloadLink.setAttribute('download', 'rapport');
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+      })
+  }
+  diplayRapport(ref:string){
+    this.http.get("http://localhost:8091/file/display/"+ref,{headers:this.authentificationService.getHeaders(), responseType: 'blob' as 'json'}).subscribe(
+      (response: any) =>{
+        let dataType = response.type;
+        let binaryData = [];
+        binaryData.push(response);
+        let downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
+        downloadLink.setAttribute('download', 'rapport');
+        downloadLink.setAttribute('target', '_blank');
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+      })
+  }
   update(file: File,titre:string,desc:string,ref:string): Observable<HttpEvent<any>>{
     const formData: FormData = new FormData();
     formData.append('file', file);

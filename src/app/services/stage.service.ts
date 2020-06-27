@@ -88,6 +88,8 @@ export class StageService {
 
   update(stage:Stage):Observable<number>{
     console.log("service update")
+    console.log(this.stage);
+    console.log(this.authentificationService.getHeaders());
        return  this.httpClient.put<number>(this.url,stage,{headers:this.authentificationService.getHeaders()});
   }
   deleteByReference(reference:string):Observable<number>{
