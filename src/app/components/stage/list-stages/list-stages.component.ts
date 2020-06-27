@@ -13,6 +13,7 @@ import {Tache} from "../../../models/tache.model";
 import {Router} from "@angular/router";
 import {CoordinateurService} from "../../../services/coordinateur.service";
 import {AuthentificationService} from "../../../services/auth/authentification.service";
+import * as $ from "jquery"
 declare let bootbox:any;
 @Component({
   selector: 'app-list-stages',
@@ -423,5 +424,20 @@ get jwtToken(){
         this.flashMessagesService.show("stagee ne peut pas être activer!!", { cssClass: 'alert-danger', timeout: 5000 });
       }
     })
+  }
+
+  pvOpen(){
+    window.open("http://localhost:8091/pv/coordinateur/id/{{idCoord}}?{{jwtToken}}");
+  }
+    DownloadWithJwtViaFormPost(url, id, token) {
+    var jwtInput = $('<input type="hidden" name="jwtToken">').val(this.authentificationService.jwtToken);
+    var idInput = $('<input type="hidden" name="id">').val(id);
+    $('<form method="post" target="_blank"></form>')
+      .attr("action", url)
+      .append(jwtInput)
+      .append(idInput)
+      .appendTo('body')
+      .submit()
+      .remove();
   }
 }

@@ -5,6 +5,7 @@ import {Stage} from "../../../models/stage.model";
 import {Encadreur} from "../../../models/encadreur.model";
 import {TacheService} from "../../../services/tache.service";
 import {LocalStorageService} from "ngx-webstorage";
+import {AuthentificationService} from "../../../services/auth/authentification.service";
 
 @Component({
   selector: 'app-etudiant-navbar',
@@ -13,7 +14,7 @@ import {LocalStorageService} from "ngx-webstorage";
 })
 export class EtudiantNavbarComponent implements OnInit {
   picture= "";
-  constructor(private localStorage:LocalStorageService) { }
+  constructor(private localStorage:LocalStorageService,private authentificationService:AuthentificationService) { }
 
   ngOnInit(): void {
     this.profilePic();
@@ -27,4 +28,9 @@ export class EtudiantNavbarComponent implements OnInit {
       this.picture = '../../../../assets/unnamed.png';
     }
   }
+
+  logout(){
+    return this.authentificationService.logout();
+  }
+
 }

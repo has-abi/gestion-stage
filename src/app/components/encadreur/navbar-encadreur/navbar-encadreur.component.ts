@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthentificationService} from "../../../services/auth/authentification.service";
 
 @Component({
   selector: 'app-navbar-encadreur',
@@ -8,12 +9,12 @@ import { Component, OnInit } from '@angular/core';
 export class NavbarEncadreurComponent implements OnInit {
   searchInput:string;
   searching = false;
-  constructor() { }
+  constructor(private authentificationService:AuthentificationService) { }
 
   ngOnInit(): void {
   }
-  search(){
-
+  logout(){
+    return this.authentificationService.logout();
   }
 
 }

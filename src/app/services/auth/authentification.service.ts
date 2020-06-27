@@ -24,7 +24,6 @@ export class AuthentificationService {
           this.loginError = "Mot de passe incorrect!"
         }else if(resp == 1){
           this.findByEmail(this.user.username);
-
         }else{
           this.loginError = "Erreur survenu!"
         }
@@ -55,6 +54,7 @@ export class AuthentificationService {
   }
   logout(){
     this.sessionStorage.clear("logedUser");
+    this.sessionStorage.clear("jwt");
     this.router.navigate(['login']);
   }
   get loginError(): string {

@@ -5,6 +5,7 @@ import {FlashMessagesService} from "angular2-flash-messages";
 import {Commentaire} from "../../models/commentaire.model";
 import {User} from "../../models/user.model";
 import {UserService} from "../../services/user.service";
+import {LocalStorageService} from "ngx-webstorage";
 
 @Component({
   selector: 'app-forum',
@@ -23,15 +24,23 @@ export class ForumComponent implements OnInit {
    commenter :false,
    id:0
   };
+  picture = ""
   comment = new Commentaire();
   user = new User();
-  constructor(private forumService:ForumService,private flashMessagesService:FlashMessagesService,private userService:UserService) { }
+  constructor(private forumService:ForumService,private flashMessagesService:FlashMessagesService,private userService:UserService,
+              private localStorage:LocalStorageService) { }
 
   ngOnInit(): void {
     this.findAll();
-    this.userService.findByReference("u145266").subscribe(user=> this.user = user);
   }
-
+  profilePic(){
+    const user = this.localStorage.retrieve("logedUser");
+    if(user.photo != null){
+      this.picture = 'http://localhost:8091/gestion-stage-api/user/image/'+user.photo;
+    }else{
+      this.picture = '../../../../assets/unnamed.png';
+    }
+  }
   search(){
     if(this.searchInput.length == 0){
       this.findAll();
@@ -107,7 +116,7 @@ export class ForumComponent implements OnInit {
 
   createCommentaire(sujet:SujetForum){
     this.comment.sujetForum = sujet;
-    this.comment.user = this.user;
+    this.comment.user =  this.localStorage.retrieve("logedUser");
     this.forumService.createCommentaire(this.comment).subscribe(resp=>{
       if(resp>0){
         this.pageForum.content[this.pageForum.content.indexOf(sujet)].commentaires.push(this.comment);
@@ -119,7 +128,7 @@ export class ForumComponent implements OnInit {
     })
   }
   create(){
-	 this.forumService.sujetForum.user = this.user;
+	 this.forumService.sujetForum.user = this.localStorage.retrieve("logedUser");
   this.forumService.save().subscribe(resp=>{
     if(resp>0){
       this.pageForum.content.push(this.sujetForum);
@@ -132,7 +141,7 @@ export class ForumComponent implements OnInit {
   }
 
   update(){
-	this.forumService.sujetForum.user = this.user;
+	this.forumService.sujetForum.user = this.localStorage.retrieve("logedUser");
     this.forumService.update().subscribe(resp=>{
       if(resp>0){
         this.flashMessagesService.show('sujet est modifier avec succée!', { cssClass: 'alert-light', timeout: 6000 })

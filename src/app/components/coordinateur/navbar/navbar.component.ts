@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {SearchService} from "../../../services/search/search.service";
+import {AuthentificationService} from "../../../services/auth/authentification.service";
 
 @Component({
   selector: 'app-navbar',
@@ -9,7 +10,7 @@ import {SearchService} from "../../../services/search/search.service";
 export class NavbarComponent implements OnInit {
   searchInput;
   searching =false;
-  constructor(private searchService:SearchService) { }
+  constructor(private searchService:SearchService,private authentificationService:AuthentificationService) { }
 
   ngOnInit(): void {
 
@@ -27,5 +28,7 @@ export class NavbarComponent implements OnInit {
   get searchResult(){
     return this.searchService.searchResult;
   }
-
+  logout(){
+    return this.authentificationService.logout();
+  }
 }

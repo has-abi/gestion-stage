@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {StyleService} from "../../../services/style.service";
+import {AuthentificationService} from "../../../services/auth/authentification.service";
 
 @Component({
   selector: 'app-admin-navbar',
@@ -8,7 +9,7 @@ import {StyleService} from "../../../services/style.service";
 })
 export class AdminNavbarComponent implements OnInit {
 
-  constructor(private styleService:StyleService) { }
+  constructor(private styleService:StyleService,private  authentificationService:AuthentificationService) { }
 
   ngOnInit(): void {
   }
@@ -22,5 +23,8 @@ export class AdminNavbarComponent implements OnInit {
     }else{
       this.styleService.cols = 'col-md-12';
     }
+  }
+  logout(){
+    return this.authentificationService.logout();
   }
 }
