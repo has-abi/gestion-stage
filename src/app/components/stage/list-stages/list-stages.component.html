@@ -75,8 +75,8 @@
     <div *ngIf="showenStages == 'active'" class="col-sm-4 offset-8 mt-3">
       <div *ngIf="role == 'COORDINATEUR_ROLE' " class="btn-group float-right">
         <button  class="btn btn-light shadow-sm" (click)="plannig()">Planning <span class="fa fa-calendar"></span></button>
-        <a href="http://localhost:8091/pv/coordinateur/id/{{idCoord}}?{{jwtToken}}"  class="btn btn-dark shadow-sm" (click)=" chargerPv()">PV <span class="fa fa-file"></span></a>
-      </div>
+        <button   class="btn btn-dark shadow-sm" (click)=" chargerPv()">PV <span class="fa fa-file"></span></button>
+      </div>  
     </div>
     <div  *ngIf="selectedStages.length>0 && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')"  class="col-md-3 mt-2 offset-5">
       <div class="btn-group">

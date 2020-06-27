@@ -22,8 +22,22 @@ export class CoordinateurService {
     return this.httpClient.get<Coordinateur>(this.url+"user/id/"+id,{headers:this.authentificationService.getHeaders()});
   }
   chargerPv(id:number){
-	console.log(this.authentificationService.getHeaders())
-    this.httpClient.get("http://localhost:8091/pv/coordinateur/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe();
+	console.log("charger le pv");
+ 	this.httpClient.get("http://localhost:8091/pv/coordinateur/id/"+id,{headers:this.authentificationService.getHeaders(), responseType: 'blob' as 'json'}).subscribe(
+        (response: any) =>{
+	console.log(response);
+            let dataType = response.type;
+            let binaryData = [];
+            binaryData.push(response);
+            let downloadLink = document.createElement('a');
+            downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
+            downloadLink.setAttribute('download', 'pv_2019_2020');
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+        }
+    )
+	//console.log(this.authentificationService.getHeaders())
+    //this.httpClient.get("http://localhost:8091/pv/coordinateur/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe();
   }
   update(coordinateur:Coordinateur):Observable<number>{
     return  this.httpClient.put<number>(this.url,coordinateur,{headers:this.authentificationService.getHeaders()});
