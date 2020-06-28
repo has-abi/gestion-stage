@@ -6,6 +6,7 @@ import {Commentaire} from "../../models/commentaire.model";
 import {User} from "../../models/user.model";
 import {UserService} from "../../services/user.service";
 import {LocalStorageService} from "ngx-webstorage";
+import {Role} from "../../models/role.model";
 
 @Component({
   selector: 'app-forum',
@@ -32,6 +33,17 @@ export class ForumComponent implements OnInit {
 
   ngOnInit(): void {
     this.findAll();
+  }
+  get logedUser():User{
+    return this.localStorage.retrieve("logedUser");
+  }
+  checkAdmin(){
+    let roles:Array<Role> = this.logedUser.roles;
+    let check = false;
+    roles.forEach(r=>{
+      if(r.role == "ADMIN_ROLE") check = true;
+    })
+    return check;
   }
   profilePic(){
     const user = this.localStorage.retrieve("logedUser");

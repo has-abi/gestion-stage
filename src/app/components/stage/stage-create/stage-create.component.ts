@@ -112,6 +112,7 @@ export class StageCreateComponent implements OnInit {
     const user = this.localStorage.retrieve('logedUser')
     this.coordinateurService.findByUserId(user.id).subscribe(coord=>{
       this.stage.coordinateur= coord
+      console.log(this.stage)
       this.stageService.save(this.stage).subscribe(resp=>{
         console.log(this.stage)
         console.log(resp)

@@ -62,7 +62,7 @@ export class UserService {
   }
 
   searchUsers(search:string){
-    this.httpClient.get<Array<User>>(this.url+"/search?search=nom:*"+search+"* OR prenom:*"+search+"* OR email:*"+search+"* OR sexe:*"+search,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
+    this.httpClient.get<Array<User>>(this.url+"/search?search=nom:*"+search+"* OR prenom:*"+search+"* OR username:*"+search+"* OR sexe:*"+search,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.users = datas;
     })
   }

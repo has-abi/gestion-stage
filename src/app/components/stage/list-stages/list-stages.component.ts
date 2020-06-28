@@ -72,36 +72,38 @@ export class ListStagesComponent implements OnInit {
 
   ngOnInit(): void {
     this.stageService.tableElements = [];
-    const user = this.sessionStorage.retrieve("logedUser");
-    this.role = user.roles[0].role;
-    this.idCoord = user.id;
-	console.log(user);
-	console.log(this.role);
-    if(this.role == "COORDINATEUR_ROLE"){
-      this.findByCoordinateur(user.id);
-    }
-    if(this.role == "ADMIN_ROLE"){
-      this.findAllPages();
-    }
-    if(this.role == "ETUDIANT_ROLE"){
-    console.log("equals")
-      this.findByEtudiant(user.id);
-    }
-    if(this.role == "ENCADREUR_ROLE"){
-      this.findByEncadreur(user.id);
-    }
-    if(this.role == "JURY_ROLE"){
-      this.findByJury(user.id);
-    }
+    this.chargerStages();
   }
 get jwtToken(){
 	return this.authentificationService.jwtToken;
+}
+chargerStages(){
+  const user = this.sessionStorage.retrieve("logedUser");
+  this.role = user.roles[0].role;
+  this.idCoord = user.id;
+  if(this.role == "COORDINATEUR_ROLE"){
+    this.findByCoordinateur(user.id);
+  }
+  if(this.role == "ADMIN_ROLE"){
+    this.findAllPages();
+  }
+  if(this.role == "ETUDIANT_ROLE"){
+    console.log("equals")
+    this.findByEtudiant(user.id);
+  }
+  if(this.role == "ENCADREUR_ROLE"){
+    this.findByEncadreur(user.id);
+  }
+  if(this.role == "JURY_ROLE"){
+    this.findByJury(user.id);
+  }
 }
   deleteStage(stage:Stage){
       this.stageService.deleteByReference(stage.reference).subscribe(resp=>{
         if(resp>0){
           this.flashMessagesService.show("stage supprimer avec succée!", { cssClass: 'alert-success', timeout: 5000 });
-          this.stageService.stagePage.content.splice(this.stagePage.content.indexOf(stage,0),1);
+          this.stageService.tableElements =  [];
+          this.chargerStages();
         }else{
           this.flashMessagesService.show("stagee ne peut pas être suprpimer!!", { cssClass: 'alert-danger', timeout: 5000 });
         }
@@ -426,18 +428,5 @@ get jwtToken(){
     })
   }
 
-  pvOpen(){
-    window.open("http://localhost:8091/pv/coordinateur/id/{{idCoord}}?{{jwtToken}}");
-  }
-    DownloadWithJwtViaFormPost(url, id, token) {
-    var jwtInput = $('<input type="hidden" name="jwtToken">').val(this.authentificationService.jwtToken);
-    var idInput = $('<input type="hidden" name="id">').val(id);
-    $('<form method="post" target="_blank"></form>')
-      .attr("action", url)
-      .append(jwtInput)
-      .append(idInput)
-      .appendTo('body')
-      .submit()
-      .remove();
-  }
+
 }

@@ -76,7 +76,7 @@ export class EtudiantService {
     return this.http.put<number>(this.link,etudiant,{headers:this.authentificationService.getHeaders()});
   }
   search(seach:string){
-    const request = "search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.email:*"+seach+"* OR " +
+    const request = "search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.username:*"+seach+"* OR " +
       "cin:*"+seach+"* OR user.sexe:*"+seach+"* OR user.adress:*"+seach+"* OR codeAppoge:*"+seach+"* OR niveau:*"+seach+"*";
     this.http.get<Array<Etudiant>>(this.link+request,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.etudiants = datas;

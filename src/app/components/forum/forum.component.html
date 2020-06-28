@@ -1,115 +1,130 @@
 
-<div class="container my-2">
-
+<div class="mx-2 my-2">
   <div class="row">
-
-    <div class="col-md-12">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Chercher dans le forum"  >
-        <div class="input-group-append">
-          <button class="btn  btn-primary"><span class="fa fa-search"></span></button>
+  <div class="col-md-8">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Chercher dans le forum"  >
+          <div class="input-group-append">
+            <button class="btn  btn-primary"><span class="fa fa-search"></span></button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-md-12 my-4">
-      <flash-messages></flash-messages>
-      <div class="card my-2">
-        <div class="card-header  text-dark bg-light" >
-          <h1 class="d-inline"><span class="fa fa-paper-plane"></span> Vous avez un sujet Créer Le!</h1>
+      <div class="col-md-12 my-4">
+        <flash-messages></flash-messages>
+        <div class="card my-2">
+          <div class="card-header  text-dark bg-light" >
+            <h1 class="d-inline"><span class="fa fa-paper-plane"></span> Vous avez un sujet Créer Le!</h1>
             <span class="fa float-right" [class.fa-plus]="!ajouterSujet" [class.fa-minus]="ajouterSujet" (click)="ajouterSujet =!ajouterSujet"></span>
-        </div>
-        <div *ngIf="ajouterSujet" class="card-body">
-          <div class="row">
-            <div class="col-sm-10">
-              <textarea  cols="30" rows="5" class="form-control" [(ngModel)]="sujetForum.content">Sujet ...</textarea>
-            </div>
-            <div class="col-sm-2">
-              <button class="btn btn-primary btn-sm shadow-none  btn-block" (click)="create()">Publier <span class="fa fa-check"></span></button>
-              <button class="btn  btn-sm shadow-none btn-outline-primary mt-1 btn-block" (click)="ajouterSujet=false">Annuler <span class="fa fa-times"></span></button>
-            </div>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div *ngFor="let sujet of pageForum.content" class="col-12 p-2 m-3 bg-white ">
-      <div class="col-12 d-flex flex-row">
-        <div class="p-2">
-          <img src="{{picture}}" alt="photo" class="rounded-circle" height="40" width="40">
-        </div>
-        <div class="p-2">
-          <div class="font-weight-bold" style="color:#db7b04 ;">{{sujet.user.nom}} {{sujet.user.prenom}}</div>
-          <div class=" small text-secondary">Publier le- {{sujet.dateCreation|date:'medium'}}</div>
-        </div>
-      </div>
-      <div class="text-left col-12">{{sujet.content}}</div>
-      <div class="col-12">
-        <div class="btn-group float-right">
-          <button class="btn btn-light " (click)="addComment(sujet.id)"><i class="fa fa-commenting-o float-right" ></i> Commenter</button>
-        <div class="dropdown">
-          <button class="btn btn-light dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false" type="button" id="colsDropdown"><span class="fa fa-ellipsis-v"></span></button>
-          <ul class="dropdown-menu w-75" aria-labelledby="colsDropdown">
-            <li class="dropdown-item"><span class="fa fa-pencil"></span> Editer</li>
-            <li class="dropdown-item"><span class="fa fa-trash"></span> Supprimer</li>
-          </ul>
-        </div>
-        </div>
-      </div>
-      <div *ngIf="ajouterCommentaire.commenter && ajouterCommentaire.id == sujet.id" class="col-12">
-        <textarea class="form-control ml-1 shadow-none textarea" [(ngModel)]="comment.contenu"></textarea>
-        <div class="mt-2 text-right"><button class="btn btn-primary btn-sm shadow-none" type="button" (click)="createCommentaire(sujet)">Commenter</button><button (click)="addComment(sujet.id)" class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Annuler</button></div>
-      </div>
-      <div *ngIf="ajouterCommentaire.commenter && ajouterCommentaire.id == sujet.id" class="col-12">
-        <div  *ngFor="let c of sujet.commentaires" class="col-12 p-2 m-3 bg-secondary ">
-          <div class="col-12 d-flex flex-row">
-            <div class="p-2">
-              <img src="../../../assets/portofolio.jpg" alt="photo" class="rounded-circle" height="40" width="40">
-            </div>
-            <div class="p-2">
-              <div class="font-weight-bold" style="color:#db7b04 ;">{{c.user.nom}} {{c.user.prenom}}</div>
-              <div class=" small text-dark">Publier le- {{c.dateCreation|date:'medium'}}</div>
-            </div>
-          </div>
-          <div class="text-left col-12">{{c.contenu}}</div>
-          <div class="col-12">
-            <div class="btn-group float-right">
-              <div class="dropdown">
-                <button class="btn btn-light dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false" type="button" id="commDropdown"><span class="fa fa-ellipsis-v"></span></button>
-                <ul class="dropdown-menu w-75" aria-labelledby="commDropdown">
-                  <li class="dropdown-item"><span class="fa fa-pencil"></span> Editer</li>
-                  <li class="dropdown-item"><span class="fa fa-trash"></span> Supprimer</li>
-                </ul>
+          <div *ngIf="ajouterSujet" class="card-body">
+            <div class="row">
+              <div class="col-sm-10">
+                <textarea  cols="30" rows="5" class="form-control" [(ngModel)]="sujetForum.content">Sujet ...</textarea>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn btn-primary btn-sm shadow-none  btn-block" (click)="create()">Publier <span class="fa fa-check"></span></button>
+                <button class="btn  btn-sm shadow-none btn-outline-primary mt-1 btn-block" (click)="ajouterSujet=false">Annuler <span class="fa fa-times"></span></button>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div *ngFor="let sujet of pageForum.content" class="col-12 p-2 m-3 bg-white ">
+        <div class="col-12 d-flex flex-row">
+          <div class="p-2">
+            <img src="{{picture}}" alt="photo" class="rounded-circle" height="40" width="40">
+          </div>
+          <div class="p-2">
+            <div class="font-weight-bold" style="color:#db7b04 ;">{{sujet.user.nom}} {{sujet.user.prenom}}</div>
+            <div class=" small text-secondary">Publier le- {{sujet.dateCreation|date:'medium'}}</div>
+          </div>
+        </div>
+        <div class="text-left col-12">{{sujet.content}}</div>
+        <div class="col-12">
+          <div class="btn-group float-right">
+            <button class="btn btn-light " (click)="addComment(sujet.id)"><i class="fa fa-commenting-o float-right" ></i> Commenter</button>
+            <div class="dropdown">
+              <button class="btn btn-light dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false" type="button" id="colsDropdown"><span class="fa fa-ellipsis-v"></span></button>
+              <ul *ngIf="logedUser.id == sujet.user.id || checkAdmin() == true" class="dropdown-menu w-75" aria-labelledby="colsDropdown">
+                <li class="dropdown-item"><span class="fa fa-pencil"></span> Editer</li>
+                <li class="dropdown-item"><span class="fa fa-trash"></span> Supprimer</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="ajouterCommentaire.commenter && ajouterCommentaire.id == sujet.id" class="col-12">
+          <textarea class="form-control ml-1 shadow-none textarea" [(ngModel)]="comment.contenu"></textarea>
+          <div class="mt-2 text-right"><button class="btn btn-primary btn-sm shadow-none" type="button" (click)="createCommentaire(sujet)">Commenter</button><button (click)="addComment(sujet.id)" class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Annuler</button></div>
+        </div>
+        <div *ngIf="ajouterCommentaire.commenter && ajouterCommentaire.id == sujet.id" class="col-12">
+          <div  *ngFor="let c of sujet.commentaires" class="col-12 p-2 m-3 bg-secondary ">
+            <div class="col-12 d-flex flex-row">
+              <div class="p-2">
+                <img src="../../../assets/portofolio.jpg" alt="photo" class="rounded-circle" height="40" width="40">
+              </div>
+              <div class="p-2">
+                <div class="font-weight-bold" style="color:#db7b04 ;">{{c.user.nom}} {{c.user.prenom}}</div>
+                <div class=" small text-dark">Publier le- {{c.dateCreation|date:'medium'}}</div>
+              </div>
+            </div>
+            <div class="text-left col-12">{{c.contenu}}</div>
+            <div class="col-12">
+              <div class="btn-group float-right">
+                <div class="dropdown">
+                  <button class="btn btn-light dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false" type="button" id="commDropdown"><span class="fa fa-ellipsis-v"></span></button>
+                  <ul class="dropdown-menu w-75" aria-labelledby="commDropdown">
+                    <li class="dropdown-item"><span class="fa fa-pencil"></span> Editer</li>
+                    <li class="dropdown-item"><span class="fa fa-trash"></span> Supprimer</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 mb-2 d-flex justify-content-center align-items-center">
+        <nav *ngIf="!searching" class="text-center m-auto">
+          <ul  class="pagination">
+            <li class="page-item cursor" (click)="getIndexPage(0)"><a class="page-link" >premier</a></li>
+            <li class="page-item cursor" [class.disabled]="pageForum.first">
+              <a class="page-link"  aria-label="Previous" (click)="prevElements()" >
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            <li class="page-item cursor" *ngFor="let i of tableElements" (click)="getIndexPage(i)"><a class="page-link">{{i+1}}</a></li>
+
+            <li class="page-item cursor" (click)="nextElements()" [class.disabled]="pageForum.last">
+              <a class="page-link"  aria-label="Next" >
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+            <li class="page-item cursor"><span class="page-link text-dark"><span *ngIf="pageForum.last">{{pageForum.totalElements}}</span><span *ngIf="!pageForum.last">{{(pageForum.number+1)*size}}</span> de {{pageForum.totalElements}}</span></li>
+            <li class="page-item cursor" (click)="getIndexPage(pageForum.totalPages-1)"><a class="page-link" >dernier</a></li>
+          </ul>
+        </nav>
+      </div>
     </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header bg-light text-dark">
+        <h2><span class="fa fa-tasks"></span> Votre Sujets</h2>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
 
-    <div class="col-12 mb-2 d-flex justify-content-center align-items-center">
-      <nav *ngIf="!searching" class="text-center m-auto">
-        <ul  class="pagination">
-          <li class="page-item cursor" (click)="getIndexPage(0)"><a class="page-link" >premier</a></li>
-          <li class="page-item cursor" [class.disabled]="pageForum.first">
-            <a class="page-link"  aria-label="Previous" (click)="prevElements()" >
-              <span aria-hidden="true">&laquo;</span>
-              <span class="sr-only">Previous</span>
-            </a>
-          </li>
-          <li class="page-item cursor" *ngFor="let i of tableElements" (click)="getIndexPage(i)"><a class="page-link">{{i+1}}</a></li>
-
-          <li class="page-item cursor" (click)="nextElements()" [class.disabled]="pageForum.last">
-            <a class="page-link"  aria-label="Next" >
-              <span aria-hidden="true">&raquo;</span>
-              <span class="sr-only">Next</span>
-            </a>
-          </li>
-          <li class="page-item cursor"><span class="page-link text-dark"><span *ngIf="pageForum.last">{{pageForum.totalElements}}</span><span *ngIf="!pageForum.last">{{(pageForum.number+1)*size}}</span> de {{pageForum.totalElements}}</span></li>
-          <li class="page-item cursor" (click)="getIndexPage(pageForum.totalPages-1)"><a class="page-link" >dernier</a></li>
         </ul>
-      </nav>
+      </div>
     </div>
+  </div>
+
 
   </div>
 </div>
