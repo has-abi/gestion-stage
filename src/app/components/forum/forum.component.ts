@@ -19,6 +19,7 @@ export class ForumComponent implements OnInit {
   sort="desc";
   searchInput ="";
   searching = false;
+  updateSujet = false;
   ajouterSujet = false;
   ajouterCommentaire = {
    commenter :false,
@@ -27,10 +28,13 @@ export class ForumComponent implements OnInit {
   picture = ""
   comment = new Commentaire();
   user = new User();
+  logedUser:User;
   constructor(private forumService:ForumService,private flashMessagesService:FlashMessagesService,private userService:UserService,
               private localStorage:LocalStorageService) { }
 
   ngOnInit(): void {
+	  const user = this.localStorage.retrieve("logedUser");
+	  this.logedUser = user;
     this.findAll();
   }
   profilePic(){
@@ -101,6 +105,11 @@ export class ForumComponent implements OnInit {
         this.flashMessagesService.show('problème au cours de la modification!', { cssClass: 'alert-warning', timeout: 6000 })
       }
     })
+  }
+  
+  updateSujetF(s:SujetForum){
+	  this.updateSujet = !this.updateSujet;
+	  this.sujetForum = s;
   }
 
   removeCommentaire(c:Commentaire,sujet:SujetForum,i:number){

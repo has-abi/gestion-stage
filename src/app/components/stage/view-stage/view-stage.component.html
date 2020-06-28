@@ -417,10 +417,10 @@
     </div>
     <div class="card shadow-sm mt-3">
       <div class="card-header bg-dark text-white"><h1 class="d-inline"><span class="fa fa-file-pdf-o"></span> Rapport de stage</h1>
-        <span *ngIf="stage.rapport!=null && !stage.rapport.valider && !checkExpiredStage()" class="fa fa-pencil fa-2x float-right" style="cursor: pointer" (click)="updateStage.rapport = true"></span>
-        <span *ngIf="stage.rapport==null && !stage.rapport.valider" class="fa fa-plus-circle fa-2x float-right" style="cursor: pointer" data-toggle="modal" data-target="#ViewrapportModal"></span>
+        <span *ngIf="(stage.rapport || stage.rapport !=null) " class="fa fa-pencil fa-2x float-right" style="cursor: pointer" (click)="updateStage.rapport=!updateStage.rapport"></span>
+        <span *ngIf="(!stage.rapport || stage.rapport ==null) " class="fa fa-plus-circle fa-2x float-right" style="cursor: pointer" data-toggle="modal" data-target="#ViewrapportModal"></span>
       </div>
-      <div class="card-body">
+      <div *ngIf="stage.rapport" class="card-body">
         <div class="row">
           <div class="col-md-3"><b>Titre:</b> {{stage.rapport.document.titre}}</div>
           <div class="col-md-3"><b>Description:</b> {{stage.rapport.descreption}}</div>

@@ -120,7 +120,11 @@ export class StageCreateComponent implements OnInit {
           this.stage = new Stage();
           this.etudiantService.etudiants = new Array<Etudiant>();
           this.encadreurService.encadreurs = new Array<Encadreur>();
+		  this.etudiants.push(this.etudiant);
           this.stage.organismeAccueil =  null;
+		  this.ajouterEncadreur = false;
+		  this.ajouterStructure = false;
+		  this.ajouterSujet = false; 
         }else{
           this.flashMessagesService.show('il y\'a un problème dans la création du stage! ', { cssClass: 'alert-danger', timeout: 6000 })
         }

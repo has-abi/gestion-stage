@@ -36,7 +36,7 @@
     <div *ngFor="let sujet of pageForum.content" class="col-12 p-2 m-3 bg-white ">
       <div class="col-12 d-flex flex-row">
         <div class="p-2">
-          <img src="{{picture}}" alt="photo" class="rounded-circle" height="40" width="40">
+          <img src="http://localhost:8091/gestion-stage-api/user/image/{{sujet.user.photo}}" alt="photo" class="rounded-circle" height="40" width="40">
         </div>
         <div class="p-2">
           <div class="font-weight-bold" style="color:#db7b04 ;">{{sujet.user.nom}} {{sujet.user.prenom}}</div>
@@ -49,7 +49,7 @@
           <button class="btn btn-light " (click)="addComment(sujet.id)"><i class="fa fa-commenting-o float-right" ></i> Commenter</button>
         <div class="dropdown">
           <button class="btn btn-light dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false" type="button" id="colsDropdown"><span class="fa fa-ellipsis-v"></span></button>
-          <ul class="dropdown-menu w-75" aria-labelledby="colsDropdown">
+          <ul  class="dropdown-menu w-75" aria-labelledby="colsDropdown">
             <li class="dropdown-item"><span class="fa fa-pencil"></span> Editer</li>
             <li class="dropdown-item"><span class="fa fa-trash"></span> Supprimer</li>
           </ul>
