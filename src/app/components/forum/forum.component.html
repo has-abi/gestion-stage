@@ -7,7 +7,7 @@
       <div class="input-group">
         <input type="text" class="form-control" placeholder="Chercher dans le forum"  >
         <div class="input-group-append">
-          <button class="btn  text-white" style="background-color: #db7b04;;"><span class="fa fa-search"></span></button>
+          <button class="btn  btn-primary"><span class="fa fa-search"></span></button>
         </div>
       </div>
     </div>
@@ -15,7 +15,7 @@
     <div class="col-md-12 my-4">
       <flash-messages></flash-messages>
       <div class="card my-2">
-        <div class="card-header  text-white" style="background-color: #db7b04;">
+        <div class="card-header  text-dark bg-light" >
           <h1 class="d-inline"><span class="fa fa-paper-plane"></span> Vous avez un sujet Créer Le!</h1>
             <span class="fa float-right" [class.fa-plus]="!ajouterSujet" [class.fa-minus]="ajouterSujet" (click)="ajouterSujet =!ajouterSujet"></span>
         </div>

@@ -16,6 +16,10 @@ export class ConventionComponent implements OnInit {
   ngOnInit(): void {
 
   }
+  
+  getEtablissement(){
+	  
+  }
 
   get conventionStage(){
     return this.conventionService.convention;

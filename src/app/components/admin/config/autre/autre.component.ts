@@ -302,27 +302,27 @@ export class AutreComponent implements OnInit {
   }
 
   validateVille() {
-    return this.ville.nom.length == 0 || this.ville.pays.nom == "--SELECT--";
+    return (this.ville.nom == undefined || this.ville.nom.length == 0) || (this.ville.pays.nom == undefined || this.ville.pays.nom == "--SELECT--");
   }
 
   validateFiliere() {
-    return this.filiere.libelle.length == 0 || this.filiere.departement.libelle == "--SELECT--";
+    return (this.filiere.libelle == undefined || this.filiere.libelle.length == 0) || (this.filiere.departement.libelle == undefined || this.filiere.departement.libelle == "--SELECT--");
   }
 
   validatePays() {
-    return this.pay.nom.length == 0;
+    return (this.pay.nom == undefined || this.pay.nom.length == 0);
   }
 
   validateService() {
-    return this.service.type.length == 0;
+    return (this.service.type == undefined || this.service.type.length == 0);
   }
 
   validateType() {
-    return this.type.type.length == 0;
+    return (this.type.type == undefined || this.type.type.length == 0);
   }
 
   validateDep() {
-    return this.dep.libelle.length == 0;
+    return (this.dep.libelle == undefined || this.dep.libelle.length == 0 );
   }
   validateEtablissement(){
     return (this.etablissement.libelle == undefined || this.etablissement.libelle.length == 0) || (this.etablissement.adress == undefined || this.etablissement.adress.length == 0 ) || (this.etablissement.email == undefined || this.etablissement.email.length == 0 ) ||
