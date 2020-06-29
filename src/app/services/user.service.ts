@@ -5,7 +5,7 @@ import {Observable} from "rxjs";
 import {UserPage} from "../models/pageModels/user-page.model";
 import {Role} from "../models/role.model";
 import {AuthentificationService} from "./auth/authentification.service";
-
+import {LoginUser} from "../models/loginUser.model"
 @Injectable({
   providedIn: 'root'
 })
@@ -18,11 +18,18 @@ export class UserService {
   tableElements = [];
   url="http://localhost:8091/gestion-stage-api/user"
   constructor(private httpClient: HttpClient,private authentificationService:AuthentificationService) { }
-  confirmUser(username:string,code:string):Observable<number>{
-    return this.httpClient.get<number>(this.url+"/confirm/code/"+code+"/username/"+username);
+  confirmUser(cne:string,code:string):Observable<number>{
+    return this.httpClient.get<number>(this.url+"/confirm/code/"+code+"/cne/"+cne);
   }
   removeUser(id:number):Observable<number>{
     return this.httpClient.delete<number>(this.url+"/id/"+id,{headers:this.authentificationService.getHeaders()});
+  }
+  newUser(username:string,password:string,cne:string):Observable<number>{
+	  const user = new LoginUser();
+	  user.username = username;
+	  user.password = password;
+	  user.cne = cne;
+	  return this.httpClient.post<number>(this.url+"/newUser",user,{headers:this.authentificationService.getHeaders()});
   }
 
     getRoles(){
@@ -62,7 +69,7 @@ export class UserService {
   }
 
   searchUsers(search:string){
-    this.httpClient.get<Array<User>>(this.url+"/search?search=nom:*"+search+"* OR prenom:*"+search+"* OR email:*"+search+"* OR sexe:*"+search,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
+    this.httpClient.get<Array<User>>(this.url+"/search?search=nom:*"+search+"* OR prenom:*"+search+"* OR username:*"+search+"* OR sexe:*"+search,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.users = datas;
     })
   }

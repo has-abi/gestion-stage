@@ -6,6 +6,7 @@ import {Commentaire} from "../../models/commentaire.model";
 import {User} from "../../models/user.model";
 import {UserService} from "../../services/user.service";
 import {LocalStorageService} from "ngx-webstorage";
+import {Role} from "../../models/role.model";
 
 @Component({
   selector: 'app-forum',
@@ -19,45 +20,67 @@ export class ForumComponent implements OnInit {
   sort="desc";
   searchInput ="";
   searching = false;
-  updateSujet = false;
+  updateSujet = {
+	update:false,
+	id:0
+  };
   ajouterSujet = false;
   ajouterCommentaire = {
    commenter :false,
    id:0
   };
+  show={
+	  showSujet:false,
+	  id:0
+  }
+  updateC = {
+	  update:false,
+	  id:0
+  }
   picture = ""
   comment = new Commentaire();
+  commentToUpdate = new Commentaire();
   user = new User();
-  logedUser:User;
+
   constructor(private forumService:ForumService,private flashMessagesService:FlashMessagesService,private userService:UserService,
               private localStorage:LocalStorageService) { }
 
   ngOnInit(): void {
-	  const user = this.localStorage.retrieve("logedUser");
-	  this.logedUser = user;
     this.findAll();
+    this.forumService.findByUserId(this.logedUser.id);
+
   }
-  profilePic(){
-    const user = this.localStorage.retrieve("logedUser");
-    if(user.photo != null){
-      this.picture = 'http://localhost:8091/gestion-stage-api/user/image/'+user.photo;
-    }else{
-      this.picture = '../../../../assets/unnamed.png';
-    }
+  get logedUser():User{
+    return this.localStorage.retrieve("logedUser");
   }
+  get userForums():Array<SujetForum>{
+    return this.forumService.userSujets;
+  }
+  checkAdmin(){
+    let roles:Array<Role> = this.logedUser.roles;
+    let check = false;
+    roles.forEach(r=>{
+      if(r.role == "ADMIN_ROLE") check = true;
+    })
+    return check;
+  }
+
   search(){
+    console.log(this.searchInput)
     if(this.searchInput.length == 0){
       this.findAll();
       this.forumService.tableElements = [];
     this.searching =false;
     }else{
-      this.forumService.searchSujet(this.searchInput);
-      this.pageForum.content = this.sujetForums;
-      this.searching = true;
+      this.forumService.searchSujet(this.searchInput).subscribe(datas=>{
+		this.searching = true;
+		this.pageForum.content = datas;
+	  });
     }
 
   }
   findAll(){
+    this.forumService.tableElements = [];
     return this.forumService.findAllSujets(this.page,this.size,this.sort);
   }
   get pageForum(){
@@ -84,6 +107,7 @@ export class ForumComponent implements OnInit {
     }
   }
   getIndexPage(i:number){
+    console.log(this.forumService.forumPage.content)
     if(i<=this.pageForum.totalPages){
       this.page = i;
       this.findAll();
@@ -97,19 +121,33 @@ export class ForumComponent implements OnInit {
     this.findAll();
     this.forumService.tableElements = [];
   }
-  updateCommentaire(c:Commentaire){
+  updateCommentaire(c:Commentaire,s:SujetForum){
+	  c.sujetForum = this.cloneSujet(s);
     this.forumService.updateCommentaire(c).subscribe(resp=>{
       if(resp>0){
+		this.updateC.update = false;
         this.flashMessagesService.show('commentaire est modifier avec succée!', { cssClass: 'alert-light', timeout: 6000 })
       }else{
         this.flashMessagesService.show('problème au cours de la modification!', { cssClass: 'alert-warning', timeout: 6000 })
       }
     })
   }
-  
+  cloneSujet(s:SujetForum):SujetForum{
+	  const sujet:SujetForum = new SujetForum();
+	  sujet.id = s.id;
+	  sujet.reference = s.reference;
+	  return sujet;
+  }
+	updateComment(c:Commentaire){
+		this.commentToUpdate = c;
+		this.updateC.update = true;
+		this.updateC.id = c.id;
+	}
   updateSujetF(s:SujetForum){
-	  this.updateSujet = !this.updateSujet;
-	  this.sujetForum = s;
+	  this.updateSujet.update = !this.updateSujet.update;
+	  this.updateSujet.id = s.id;
+	  console.log(this.updateSujet);
+	  this.forumService.sujetForum = s;
   }
 
   removeCommentaire(c:Commentaire,sujet:SujetForum,i:number){
@@ -125,11 +163,13 @@ export class ForumComponent implements OnInit {
 
   createCommentaire(sujet:SujetForum){
     this.comment.sujetForum = sujet;
+    this.comment.dateCreation = new Date();
     this.comment.user =  this.localStorage.retrieve("logedUser");
     this.forumService.createCommentaire(this.comment).subscribe(resp=>{
       if(resp>0){
         this.pageForum.content[this.pageForum.content.indexOf(sujet)].commentaires.push(this.comment);
-        this.ajouterCommentaire.commenter = false;
+        this.forumService.findByUserId(this.logedUser.id);
+		this.comment = new Commentaire();
         this.flashMessagesService.show('commentaire est publier avec succée!', { cssClass: 'alert-light', timeout: 6000 })
       }else{
         this.flashMessagesService.show('problème au cours de publication!', { cssClass: 'alert-warning', timeout: 6000 })
@@ -138,11 +178,13 @@ export class ForumComponent implements OnInit {
   }
   create(){
 	 this.forumService.sujetForum.user = this.localStorage.retrieve("logedUser");
+	 this.forumService.sujetForum.dateCreation = new Date();
   this.forumService.save().subscribe(resp=>{
     if(resp>0){
-      this.pageForum.content.push(this.sujetForum);
       this.ajouterSujet = false;
       this.flashMessagesService.show('sujet est publier avec succée!', { cssClass: 'alert-light', timeout: 6000 })
+      this.findAll();
+      this.forumService.findByUserId(this.logedUser.id);
     }else{
       this.flashMessagesService.show('problème au cours de la publication!', { cssClass: 'alert-warning', timeout: 6000 })
     }
@@ -153,6 +195,9 @@ export class ForumComponent implements OnInit {
 	this.forumService.sujetForum.user = this.localStorage.retrieve("logedUser");
     this.forumService.update().subscribe(resp=>{
       if(resp>0){
+		  this.updateSujet.update = false;
+		  this.updateSujet.id = 0;
+		  this.forumService.sujetForum = new SujetForum();
         this.flashMessagesService.show('sujet est modifier avec succée!', { cssClass: 'alert-light', timeout: 6000 })
       }else{
         this.flashMessagesService.show('problème au cours de la modification!', { cssClass: 'alert-warning', timeout: 6000 })
@@ -163,13 +208,15 @@ export class ForumComponent implements OnInit {
   delete(sujet:SujetForum){
     this.forumService.removeByRef(sujet.reference).subscribe(resp=>{
       if(resp>0){
-        this.pageForum.content.splice(this.pageForum.content.indexOf(sujet),1);
+        this.findAll();
+        this.forumService.findByUserId(this.logedUser.id)
         this.flashMessagesService.show('sujet est supprimer avec succée!', { cssClass: 'alert-light', timeout: 6000 })
       }else{
         this.flashMessagesService.show('problème au cours de suppression!', { cssClass: 'alert-warning', timeout: 6000 })
       }
     })
   }
+
   addComment(id:number){
     if(this.ajouterCommentaire.commenter){
       this.ajouterCommentaire.id =0;
@@ -178,4 +225,24 @@ export class ForumComponent implements OnInit {
     }
     this.ajouterCommentaire.commenter = !this.ajouterCommentaire.commenter;
   }
+
+  countComments(cs:Array<Commentaire>){
+    return cs.length;
+  }
+  showSujet(s:SujetForum){
+		this.show.showSujet = true;
+		this.show.id = s.id;
+		this.pageForum.content = [];
+		this.pageForum.content.push(s);
+		this.searching = true;
+		this.ajouterCommentaire.commenter = true;
+		this.ajouterCommentaire.id = s.id;
+  }
+  refresh(){
+	  this.show.showSujet = false; 
+	  this.ajouterCommentaire.commenter = false;
+	  this.findAll();
+  }
+
 }
+

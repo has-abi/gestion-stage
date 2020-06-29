@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
         this.sessionStorage.store('jwt',jwt);
         this.authentificationService.findByEmail(this.user.username);
       },error => {
-        console.log("error")
+        this.authentificationService.loginError = "E-mail ou mot de pass incorrect(s)!"
       })
     }
   }

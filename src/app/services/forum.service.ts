@@ -14,6 +14,7 @@ export class ForumService {
   private urlComment = "http://localhost:8091/gestion-stage-api/commentaire/"
   private _sujetForum:SujetForum;
   private _sujetForums:Array<SujetForum>;
+  private _userSujets:Array<SujetForum>;
   private _forumPage:ForumPage;
   private _commentaire:Commentaire;
   private _commentaires:Array<Commentaire>;
@@ -33,22 +34,29 @@ export class ForumService {
       this.sujetForum = res;
     })
   }
+  findByUserId(id:number){
+    this.http.get<Array<SujetForum>>(this.url+"user/id/"+id).subscribe(datas=>{
+      this._userSujets = datas;
+    });
+  }
   findByContentContains(content:string){
     this.http.get<Array<SujetForum>>(this.url+"content/"+content,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.sujetForums = datas;
     })
   }
 
-  searchSujet(search:string){
-    this.http.get<Array<SujetForum>>(this.url+"search?search=content:*"+search+"*",{headers:this.authentificationService.getHeaders()});
+  searchSujet(search:string):Observable<Array<SujetForum>>{
+	 
+    return this.http.get<Array<SujetForum>>(this.url+"search?search=content:*"+search+"*",{headers:this.authentificationService.getHeaders()});
+	
   }
 
   save():Observable<number>{
     this.sujetForum.reference = this.getReference();
-    return  this.http.post<number>(this.url,this.sujetForum);
+    return  this.http.post<number>(this.url,this.sujetForum,{headers:this.authentificationService.getHeaders()});
   }
   update():Observable<number>{
-    return this.http.put<number>(this.url,this.sujetForum);
+    return this.http.put<number>(this.url,this.sujetForum,{headers:this.authentificationService.getHeaders()});
   }
 
   removeByRef(ref:string):Observable<number>{
@@ -148,5 +156,17 @@ export class ForumService {
   getReference(){
     const date = new Date();
     return "sujet"+date.getTime();
+  }
+
+
+  get userSujets(): Array<SujetForum> {
+    if(this._userSujets == null){
+      this._userSujets = new Array<SujetForum>();
+    }
+    return this._userSujets;
+  }
+
+  set userSujets(value: Array<SujetForum>) {
+    this._userSujets = value;
   }
 }

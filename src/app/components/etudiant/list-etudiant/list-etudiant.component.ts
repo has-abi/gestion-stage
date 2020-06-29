@@ -68,8 +68,8 @@ export class ListEtudiantComponent implements OnInit {
       this.etudiantService.search(this.searchInput);
       this.pageEtudiant.content = this.etudiants;
     }else{
-      this.findByCoordinateur();
       this.etudiantService.tableElements = [];
+      this.findByCoordinateur();
       this.searching = false;
     }
   }
@@ -78,9 +78,11 @@ export class ListEtudiantComponent implements OnInit {
   }
   changeOrder(order:string,prop:string){
     if(order=="asc" && prop == "id"){
+      this.etudiantService.tableElements =  [];
       this.etudiantService.findByCoordinateur(this.id,this.page,this.size,"asc");
     }
     if(order=="desc" && prop == "id"){
+      this.etudiantService.tableElements =  [];
       this.etudiantService.findByCoordinateur(this.id,this.page,this.size,"desc");
     }
     this.tableOrder.order = order;

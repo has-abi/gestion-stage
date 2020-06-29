@@ -27,7 +27,12 @@ export class EtudiantService {
     return this.http.get<Etudiant>(this.link+"user/id/"+id,{headers:this.authentificationService.getHeaders()});
   }
   sendCode(cne:string,username:string){
-    this.http.get("http://localhost:8091/gestion-stage-api/mail/username/"+username+"/cne/"+cne);
+	  console.log(cne);
+	  console.log(username);
+	  console.log("code sended");
+    this.http.get("http://localhost:8091/gestion-stage-api/mail/username/"+username+"/cne/"+cne).subscribe(resp=>{
+			console.log(resp);
+	});
   }
   confirmEtudiant(cne:string,codeAppoge:string):Observable<number>{
     return this.http.get<number>(this.link+"confirm/cne/"+cne+"/codeAppoge/"+codeAppoge);
@@ -76,7 +81,7 @@ export class EtudiantService {
     return this.http.put<number>(this.link,etudiant,{headers:this.authentificationService.getHeaders()});
   }
   search(seach:string){
-    const request = "search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.email:*"+seach+"* OR " +
+    const request = "search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.username:*"+seach+"* OR " +
       "cin:*"+seach+"* OR user.sexe:*"+seach+"* OR user.adress:*"+seach+"* OR codeAppoge:*"+seach+"* OR niveau:*"+seach+"*";
     this.http.get<Array<Etudiant>>(this.link+request,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.etudiants = datas;

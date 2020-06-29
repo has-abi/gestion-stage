@@ -88,9 +88,11 @@ export class UtilisateurTableComponent implements OnInit {
   }
 
   search(){
+    console.log(this.searchInput.length)
     if(this.searchInput.length == 0){
       this.findAll();
       this.userService.tableElements = [];
+      this.searching =  false;
     }
     else{
       if(this.searchCretaria == "1"){
@@ -105,14 +107,16 @@ export class UtilisateurTableComponent implements OnInit {
     }
   }
   changeOrder(order:string,prop:string){
-    this.userService.tableElements = [];
+
     if(order=="asc" && prop == "id"){
+      this.userService.tableElements = [];
       this.userService.findAll(this.page,this.size,"asc");
     }
     if(order=="desc" && prop == "id"){
       this.userService.findAll(this.page,this.size,"desc");
     }if(order=="asc" && prop == "nom") {
       this.userService.findAll(this.page,this.size,"nom");
+      this.userService.tableElements = [];
     }
   }
   update(user:User){

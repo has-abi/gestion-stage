@@ -89,7 +89,6 @@ export class AuthentificationService {
   }
 
   getHeaders():HttpHeaders{
-    console.log(this.jwtToken)
     const headers = new HttpHeaders({'Authorization':this.jwtToken});
     return  headers;
   }

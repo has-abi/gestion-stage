@@ -58,13 +58,24 @@ export class RegisterComponent implements OnInit {
           this.flashMessagesService.show('Erreur dans le CNE ou le code d\'appogé!', { cssClass: 'alert-danger', timeout: 6000 })
         }
       }else if (this.etudConfirm && !this.emailconfirm){
-        this.etudiantService.sendCode(formData.registerEmail,this.verifiedCne);
+        this.etudiantService.sendCode(this.verifiedCne,formData.registerEmail);
         this.emailconfirm = true;
         this.verifiedEmail = formData.registerEmail;
       }else {
-        this.userService.confirmUser(this.verifiedEmail,formData.codeConfirm).subscribe(resp=>{
+        this.userService.confirmUser(this.verifiedCne,formData.codeConfirm).subscribe(resp=>{
+			console.log(resp);
           if(resp>0){
-            this.router.navigate(['/login']);
+			  console.log(this.verifiedEmail);
+			  console.log(formData.password);
+			  console.log(this.verifiedCne);
+			  this.userService.newUser(this.verifiedEmail,formData.password,this.verifiedCne).subscribe(response=>{
+				  if(response>0){
+					   this.router.navigate(['/login']);
+				  }else{
+					   this.flashMessagesService.show('Un erreur est survenu lors de l\'inscription vérifier votre information et réssayer! ', { cssClass: 'alert-danger', timeout: 6000 })
+				  }
+			  })
+           
           }else{
             this.flashMessagesService.show('Le code de confirmation est incorrect!', { cssClass: 'alert-danger', timeout: 6000 })
           }

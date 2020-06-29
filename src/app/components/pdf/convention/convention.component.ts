@@ -2,6 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import {ConventionService} from "../../../services/convention.service";
+import {ConfigurationService} from "../../../services/configuration.service";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -10,15 +11,21 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
   styleUrls: ['./convention.component.css']
 })
 export class ConventionComponent implements OnInit {
-
-  constructor(private conventionService:ConventionService) { }
+  nomDoyen;
+  prenomDoyen;
+  constructor(private conventionService:ConventionService,private configurationService:ConfigurationService) { }
 
   ngOnInit(): void {
-
+    this.configurationService.getEtablissement();
+    this.reformDoyen();
   }
-  
-  getEtablissement(){
-	  
+  reformDoyen(){
+    const doyen:string[]  =  this.etablisment.doyen.split(" ");
+    this.prenomDoyen = doyen[0];
+    this.nomDoyen = doyen[1];
+  }
+  get etablisment(){
+    return this.configurationService.etablisement;
   }
 
   get conventionStage(){
@@ -47,11 +54,11 @@ export class ConventionComponent implements OnInit {
           {text:'CONVENTION DE STAGE',fontSize:18.1,alignment:'center',bold:true,lineHeight:2},
           {text:'Article 1 : Objet de la convention',fontSize:12.1,bold:true},
           {text:'La présente convention de stage a pour objet de  régler les rapports entre :',fontSize:11.1},
-          {text:'- La Faculté des Sciences et Techniques de Marrakech, représentée par son Doyen Monsieur Moha',fontSize:11.1,margin:[0,20,0,0]},
-          {text:'TAOURIRTE',fontSize:11.1},
-          {text:'Adresse            : BP 549, AV. Abdelkrim El khattabi, Guéliz, Marrakech, Maroc,',fontSize:11.1},
-          {text:'Téléphone        : +212 524 43 34 04',fontSize:11.1},
-          {text:'Fax                  :+212 524 43 31 70',fontSize:11.1},
+          {text:'- '+this.etablisment.libelle+' , représentée par son Doyen Monsieur '+this.prenomDoyen,fontSize:11.1,margin:[0,20,0,0]},
+          {text:this.nomDoyen,fontSize:11.1},
+          {text:'Adresse            : '+this.etablisment.adress+',',fontSize:11.1},
+          {text:'Téléphone        : '+this.etablisment.tele_gsm,fontSize:11.1},
+          {text:'Fax                  : '+this.etablisment.tele_fix,fontSize:11.1},
           {text:'et désignée ci après par Etablissement.',fontSize:11.1},
           {text:'Et',fontSize:12.1},
           {text:'- L’Organisme ci-dessous mentionné :',fontSize:11.1,margin:[0,20,0,0]},
