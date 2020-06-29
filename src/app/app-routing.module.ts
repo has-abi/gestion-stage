@@ -54,6 +54,7 @@ const routes: Routes = [
       {path: "profile",component:EtudiantMainComponent},
       {path: "stage/archive",component:ListStagesComponent},
       {path: "tache/archive",component:ArchiveTachesComponent},
+      {path: "forum",component:ForumComponent},
       {path: '**',redirectTo:'etudiant/profile',pathMatch: 'full'}
     ]
   },

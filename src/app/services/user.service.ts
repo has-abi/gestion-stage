@@ -15,6 +15,7 @@ export class UserService {
   private _users:Array<User>;
   private _userPage:UserPage;
   private _roles:Array<Role>;
+  private _userToRegister:LoginUser;
   tableElements = [];
   url="http://localhost:8091/gestion-stage-api/user"
   constructor(private httpClient: HttpClient,private authentificationService:AuthentificationService) { }
@@ -25,11 +26,13 @@ export class UserService {
     return this.httpClient.delete<number>(this.url+"/id/"+id,{headers:this.authentificationService.getHeaders()});
   }
   newUser(username:string,password:string,cne:string):Observable<number>{
+    console.log("passed here")
 	  const user = new LoginUser();
 	  user.username = username;
 	  user.password = password;
 	  user.cne = cne;
-	  return this.httpClient.post<number>(this.url+"/newUser",user,{headers:this.authentificationService.getHeaders()});
+    console.log(user);
+	  return this.httpClient.post<number>(this.url+"/newUser",user);
   }
 
     getRoles(){
@@ -127,4 +130,15 @@ export class UserService {
     this._userPage = value;
   }
 
+
+  get userToRegister(): LoginUser {
+    if(this._userToRegister == null){
+      this._userToRegister =  new LoginUser();
+    }
+    return this._userToRegister;
+  }
+
+  set userToRegister(value: LoginUser) {
+    this._userToRegister = value;
+  }
 }

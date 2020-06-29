@@ -50,6 +50,7 @@ export class RegisterComponent implements OnInit {
             if(resp>0){
               this.etudConfirm = true;
               this.verifiedCne = formData.cne;
+              this.userToRegister.cne =  formData.cne;
             }else{
               this.flashMessagesService.show('Erreur dans la confirmation de l\'étudiant!', { cssClass: 'alert-danger', timeout: 6000 })
             }
@@ -58,24 +59,26 @@ export class RegisterComponent implements OnInit {
           this.flashMessagesService.show('Erreur dans le CNE ou le code d\'appogé!', { cssClass: 'alert-danger', timeout: 6000 })
         }
       }else if (this.etudConfirm && !this.emailconfirm){
+        console.log(this.verifiedCne);
+        console.log(this.verifiedEmail);
         this.etudiantService.sendCode(this.verifiedCne,formData.registerEmail);
         this.emailconfirm = true;
         this.verifiedEmail = formData.registerEmail;
+        this.userToRegister.username = formData.registerEmail;
+        this.userToRegister.password = formData.password;
       }else {
         this.userService.confirmUser(this.verifiedCne,formData.codeConfirm).subscribe(resp=>{
 			console.log(resp);
           if(resp>0){
-			  console.log(this.verifiedEmail);
-			  console.log(formData.password);
-			  console.log(this.verifiedCne);
-			  this.userService.newUser(this.verifiedEmail,formData.password,this.verifiedCne).subscribe(response=>{
+            console.log(this.userToRegister)
+			  this.userService.newUser(this.userToRegister.username,this.userToRegister.password,this.userToRegister.cne).subscribe(response=>{
 				  if(response>0){
 					   this.router.navigate(['/login']);
 				  }else{
 					   this.flashMessagesService.show('Un erreur est survenu lors de l\'inscription vérifier votre information et réssayer! ', { cssClass: 'alert-danger', timeout: 6000 })
 				  }
 			  })
-           
+
           }else{
             this.flashMessagesService.show('Le code de confirmation est incorrect!', { cssClass: 'alert-danger', timeout: 6000 })
           }
@@ -96,6 +99,9 @@ export class RegisterComponent implements OnInit {
   }
   get codeConfirm(){
     return this.registerForm.get("codeConfirm")
+  }
+  get userToRegister(){
+    return this.userService.userToRegister;
   }
 
 }

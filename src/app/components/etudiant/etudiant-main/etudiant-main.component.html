@@ -9,9 +9,11 @@
           <div class="card">
             <div class="card-header bg-dark text-white"><b>Sujet :</b> {{stage.sujet}}</div>
             <div class="card-body">
-              <ul class="list-group">
+              <ul *ngIf="!stage.organismeAccueil || stage.organismeAccueil != null" class="list-group">
                 <li class="list-group-item"><b><span class="fa fa-building"></span> Structure d'accueil:</b>
-                  {{stage.organismeAccueil.raisonSociale}} <span class="fa fa-caret-down" (click)="showOrganisme = !showOrganisme" [class.fa-caret-down]="!showOrganisme" [class.fa-caret-up]="showOrganisme" ></span>
+                  <span *ngIf="stage.organismeAccueil || stage.organismeAccueil != null">{{stage.organismeAccueil.raisonSociale}}</span>
+                  <span *ngIf="stage.organismeAccueil || stage.organismeAccueil != null" class="fa fa-caret-down" (click)="showOrganisme = !showOrganisme" [class.fa-caret-down]="!showOrganisme" [class.fa-caret-up]="showOrganisme" ></span>
+                  <button *ngIf="!stage.organismeAccueil || stage.organismeAccueil == null" data-toggle="modal" data-target="#organismeModal"  class="btn btn-sm btn-light shadow-sm float-right" data-toggle="tooltip" data-placement="top" title="Ajouter la structure d'accueil"><span class="fa fa-plus"></span></button>
                   <ul *ngIf="showOrganisme" class="list-group list-group-flush">
                     <li class="list-group-item"><span class="fa fa-envelope"></span> {{stage.organismeAccueil.email}}</li>
                     <li class="list-group-item"><span class="fa fa-address-card"></span> {{stage.organismeAccueil.adress}}</li>
@@ -21,18 +23,21 @@
                   </ul>
                 </li>
                 <li class="list-group-item"><b><span class="fa fa-user-circle"></span> Encadrant:</b>
-                  <span *ngFor="let e of stage.stageEncadreurs">
+                  <span *ngIf="stage.stageEncadreurs.length==0" class="badge badge-secondary">pas encore affecter</span>
+                  <div *ngIf="stage.stageEncadreurs.length>0">
+                      <span *ngFor="let e of stage.stageEncadreurs">
                     <span class="mx-3">{{e.encadreur.user.nom}} {{e.encadreur.user.prenom}} <span class="fa " [class.fa-chevron-circle-down]="!showEnca" [class.fa-chevron-circle-up]="showEnca" (click)="showEncadreur(e.encadreur)"></span></span>
                   </span>
-                  <ul *ngIf="showEnca" class="list-group list-group-flush">
-                    <li class="list-group-item text-center">{{EncadreurToBeShowen.type}}</li>
-                    <li class="list-group-item text-center"><span class="fa fa-envelope"></span> {{EncadreurToBeShowen.user.username}}</li>
-                    <li class="list-group-item text-center"><span class="fa fa-phone"></span> {{EncadreurToBeShowen.user.tele}}</li>
-                  </ul>
+                    <ul *ngIf="showEnca" class="list-group list-group-flush">
+                      <li class="list-group-item text-center">{{EncadreurToBeShowen.type}}</li>
+                      <li class="list-group-item text-center"><span class="fa fa-envelope"></span> {{EncadreurToBeShowen.user.username}}</li>
+                      <li class="list-group-item text-center"><span class="fa fa-phone"></span> {{EncadreurToBeShowen.user.tele}}</li>
+                    </ul>
+                  </div>
                 </li>
                 <li class="list-group-item"><b><span class="fa fa-calendar"></span> Date debut de stage:</b> {{stage.dateDebut}}</li>
                 <li class="list-group-item"><b><span class="fa fa-calendar"></span> Date fin de stage:</b> {{stage.dateFin}}</li>
-                <li *ngIf="stage.rapport!=null" class="list-group-item"><b><span class="fa fa-file-pdf-o"></span> Rapport:</b>
+                <li *ngIf="stage.rapport && stage.rapport!=null" class="list-group-item"><b><span class="fa fa-file-pdf-o"></span> Rapport:</b>
                   <a href="http://localhost:8091/files/{{stage.rapport.document.reference}}" class="btn btn-sm btn-light shadow-none mx-2"><span class="fa fa-download "></span></a>
                   <a target="_blank"  href="http://localhost:8091/file/display/{{stage.rapport.document.reference}}" class="btn btn-sm btn-light shadow-none"><span class="fa fa-eye" ></span></a>
                   <span *ngIf="!stage.statu" class="fa fa-pencil mx-2" data-toggle="modal" data-target="#ViewrapportModal" (click)="diaplayRapport(stage.rapport)"></span>
@@ -43,7 +48,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="stage.rapport == null" class="card-footer"><button class="btn btn-block btn-outline-success"  data-toggle="modal" data-target="#rapportModal" (click)="setStageRef(stage.reference)">Uploder Le rapport  <i class="fa fa-upload"></i></button></div>
+        <div *ngIf="stage.rapport == null && stage.statu" class="card-footer"><button class="btn btn-block btn-outline-success"  data-toggle="modal" data-target="#rapportModal" (click)="setStageRef(stage.reference)">Uploder Le rapport  <i class="fa fa-upload"></i></button></div>
       </div>
     </div>
     <div class="col-md-6">
@@ -52,66 +57,70 @@
           <h2><i class="fa fa-tasks"></i> Tâches</h2>
         </div>
         <div class="card-body">
-          <div *ngFor="let tache of taches" class="card">
-            <div class="card-header bg-dark text-white"><b>Titre:</b> {{tache.titre}}</div>
-            <div class="card-body">
-              <p><b>Affecter par: </b> <i class="fa fa-user"></i> {{tache.encadreur.user.nom}}  {{tache.encadreur.user.prenom}}</p>
-              <p><b><i class="fa fa-calendar mx-2"></i>Crée Le: </b>{{tache.dateCreation | date:'mediumDate'}} <b><span class="fa fa-calendar-check-o"></span> Date limit: </b>{{tache.dateLimite | date:'mediumDate'}} </p>
-              <p><b>Statu:</b> <span *ngIf="tache.effectuer"><span  class="badge badge-danger">Terminer</span></span> <span *ngIf="!tache.effectuer"><span class="badge badge-success">En cours</span>  <button class="btn btn-sm btn-success shadow-none float-right"><span class="fa fa-check" ></span></button></span>  </p>
-              <p><b><span class="fa fa-file-pdf-o"></span> Rapport du tâche:</b> <span *ngIf="tache.rapportTache == null"> <span class="btn btn-sm btn-primary" data-toggle="modal" data-target="#rapportModal" (click)="tacheRef(tache.reference)"><span class="fa fa-upload"></span></span></span>
-                <span *ngIf="tache.rapportTache!=null"><a  href="http://localhost:8091/files/{{tache.rapportTache.document.reference}}" class="btn btn-sm btn-light shadow-none">
+          <div *ngIf="taches.length == 0" class="alert alert-light">Accune tâche affectée!</div>
+          <div *ngIf="taches.length>0">
+            <div *ngFor="let tache of taches" class="card">
+              <div class="card-header bg-dark text-white"><b>Titre:</b> {{tache.titre}}</div>
+              <div class="card-body">
+                <p><b>Affecter par: </b> <i class="fa fa-user"></i> {{tache.encadreur.user.nom}}  {{tache.encadreur.user.prenom}}</p>
+                <p><b><i class="fa fa-calendar mx-2"></i>Crée Le: </b>{{tache.dateCreation | date:'mediumDate'}} <b><span class="fa fa-calendar-check-o"></span> Date limit: </b>{{tache.dateLimite | date:'mediumDate'}} </p>
+                <p><b>Statu:</b> <span *ngIf="tache.effectuer"><span  class="badge badge-danger">Terminer</span></span> <span *ngIf="!tache.effectuer"><span class="badge badge-success">En cours</span>  <button class="btn btn-sm btn-success shadow-none float-right"><span class="fa fa-check" ></span></button></span>  </p>
+                <p><b><span class="fa fa-file-pdf-o"></span> Rapport du tâche:</b> <span *ngIf="tache.rapportTache == null"> <span class="btn btn-sm btn-primary" data-toggle="modal" data-target="#rapportModal" (click)="tacheRef(tache.reference)"><span class="fa fa-upload"></span></span></span>
+                  <span *ngIf="tache.rapportTache!=null"><a  href="http://localhost:8091/files/{{tache.rapportTache.document.reference}}" class="btn btn-sm btn-light shadow-none">
                   <span class="fa fa-download"></span></a>
                   <a class="btn btn-sm btn-light shadow-none mx-2" target="_blank"  href="http://localhost:8091/file/display/{{tache.rapportTache.document.reference}}">
                     <span class="fa fa-eye"></span></a> <span *ngIf="!tache.valider" class="fa fa-pencil" (click)="updateRapportTache(tache)">
 
                   </span> <span *ngIf="!tache.valider && tache.effectuer" class="badge badge-warning mx-1">Pas encore valider</span> <span *ngIf="tache.valider && tache.effectuer" class="badge badge-success">Validé!</span></span>
-              </p>
-              <div class="d-flex justify-content-end">
-                <button class="btn btn-sm shadow-none btn-light" (click)="showContenu(tache)"><span class="fa fa-bars"></span></button>
-              </div>
-              <div *ngIf="showContent.show && showContent.tache == tache.reference" class="row p-2 bg-light"  [innerHTML]="tache.contenu">
+                </p>
+                <div class="d-flex justify-content-end">
+                  <button class="btn btn-sm shadow-none btn-light" (click)="showContenu(tache)"><span class="fa fa-bars"></span></button>
+                </div>
+                <div *ngIf="showContent.show && showContent.tache == tache.reference" class="row p-2 bg-light"  [innerHTML]="tache.contenu">
 
-              </div>
-              <div *ngIf="updateRT.update && updateRT.tache == tache.reference" class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
+                </div>
+                <div *ngIf="updateRT.update && updateRT.tache == tache.reference" class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
 
                       <label for="titre">Titre:</label>
                       <input type="text" class="form-control" id="titre" [(ngModel)]="rapportTache.document.titre">
 
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="form-group">
+                  <div class="col-md-12">
+                    <div class="form-group">
                       <label for="desc">Description:</label>
                       <input type="text" class="form-control" id="desc" [(ngModel)]="rapportTache.descreption">
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <div *ngIf="currentFile" class="progress">
-                      <div
-                        class="progress-bar progress-bar-info progress-bar-striped"
-                        role="progressbar"
-                        attr.aria-valuenow="{{ progress }}"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        [ngStyle]="{ width: progress + '%' }"
-                      >
-                        {{ progress }}%
-                      </div>
                     </div>
-                    <label class="btn btn-default">
-                      <input type="file" (change)="selectFile($event)"  name="file" id="file" />
-                    </label>
-                      <div class="alert alert-dark ">{{rapportTache.document.reference}}</div>
-                    <div class="alert alert-light alert-dismissible" role="alert">{{ message }}</div>
                   </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <div *ngIf="currentFile" class="progress">
+                        <div
+                          class="progress-bar progress-bar-info progress-bar-striped"
+                          role="progressbar"
+                          attr.aria-valuenow="{{ progress }}"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                          [ngStyle]="{ width: progress + '%' }"
+                        >
+                          {{ progress }}%
+                        </div>
+                      </div>
+                      <label class="btn btn-default">
+                        <input type="file" (change)="selectFile($event)"  name="file" id="file" />
+                      </label>
+                      <div class="alert alert-dark ">{{rapportTache.document.reference}}</div>
+                      <div class="alert alert-light alert-dismissible" role="alert">{{ message }}</div>
+                    </div>
+                  </div>
+                  <button class="btn btn-primary btn-block"  (click)="update(tache)">Enregister <span class="fa fa-check"></span></button>
                 </div>
-                <button class="btn btn-primary btn-block"  (click)="update(tache)">Enregister <span class="fa fa-check"></span></button>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -122,7 +131,7 @@
         <h2><span class="fa fa-file-pdf-o"></span> Archive des rapports</h2>
       </div>
       <div class="card-body">
-        <ul class="list-group">
+        <ul *ngIf="stage.rapport && stage.rapport!=null" class="list-group">
           <li class="list-group-item">Rapport de stage <a href="http://localhost:8091/file/display/{{stage.rapport.document.reference}}" class="btn btn-sm btn-light text-dark"><i class="fa fa-eye"></i></a>
             <a href="http://localhost:8091/files/{{stage.rapport.document.reference}}" class="btn btn-sm btn-light text-dark"><i class="fa fa-download"></i></a></li>
         </ul>
@@ -131,7 +140,7 @@
   </div>
 </section>
 <app-rapport></app-rapport>
-
+<app-ajouter-organisme></app-ajouter-organisme>
 
 
 
