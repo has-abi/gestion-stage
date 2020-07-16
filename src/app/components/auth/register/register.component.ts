@@ -59,13 +59,11 @@ export class RegisterComponent implements OnInit {
           this.flashMessagesService.show('Erreur dans le CNE ou le code d\'appogé!', { cssClass: 'alert-danger', timeout: 6000 })
         }
       }else if (this.etudConfirm && !this.emailconfirm){
-        console.log(this.verifiedCne);
-        console.log(this.verifiedEmail);
         this.etudiantService.sendCode(this.verifiedCne,formData.registerEmail);
         this.emailconfirm = true;
         this.verifiedEmail = formData.registerEmail;
         this.userToRegister.username = formData.registerEmail;
-        this.userToRegister.password = formData.password;
+        this.userToRegister.password = formData.password
       }else {
         this.userService.confirmUser(this.verifiedCne,formData.codeConfirm).subscribe(resp=>{
 			console.log(resp);

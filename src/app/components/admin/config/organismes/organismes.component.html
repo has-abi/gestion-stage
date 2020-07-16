@@ -43,7 +43,7 @@
           </ul>
         </div>
       </div>
-      <div class="col-md-1">
+      <div *ngIf="role!='ETUDIANT_ROLE'" class="col-md-1">
         <button class="btn btn-success" (click)="addOrga()"><span class="fa fa-plus"></span></button>
       </div>
 
@@ -61,7 +61,7 @@
         <td>Ville</td>
         <td>Type</td>
         <td>Service</td>
-        <td>Actions</td>
+        <td *ngIf="role!='ETUDIANT_ROLE'">Actions</td>
       </tr>
       </thead>
       <tbody>
@@ -75,7 +75,7 @@
           <td>{{or.ville.nom}}</td>
           <td>{{or.typeOrganisme.type}}</td>
           <td>{{or.typeServiceOrganisme.type}}</td>
-          <td>
+          <td *ngIf="role!='ETUDIANT_ROLE'">
             <div class="btn-group btn-group-sm">
               <button class="btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Editer" (click)="update(or)"><span
                 class="fa fa-pencil"></span></button>

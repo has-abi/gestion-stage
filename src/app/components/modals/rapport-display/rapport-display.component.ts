@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {RapportService} from "../../../services/rapport.service";
 import {LocalStorageService} from "ngx-webstorage";
+import {NotificationService} from "../../../services/notification.service";
 
 @Component({
   selector: 'app-rapport-display',
@@ -14,7 +15,7 @@ export class RapportDisplayComponent implements OnInit {
   message = '';
   modifierRapport = false;
   role = "";
-  constructor(private rapportService:RapportService,private sessionStorage:LocalStorageService) { }
+  constructor(private rapportService:RapportService,private sessionStorage:LocalStorageService,private notificationService:NotificationService) { }
 
   ngOnInit(): void {
     const user = this.sessionStorage.retrieve("logedUser");
@@ -24,7 +25,16 @@ export class RapportDisplayComponent implements OnInit {
     return this.rapportService.rapport;
   }
   valider(){
-    return this.rapportService.validerRapport();
+    return this.rapportService.validerRapport().subscribe(resp=>{
+      if(resp>0){
+        this.notificationService.showSuccess("Le rapport est validé avec succès!","Rapports des stages")
+      }else {
+        this.notificationService.showWarning("Erreur dans la validation du rapport!","Rapports des stages")
+      }
+    },error => {
+      this.notificationService.showError("Erreur est survenu","Rapports des stages")
+    });
+
   }
   selectFile(event) {
     this.selectedFiles = event.target.files;

@@ -1,76 +1,90 @@
-<div class="my-2"><flash-messages></flash-messages></div>
+<div class="my-2">
+  <flash-messages></flash-messages>
+</div>
 <div class="row mx-2 my-2">
   <div class="col-md-11">
     <div class="card shadow my-4">
-      <div class="card-header text-dark bg-light" ><h1><span class="fa fa-briefcase"></span> Active Stages</h1></div>
+      <div class="card-header text-dark bg-light"><h1><span class="fa fa-briefcase"></span> Active Stages</h1></div>
       <div class="card-body">
         <ul class="list-group-item">
+          <li *ngIf="!stagePage.content || stagePage.content.length == 0" class="list-group-item">Votre liste de stages est vide!</li>
           <li *ngFor="let s of stagePage.content" class="list-group-item">
-            <div  class="row">
+            <div class="row">
               <div class="col-md-6"><b><i class="fas fa-file-alt"></i>Sujet: </b> {{s.sujet}}</div>
               <div class="col-md-3"><b><span class="fa fa-calendar"></span> Date début: </b>{{s.dateDebut}}</div>
               <div class="col-md-3"><b><span class="fa fa-calendar"></span> Date fin: </b>{{s.dateFin}}</div>
-              <div *ngFor="let se of s.stageEtudiants" class="col-md-3 mt-2"><span class="fa fa-graduation-cap"></span> <span class="font-weight-bold">{{se.etudiant.user.nom}} {{se.etudiant.user.prenom}}</span>
-                <span class="fa fa-bars mx-3" style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="plus info sur l'étudiant" (click)="showEtudiant(se.etudiant)"></span></div>
+              <div *ngFor="let se of s.stageEtudiants" class="col-md-3 mt-2"><span class="fa fa-graduation-cap"></span>
+                <span class="font-weight-bold">{{se.etudiant.user.nom}} {{se.etudiant.user.prenom}}</span>
+                <span class="fa fa-bars mx-3" style="cursor: pointer" data-toggle="tooltip" data-placement="top"
+                      title="plus info sur l'étudiant" (click)="showEtudiant(se.etudiant,s)"></span></div>
               <div class="col-md-4 mt-2">
-                <b><span class="fa fa-building"></span> Structure d'accueil: {{s.organismeAccueil.raisonSociale}} </b>  <span class="fa fa-bars" (click)="showStructure = !showStructure"></span>
+                <b><span class="fa fa-building"></span> Structure d'accueil: {{s.organismeAccueil.raisonSociale}} </b>
+                <span class="fa fa-bars" (click)="showStructures(s)"></span>
               </div>
-              <div *ngIf="showEtud" class="col-md-12 my-2">
-                  <div class="row">
-                    <div class="col-md-3">
-                      <b><span class="fa fa-envelope"></span> E-mail:</b> {{etudiant.user.username}}
-                    </div>
-                    <div class="col-md-3">
-                      <b><span class="fa fa-mobile-phone"></span> Mobile:</b> {{etudiant.user.tele}}
-                    </div>
-                    <div class="col-md-3">
-                      <b><span class="fa fa-home"></span> Adress:</b> {{etudiant.user.adress}}
-                    </div>
-                    <div class="col-md-3">
-                      <b><span class="fa fa-map"></span> Nationalité:</b> {{etudiant.nationalite}}
-                    </div>
+              <div *ngIf="showEtud.show && showEtud.ref == s.reference" class="col-md-12 my-2">
+                <div class="row">
+                  <div class="col-md-3">
+                    <b><span class="fa fa-envelope"></span> E-mail:</b> {{etudiant.user.username}}
                   </div>
-              </div>
-                <div *ngIf="showStructure" class="col-md-12 my-2">
-                  <div class="row">
-                    <div class="col-md-3">
-                      <b><span class="fa fa-envelope-square"></span> E-mail :</b> {{s.organismeAccueil.email}}
-                    </div>
-                    <div class="col-md-3">
-                      <b><span class="fa fa-phone"></span> GSM :</b> {{s.organismeAccueil.tele}}
-                    </div>
-                    <div class="col-md-3">
-                      <b><span class="fa fa-phone-square"></span> Fax :</b> {{s.organismeAccueil.teleFix}}
-                    </div>
-                    <div class="col-md-3">
-                      <b><span class="fa fa-map"></span> Adress :</b> {{s.organismeAccueil.adress}}
-                    </div>
-                    <div class="col-md-3">
-                      <b><span class="fa fa-briefcase"></span> Responsable :</b> {{s.organismeAccueil.responsable}}
-                    </div>
-                    <div class="col-md-3">
-                      <b><span class="fa fa-home"></span> Ville :</b> {{s.organismeAccueil.ville.nom}}
-                    </div>
+                  <div class="col-md-3">
+                    <b><span class="fa fa-mobile-phone"></span> Mobile:</b> {{etudiant.user.tele}}
+                  </div>
+                  <div class="col-md-3">
+                    <b><span class="fa fa-home"></span> Adress:</b> {{etudiant.user.adress}}
+                  </div>
+                  <div class="col-md-3">
+                    <b><span class="fa fa-map"></span> Nationalité:</b> {{etudiant.nationalite}}
                   </div>
                 </div>
+              </div>
+              <div *ngIf="showStructure.show && showStructure.ref == s.reference " class="col-md-12 my-2">
+                <div class="row">
+                  <div class="col-md-3">
+                    <b><span class="fa fa-envelope-square"></span> E-mail :</b> {{s.organismeAccueil.email}}
+                  </div>
+                  <div class="col-md-3">
+                    <b><span class="fa fa-phone"></span> GSM :</b> {{s.organismeAccueil.tele}}
+                  </div>
+                  <div class="col-md-3">
+                    <b><span class="fa fa-phone-square"></span> Fax :</b> {{s.organismeAccueil.teleFix}}
+                  </div>
+                  <div class="col-md-3">
+                    <b><span class="fa fa-map"></span> Adress :</b> {{s.organismeAccueil.adress}}
+                  </div>
+                  <div class="col-md-3">
+                    <b><span class="fa fa-briefcase"></span> Responsable :</b> {{s.organismeAccueil.responsable}}
+                  </div>
+                  <div class="col-md-3">
+                    <b><span class="fa fa-home"></span> Ville :</b> {{s.organismeAccueil.ville.nom}}
+                  </div>
+                </div>
+              </div>
               <div class="col-md-12">
                 <div class="btn-group-sm">
-                  <button class="btn-sm shadow-none btn-warning float-right" data-toggle="tooltip" data-placement="top" title="voir les tâche relative a ce stage" style="cursor: pointer" (click)="loadTaches(s.reference)"><span class="fa fa-bars"></span></button>
-                  <button class="btn-sm btn-info shadow-none float-right mx-2" (click)="ajouterTache = !ajouterTache" data-toggle="tooltip" data-placement="top" title="affecter une tâche a ce stage"><span class="fa " [class.fa-plus-circle]="!ajouterTache" [class.fa-minus-circle]="ajouterTache"></span></button>
+                  <button class="btn-sm shadow-none btn-warning float-right" data-toggle="tooltip" data-placement="top"
+                          title="voir les tâche relative a ce stage" style="cursor: pointer"
+                          (click)="loadTaches(s.reference)"><span class="fa fa-bars"></span></button>
+                  <button class="btn-sm btn-info shadow-none float-right mx-2" (click)="ajouterTache = !ajouterTache"
+                          data-toggle="tooltip" data-placement="top" title="affecter une tâche a ce stage"><span
+                    class="fa " [class.fa-plus-circle]="!ajouterTache" [class.fa-minus-circle]="ajouterTache"></span>
+                  </button>
                 </div>
-                </div>
+              </div>
               <div *ngIf="ajouterTache || updateTache.update  " class="col-md-12 card p-3 bg-light">
                 <div class="row mb-1">
                   <div class="col-md-6">
                     <div class="input-group ">
-                      <div class="input-group-prepend"><div class="input-group-text">Titre*:</div></div>
-                      <input type="text" class="form-control " placeholder="titre de la tâche ..." [(ngModel)]="tache.titre">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">Titre*:</div>
+                      </div>
+                      <input type="text" class="form-control " placeholder="titre de la tâche ..."
+                             [(ngModel)]="tache.titre">
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <div class="input-group-text" ><span class="fa fa-calendar"></span> Date limit*</div>
+                        <div class="input-group-text"><span class="fa fa-calendar"></span> Date limit*</div>
                       </div>
                       <input type="date" class="form-control" [(ngModel)]="tache.dateLimite">
                     </div>
@@ -80,36 +94,52 @@
                 <ckeditor [(ngModel)]="tache.contenu" data="<p>Tâche...</p>"></ckeditor>
                 <div class="row my-2">
                   <div *ngIf="updateTache.update" class="col-md-3">
-                    <button class="btn btn-light btn-block" (click)="updateTache.update = false">Annuler <span class="fa fa-times"></span></button>
+                    <button class="btn btn-light btn-block" (click)="updateTache.update = false">Annuler <span
+                      class="fa fa-times"></span></button>
                   </div>
                   <div class="col-md-3 offset-9">
-                    <button class="btn btn-info btn-block"  (click)="affecterTache(s)"> <span *ngIf="ajouterTache">Affecter</span> <span *ngIf="updateTache.update">Modifier</span> <span class="fa fa-check"></span></button>
+                    <button class="btn btn-info btn-block" (click)="affecterTache(s)"><span *ngIf="ajouterTache">Affecter</span>
+                      <span *ngIf="updateTache.update">Modifier</span> <span class="fa fa-check"></span></button>
                   </div>
                 </div>
               </div>
-              <div *ngIf="showTaches.show && showTaches.ref == s.reference" class="col-md-12">
+              <div *ngIf="showTaches.show && showTaches.ref == s.reference" class="col-md-12 ">
                 <ul class="list-group">
-                  <li *ngFor="let t of taches" class="list-group-item">
+                  <li *ngFor="let t of taches" class="list-group-item shadow">
                     <div class="row">
                       <div class="col-md-6"><b>Tâche:</b> {{t.titre}}
-                      <div class="card bg-light p-2" [innerHTML]="t.contenu"></div>
+                        <div class="card bg-light p-2" [innerHTML]="t.contenu"></div>
                       </div>
-                      <div class="col-md-3"><b><span class="fa fa-calendar-check-o"></span> Date Création : </b> {{t.dateCreation | date:'medium'}}</div>
-                      <div class="col-md-3"><b><span class="fa fa-calendar-check-o"></span> Date limite : </b> {{t.dateLimite | date:'medium'}}</div>
-                      <div class="col-md-3 my-2"><span *ngIf="t.valider"><b><span class="fa fa-calendar-check-o text-success fa-2x"></span> Date validation: </b> {{t.dateValidation}}</span>
-                      <span *ngIf="!t.valider && t.effectuer"><button class="btn btn-sm btn-primary shadow-none">Validé <span class="fa fa-check"></span></button></span>
+                      <div class="col-md-3"><b><span class="fa fa-calendar-check-o"></span> Date Création :
+                      </b> {{t.dateCreation | date:'medium'}}</div>
+                      <div class="col-md-3"><b><span class="fa fa-calendar-check-o"></span> Date limite :
+                      </b> {{t.dateLimite | date:'medium'}}</div>
+                      <div class="col-md-4 my-2"><span *ngIf="t.valider"><b><span
+                        class="fa fa-calendar-check-o text-success"></span> Date validation: </b> {{t.dateValidation | date:'medium'}}</span>
+                        <span *ngIf="!t.valider && t.effectuer"><button class="btn btn-sm btn-primary shadow-none"
+                                                                        (click)="validerTache(t,s)">Validé <span
+                          class="fa fa-check"></span></button></span>
                       </div>
                       <div class="col-md-3 my-2"><b><span class="fa fa-file-pdf-o"></span> Rapport de Tâche</b>
-                      <span *ngIf="t.rapportTache != null"><span class="fa fa-download mx-2 " style="cursor: pointer"></span> <span class="fa fa-eye mx-2" style="cursor: pointer"></span></span>
+                        <a href="http://localhost:8091/files/{{t.rapportTache.document.reference}}"
+                           *ngIf="t.rapportTache != null"><span class="fa fa-download mx-2 "
+                                                                style="cursor: pointer"></span></a>
+                        <a target="_blank" *ngIf="t.rapportTache != null"
+                           href="http://localhost:8091/file/display/{{t.rapportTache.document.reference}}"><span
+                          class="fa fa-eye mx-2" style="cursor: pointer"></span></a>
                         <span *ngIf="t.rapportTache == null">  - </span>
                       </div>
                       <div class="col-md-3 my-2">
-                        <b><span class="fa fa-clock-o"></span> Statu: <span *ngIf="t.effectuer" class="badge badge-success">Terminer</span> <span *ngIf="!t.effectuer" class="badge badge-primary">En cours</span></b>
+                        <b><span class="fa fa-clock-o"></span> Statu: <span *ngIf="t.effectuer"
+                                                                            class="badge badge-success">Terminer</span>
+                          <span *ngIf="!t.effectuer" class="badge badge-primary">En cours</span></b>
                       </div>
                       <div class="col-md-12">
                         <div class="btn-group">
-                          <button class="btn btn-sm btn-primary float-right shadow-none" (click)="showUpdate(t)"><span class="fa fa-pencil"></span></button>
-                          <button class="btn btn-sm btn-danger float-right shadow-none" (click)="delete(t,s)" ><span class="fa fa-trash"></span></button>
+                          <button *ngIf="!t.valider" class="btn btn-sm btn-primary float-right shadow-none"
+                                  (click)="showUpdate(t)"><span class="fa fa-pencil"></span></button>
+                          <button *ngIf="!t.valider" class="btn btn-sm btn-danger float-right shadow-none"
+                                  (click)="delete(t,s)"><span class="fa fa-trash"></span></button>
                         </div>
                       </div>
                     </div>
@@ -126,10 +156,22 @@
   </div>
   <div class="col-md-1 mt-4">
     <ul class="list-group float-right list">
-      <li class="list-group-item bg-dark text-white call " style="cursor: pointer"><span class="fa fa-graduation-cap"></span><span class="pop-up"> Etudiants</span></li>
-      <li class="list-group-item bg-dark text-white call" style="cursor: pointer"><span class="fa fa-tasks"></span><span class="pop-up"> Tâches</span></li>
-      <li class="list-group-item bg-dark text-white call" style="cursor: pointer"><span class="fa fa-bars"></span><span class="pop-up"> stages</span></li>
-      <li class="list-group-item bg-dark text-white call" style="cursor: pointer"><span class="fa fa-file"></span><span class="pop-up"> Documents</span></li>
+      <li class="list-group-item bg-dark text-white call " style="cursor: pointer" routerLinkActive="bg-info"><a [routerLink]="['../../encadrant/etudiants']" class="text-white">
+        <span
+          class="fa fa-graduation-cap"></span><span class="pop-up">Etudiants</span>
+      </a></li>
+      <li class="list-group-item bg-dark text-white call" style="cursor: pointer" routerLinkActive="bg-info"><a [routerLink]="['../../encadrant/tache/archive']" class="text-white">
+        <span class="fa fa-tasks"></span><span
+        class="pop-up"> Tâches</span>
+      </a></li>
+      <li class="list-group-item bg-dark text-white call" style="cursor: pointer" routerLinkActive="bg-info"><a [routerLink]="['../../encadrant/stage/archive']" class="text-white">
+        <span class="fa fa-bars"></span><span
+        class="pop-up"> stages</span>
+      </a></li>
+      <li class="list-group-item bg-dark text-white call" style="cursor: pointer" routerLinkActive="bg-info"><a [routerLink]="['../../encadrant/documents']" class="text-white">
+        <span class="fa fa-file"></span><span
+        class="pop-up"> Documents</span>
+      </a></li>
     </ul>
   </div>
 </div>

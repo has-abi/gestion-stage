@@ -1,0 +1,49 @@
+<div  class="modal" id="ajouterEncadrant" tabindex="-1" role="dialog" aria-labelledby="ajouterEncadrant" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-info shadow-sm text-white">
+        <h1 class="modal-title"> <span class="fa fa-briefcase"></span> Ajouter un Encadrant de la structure d'accueil</h1>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <flash-messages></flash-messages>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-3">
+        <div *ngIf="!oldEnca" class="form-group">
+          <label for="email">E-mail</label>
+          <div class="input-group">
+            <input type="email" [disabled]="oldEnca" class="form-control" placeholder="e-mail de l'encadrant" id="email" [(ngModel)]="email">
+            <div class="input-group-append">
+              <button class="btn btn-success" [disabled]="!email || email.length == 0" (click)="fetchEncadrant()"><span class="fa fa-refresh"></span></button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="newEnca"  class="form-group">
+          <label for="nom">Nom</label>
+            <input type="text" class="form-control" [disabled]="oldEnca" placeholder="nom" id="nom" [(ngModel)]="encadreur.user.nom">
+        </div>
+        <div *ngIf="newEnca" class="form-group">
+          <label for="prenom">Prénom</label>
+          <input type="text" class="form-control" placeholder="prénom" id="prenom" [disabled]="oldEnca" [(ngModel)]="encadreur.user.prenom">
+        </div>
+        <div *ngIf="newEnca" class="form-group">
+          <label for="phone">Télé</label>
+          <input type="text" class="form-control" placeholder="téléphone" id="phone" [disabled]="oldEnca" [(ngModel)]="encadreur.user.tele">
+        </div>
+        <div *ngIf="newEnca && !oldEnca" class="form-group">
+          <label for="pwd">Mot de passe</label>
+          <div class="input-group">
+            <input type="password" class="form-control" placeholder="nom" id="pwd" disabled [(ngModel)]="encadreur.user.password" >
+            <div class="input-group-append">
+              <button class="btn btn-warning" (click)="generate()"><span class="fa fa-lock"></span></button></div>
+          </div>
+        </div>
+        <button class="btn btn-outline-success btn-block" (click)="ajouter()" [disabled]="validate()">Ajouter</button>
+		<flash-messages></flash-messages>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-dismiss="modal" >Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>

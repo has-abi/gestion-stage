@@ -63,7 +63,7 @@ export class CoordinateurService {
   }
 
   search(search: string) {
-    const request = "search?search=user.nom:*" + search + "* OR user.prenom:*" + search + "* OR user.email:*" + search + "* OR " +
+    const request = "search?search=user.nom:*" + search + "* OR user.prenom:*" + search + "* OR user.username:*" + search + "* OR " +
       "reference:*" + search + "* OR user.sexe:*" + search + "* OR user.adress:*" + search;
     this.httpClient.get<Array<Coordinateur>>(this.url + request,{headers:this.authentificationService.getHeaders()}).subscribe(datas => {
       this.coordinatuers = datas
@@ -71,7 +71,8 @@ export class CoordinateurService {
   }
 
   createCoordinateur(coordinateur: Coordinateur): Observable<number> {
-    return this.httpClient.post<number>(this.url, coordinateur);
+	  console.log(coordinateur)
+    return this.httpClient.post<number>(this.url, coordinateur,{headers:this.authentificationService.getHeaders()});
   }
 
   get coordinateurPage(): CoordinateurPage {

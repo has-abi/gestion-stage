@@ -1,11 +1,12 @@
 <div class="card">
-  <div class="card-header bg-light text-dark"> <h1><span class="fa fa-graduation-cap"></span> Etudiants</h1></div>
+  <div class="card-header bg-light text-dark"><h1><span class="fa fa-graduation-cap"></span> Etudiants</h1></div>
 </div>
 <div class="card-body table-responsive">
   <div class="row">
     <div class="col-md-6">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Chercher un etudiant.." [(ngModel)]="searchInput" (input)="search()">
+        <input type="text" class="form-control" placeholder="Chercher un etudiant.." [(ngModel)]="searchInput"
+               (input)="search()">
         <div class="input-group-append">
           <button class="btn bg-dark text-white"><span class="fa fa-search"></span></button>
         </div>
@@ -13,7 +14,9 @@
     </div>
     <div class="col-md-3">
       <div class="input-group">
-        <div class="input-group-prepend"><div class="input-group-text">Filtrer par</div></div>
+        <div class="input-group-prepend">
+          <div class="input-group-text">Filtrer par</div>
+        </div>
         <select class="form-control" id="typeEncadreur">
           <option value="0" selected disabled>--SELECT--</option>
           <option value="2">BAC +3</option>
@@ -24,7 +27,9 @@
     </div>
     <div class="col-md-2 ">
       <div class="dropdown">
-        <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false">Order par</button>
+        <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false">
+          Order par
+        </button>
         <ul class="dropdown-menu shadow-sm" role="menu">
           <li class="dropdown-item" (click)="changeOrder('desc','id')">Noveaux</li>
           <li class="dropdown-item" (click)="changeOrder('asc','id')">Anciens</li>
@@ -36,7 +41,6 @@
   <table class="table table-striped shadow-sm mt-3">
     <thead>
     <tr>
-      <td><input type="checkbox"></td>
       <td>CNE</td>
       <td>Code d'appogé</td>
       <td>Nom</td>
@@ -46,12 +50,14 @@
       <td>Email</td>
       <td>Nationalité</td>
       <td>Niveau</td>
-      <td>Actions</td>
+      <td *ngIf="role=='ADMIN_ROLE' || role == 'COORDINATEUR_ROLE'">Actions</td>
     </tr>
     </thead>
     <tbody>
+    <div *ngIf="!pageEtudiant.content || pageEtudiant.content.length == 0" class="alert alert-light">La liste des
+      étudiants est vide!
+    </div>
     <tr *ngFor="let etudiant of pageEtudiant.content| sortBy: tableOrder.order:tableOrder.prop">
-      <td><input type="checkbox"></td>
       <td>{{etudiant.cin}}</td>
       <td>{{etudiant.codeAppoge}}</td>
       <td>{{etudiant.user.nom}}</td>
@@ -61,19 +67,23 @@
       <td>{{etudiant.user.username}}</td>
       <td>{{etudiant.nationalite}}</td>
       <td>{{etudiant.niveau}}</td>
-      <td>
+      <td *ngIf="role=='ADMIN_ROLE' || role == 'COORDINATEUR_ROLE'">
         <div class="btn-group btn-group-sm">
-          <button class="btn-sm btn-primary" data-target="#muserModal" data-toggle="modal" (click)="updateEtudiant(etudiant)"><span class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" title="Editer"></span></button>
-          <button class="btn-sm btn-danger" (click)="delete(etudiant)"><span class="fa fa-trash"  data-toggle="tooltip" data-placement="top" title="Suprimer"></span></button>
+          <button class="btn-sm btn-primary" data-target="#muserModal" data-toggle="modal"
+                  (click)="updateEtudiant(etudiant)"><span class="fa fa-pencil" data-toggle="tooltip"
+                                                           data-placement="top" title="Editer"></span></button>
+          <button class="btn-sm btn-danger" (click)="delete(etudiant)"><span class="fa fa-trash" data-toggle="tooltip"
+                                                                             data-placement="top"
+                                                                             title="Suprimer"></span></button>
         </div>
       </td>
     </tr>
     </tbody>
   </table>
 </div>
-<div class="card-footer d-flex justify-content-center align-items-center">
+<div *ngIf="role != 'ENCADREUR_ROLE'" class="card-footer d-flex justify-content-center align-items-center">
   <nav *ngIf="!searching" class="text-center m-auto">
-    <ul  class="pagination">
+    <ul class="pagination">
       <li class="page-item">
         <select class="form-control" [(ngModel)]="size" (change)="resizePage()">
           <option value="5">5</option>
@@ -81,23 +91,27 @@
           <option value="15">15</option>
         </select>
       </li>
-      <li class="page-item" (click)="getIndexPage(0)"><a class="page-link" >premier</a></li>
+      <li class="page-item" (click)="getIndexPage(0)"><a class="page-link">premier</a></li>
       <li class="page-item" [class.disabled]="pageEtudiant.first">
-        <a class="page-link"  aria-label="Previous" (click)="prevElements()" >
+        <a class="page-link" aria-label="Previous" (click)="prevElements()">
           <span aria-hidden="true">&laquo;</span>
           <span class="sr-only">Previous</span>
         </a>
       </li>
-      <li class="page-item" *ngFor="let i of tableElements" (click)="getIndexPage(i)"><a class="page-link">{{i+1}}</a></li>
+      <li class="page-item" *ngFor="let i of tableElements" (click)="getIndexPage(i)"><a class="page-link">{{i + 1}}</a>
+      </li>
 
       <li class="page-item" (click)="nextElements()" [class.disabled]="pageEtudiant.last">
-        <a class="page-link"  aria-label="Next" >
+        <a class="page-link" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
           <span class="sr-only">Next</span>
         </a>
       </li>
-      <li class="page-item"><span class="page-link text-dark"><span *ngIf="pageEtudiant.last">{{pageEtudiant.totalElements}}</span><span *ngIf="!pageEtudiant.last">{{(pageEtudiant.number+1)*size}}</span> de {{pageEtudiant.totalElements}}</span></li>
-      <li class="page-item" (click)="getIndexPage(pageEtudiant.totalPages-1)"><a class="page-link" >dernier</a></li>
+      <li class="page-item"><span class="page-link text-dark"><span
+        *ngIf="pageEtudiant.last">{{pageEtudiant.totalElements}}</span><span
+        *ngIf="!pageEtudiant.last">{{(pageEtudiant.number + 1) * size}}</span> de {{pageEtudiant.totalElements}}</span>
+      </li>
+      <li class="page-item" (click)="getIndexPage(pageEtudiant.totalPages-1)"><a class="page-link">dernier</a></li>
     </ul>
   </nav>
 </div>

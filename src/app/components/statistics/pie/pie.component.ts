@@ -34,7 +34,6 @@ export class PieComponent implements OnInit {
   }
   getData(id:number){
     this.statisticsService.getOrganismeData(id).subscribe(datas=>{
-console.log(datas)
       if(datas.length>0){
         this.zone.runOutsideAngular(() => {
           let chart = am4core.create("piediv", am4charts.PieChart);

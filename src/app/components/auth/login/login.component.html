@@ -15,8 +15,8 @@
                 <input type="email" class="form-control" id="email" placeholder="email..." formControlName="email" name="email"  required="true">
               </div>
             <div *ngIf="email.invalid && (email.dirty || email.touched)" >
-              <div *ngIf="email.errors.required" class="text-danger text-center mt-1">Email est obligatoire!</div>
-              <div *ngIf="email.errors?.email" class="text-danger text-center mt-1">Email n'est pas valide!</div>
+              <div *ngIf="email.errors.required" class=" alert my-2 alert-danger text-center mt-1">E-mail est obligatoire!</div>
+              <div *ngIf="email.errors?.email" class="alert my-2 alert-danger text-center mt-1">E-mail n'est pas valide!</div>
             </div>
             </div>
             <div class="form-group">
@@ -26,15 +26,20 @@
                   <button class="btn btn-dark"><span class="fa fa-lock"></span></button>
                 </div>
                 <input type="password" class="form-control" id="pwd" placeholder="mot de passe..." formControlName="pwd">
+
               </div>
+			  <div *ngIf="pwd.invalid && (pwd.dirty || pwd.touched)" >
+                  <div *ngIf="pwd.errors.required" class=" alert my-2 alert-danger text-center mt-1">Le mot de pass est obligatoire!</div>
+                </div>
             </div>
             <button class="btn btn-primary  btn-block" type="submit">S'authentifier</button>
-            <div *ngIf="this.loginError!=null" class="text-center mt-2 alert-warning">{{this.loginError}}</div>
+            <div *ngIf="this.loginError!=null" class="text-center mt-2 alert alert-warning">{{this.loginError}}</div>
            <div class="text-center"><a  routerLink="/register">noveau compte?</a></div>
           </form>
         </div>
     <div class="card-footer text-center">
-      <a href="#">oublier le mot de passe?</a>
+      <a routerLink="/mot-de-pass-oublier">oublier le mot de passe?</a>
+
     </div>
 </div>
 </div>

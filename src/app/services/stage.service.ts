@@ -6,6 +6,7 @@ import {StagePage} from "../models/pageModels/stage-page.model";
 import {Coordinateur} from "../models/coordinateur.model";
 import {Observable} from "rxjs";
 import {AuthentificationService} from "./auth/authentification.service";
+import {Etudiant} from "../models/etudiant.model";
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class StageService {
   private _stage:Stage;
   private _searchedStage:Stage;
   private _stages:Array<Stage>;
+  public _ajouterOrganisme = false;
   private _stagePage:StagePage;
   tableElements = [];
   nombreStages = 0;
@@ -27,26 +29,43 @@ export class StageService {
   constructor(private httpClient:HttpClient,private authentificationService:AuthentificationService) { }
 
   findEtudinantActiveStages(id:number){
-    this.httpClient.get<Stage>(this.url+"etudiant/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(stage=>{
-      this.stage = stage;
+    this.httpClient.get<Stage>(this.url+"etudiant/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
+    this.stagePage.content[0] = datas;
     })
   }
 
+  searchByEtudiant(id:number,search:string):Observable<Array<Stage>>{
+    return this.httpClient.get<Array<Stage>>(this.url+"/etudiant/id/"+id+"/search?search=sujet:*'"+search+"' OR organismeAccueil.raisonSociale:*'"+search+"'* OR dateDebut:*"+search+"* OR dateFin:*"+search+"*" ,{headers:this.authentificationService.getHeaders()});
+  }
+  searchByEncadreur(id:number,search:string):Observable<Array<Stage>>{
+    return this.httpClient.get<Array<Stage>>(this.url+"/encadreur/id/"+id+"/search?search=sujet:*'"+search+"' OR organismeAccueil.raisonSociale:*'"+search+"'* OR dateDebut:*"+search+"* OR dateFin:*"+search+"*" ,{headers:this.authentificationService.getHeaders()});
+  }
+    searchByJury(id:number,search:string):Observable<Array<Stage>>{
+    return this.httpClient.get<Array<Stage>>(this.url+"/jury/id/"+id+"/search?search=sujet:'*"+search+"*' OR organismeAccueil.raisonSociale:*'"+search+"'* OR dateDebut:*"+search+"* OR dateFin:*"+search+"*" ,{headers:this.authentificationService.getHeaders()});
+  }
+
+  searchByCoordinateur(id:number,search:string):Observable<Array<Stage>>{
+    return this.httpClient.get<Array<Stage>>(this.url+"coord/id/"+id+"/search?search=sujet:'*"+search+"*' OR organismeAccueil.raisonSociale:'*"+search+"*' OR dateDebut:*"+search+"* OR dateFin:*"+search+"*",{headers:this.authentificationService.getHeaders()});
+  }
+  etudiantActiveStages(id:number):Observable<Stage>{
+	return  this.httpClient.get<Stage>(this.url+"etudiant/id/"+id,{headers:this.authentificationService.getHeaders()});
+  }
+
   findCoordinateurActiveStages(id:number){
-    this.httpClient.get<Array<Stage>>(this.url+"coordinateur/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(stages=>{
-      this.stages = stages;
+    this.httpClient.get<Array<Stage>>(this.url+"coordinateur/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
+      this.stagePage.content = datas;
     })
   }
 
   findEncadreurActiveStages(id:number){
-    this.httpClient.get<Array<Stage>>(this.url+"encadreur/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(stages=>{
-      this.stages = stages;
+    this.httpClient.get<Array<Stage>>(this.url+"encadreur/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
+      this.stagePage.content = datas;
     })
   }
 
   findJuryActiveStages(id:number){
-    this.httpClient.get<Array<Stage>>(this.url+"jury/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(stages=>{
-      this.stages = stages;
+    this.httpClient.get<Array<Stage>>(this.url+"jury/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
+      this.stagePage.content = datas;
     })
   }
 
@@ -87,9 +106,6 @@ export class StageService {
   }
 
   update(stage:Stage):Observable<number>{
-    console.log("service update")
-    console.log(this.stage);
-    console.log(this.authentificationService.getHeaders());
        return  this.httpClient.put<number>(this.url,stage,{headers:this.authentificationService.getHeaders()});
   }
   deleteByReference(reference:string):Observable<number>{
@@ -99,7 +115,7 @@ export class StageService {
   findAllPages(page:number,size:number){
       return this.httpClient.get<StagePage>(this.url+"list/get?page="+page+"&size="+size,{headers:this.authentificationService.getHeaders()}).subscribe(data=>{
         this.stagePage = data
-        console.log(data.content)
+     
         this.fillTableElements(data.totalPages);
       })
   }
@@ -176,7 +192,13 @@ export class StageService {
     this._stagePage = value;
   }
 
-
+	get ajouterOrganisme(){
+		return this._ajouterOrganisme;
+	}
+	
+	set ajouterOrganisme(value:boolean){
+		this._ajouterOrganisme = value;
+	}
   get searchedStage(): Stage {
     if(this._searchedStage == null){
       this._searchedStage = new Stage();
@@ -205,7 +227,7 @@ export class StageService {
 
   }
   activerStage(ref:string):Observable<number>{
-    return  this.httpClient.put<number>(this.url+"activate",ref);
+    return  this.httpClient.put<number>(this.url+"activer",ref);
   }
   countByCoordinateurReference(ref:string){
       this.httpClient.get<number>(this.url+"coordinateur/count/ref/"+ref).subscribe(n=>this.nombreStages = n);

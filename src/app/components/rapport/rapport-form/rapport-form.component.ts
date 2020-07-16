@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {RapportService} from "../../../services/rapport.service";
+import {StageService} from "../../../services/stage.service";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {HttpEventType, HttpResponse} from "@angular/common/http";
+import {LocalStorageService} from "ngx-webstorage";
+import {TacheService} from "../../../services/tache.service";
+import {NotificationService} from "../../../services/notification.service";
 
 @Component({
   selector: 'app-rapport-form',
@@ -14,57 +18,76 @@ export class RapportFormComponent implements OnInit {
   currentFile: File;
   progress = 0;
   message = '';
+  id;
 
   fileInfos: Observable<any>;
   rapportForm;
-  constructor(private rapportService:RapportService,private formBuilder:FormBuilder) { }
+
+  constructor(private rapportService: RapportService, private formBuilder: FormBuilder, private stageService: StageService, private localStorage: LocalStorageService,
+              private tacheService: TacheService,private notificationService:NotificationService) {
+  }
 
   ngOnInit(): void {
+    const user = this.localStorage.retrieve("logedUser");
+    this.id = user.id;
     this.rapportForm = this.formBuilder.group({
-      titre:new FormControl('',[
+      titre: new FormControl('', [
         Validators.required
       ]),
-      desc:new FormControl('',[
+      desc: new FormControl('', [
         Validators.required
       ])
     })
   }
-  upload(rapportData) {
 
-    if(this.titre.errors == null && this.desc.errors == null ){
+  upload(rapportData) {
+    if (this.titre.errors == null && this.desc.errors == null) {
       this.progress = 0;
       this.currentFile = this.selectedFile.item(0);
-      this.rapportService.save(this.currentFile,rapportData.titre,rapportData.desc).subscribe(
+      this.rapportService.save(this.currentFile, rapportData.titre, rapportData.desc).subscribe(
         event => {
           if (event.type === HttpEventType.UploadProgress) {
             this.progress = Math.round(100 * event.loaded / event.total);
           } else if (event instanceof HttpResponse) {
-            this.message = event.body.message;
+            this.notificationService.showSuccess("Le rapport est archivé avec succès","L'archivage du rapport")
+            this.stageService.tableElements = [];
+            this.stageService.findByCoordinateurId(this.id, 0, 10, "asc");
+
+            const logedUser = this.localStorage.retrieve("logedUser");
+            this.stageService.etudiantActiveStages(logedUser.id).subscribe(s => {
+              this.stageService.stage = s
+              this.tacheService.findByStageRef(s.reference).subscribe(data => {
+                this.tacheService.taches = data;
+              })
+            });
           }
         },
         err => {
+          this.notificationService.showError("Erreur est survenu!","L'archivage du rapport");
           this.progress = 0;
-          this.message = 'Could not upload the file!';
           this.currentFile = undefined;
         });
 
       this.selectedFile = undefined;
     }
   }
+
   selectFile(event) {
     this.selectedFile = event.target.files;
     this.rapportService.fileIsSelected = true;
   }
-  get titre(){
+
+  get titre() {
     return this.rapportForm.get('titre');
   }
-  get file(){
+
+  get file() {
     return this.rapportForm.get('file');
   }
-  get desc(){
+
+  get desc() {
     return this.rapportForm.get('desc');
   }
-
 
 
 }

@@ -12,10 +12,12 @@ am4core.useTheme(am4themes_animated);
   templateUrl: './statistics.component.html',
   styleUrls: ['./statistics.component.css']
 })
-export class StatisticsComponent  {
+export class StatisticsComponent {
   selectedFiliere = "";
   private chart: am4charts.XYChart;
-  constructor(private zone: NgZone,private statisticsService:StatisticsService,private configurationService:ConfigurationService) {}
+
+  constructor(private zone: NgZone, private statisticsService: StatisticsService, private configurationService: ConfigurationService) {
+  }
 
   ngAfterViewInit() {
     this.configurationService.getAllFilieres();
@@ -30,19 +32,20 @@ export class StatisticsComponent  {
       }
     });
   }
-  get filieres(){
+
+  get filieres() {
     return this.configurationService.filieres;
   }
 
-  get villeStatistics(){
+  get villeStatistics() {
     return this.statisticsService.villeStatistics;
   }
 
 
-  chartData(id:number){
+  chartData(id: number) {
 
-    this.statisticsService.getData(id).subscribe(datas=>{
-      if(datas.length>0){
+    this.statisticsService.getData(id).subscribe(datas => {
+      if (datas.length > 0) {
         this.zone.runOutsideAngular(() => {
           let chart = am4core.create("chartdiv", am4charts.XYChart);
 
@@ -53,7 +56,7 @@ export class StatisticsComponent  {
 
           let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
           categoryAxis.dataFields.category = "nom";
-          categoryAxis.title.text = "Villes ["+this.selectedFiliere+"]";
+          categoryAxis.title.text = "Villes [" + this.selectedFiliere + "]";
           categoryAxis.renderer.grid.template.location = 0;
           categoryAxis.renderer.minGridDistance = 2;
           let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
@@ -64,8 +67,8 @@ export class StatisticsComponent  {
           series.heatRules.push({
             "target": series.columns.template,
             "property": "fill",
-            "min": am4core.color("#ffdd00"),
-            "max": am4core.color("#ffbb00"),
+            "min": am4core.color("#32a852"),
+            "max": am4core.color("#32a852"),
             "dataField": "valueY"
           });
           series.dataFields.valueY = "nombreVille";

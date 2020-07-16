@@ -16,11 +16,17 @@ export class JuryService {
   private _pagejury:JuryPage;
   tableElements = [];
   constructor(private http: HttpClient,private  authentificationService:AuthentificationService) { }
-findByfiliere(id:number){
+  findByfiliere(id:number){
     this.http.get<Array<MembreJury>>(this.url+"filiere/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.juries = datas;
     })
-}
+  }
+  findAll(page:number,size:number,sort:string){
+    this.http.get<JuryPage>(this.url+"/page/"+page+"/size/"+size+"/sort/"+sort,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
+      this.pagejury = datas;
+      this.pagejury.content = datas.content;
+    })
+  }
   createJury(jury:MembreJury):Observable<number>{
     return this.http.post<number>(this.url,jury,{headers:this.authentificationService.getHeaders()});
   }
@@ -40,7 +46,7 @@ findByfiliere(id:number){
     })
   }
   search(seach:string){
-    const request = "search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.email:*+"+seach+"* " +
+    const request = "search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.username:*+"+seach+"* " +
       "OR role:*"+seach+"* OR user.sexe:*"+seach+"* OR user.adress:*"+seach+"* OR profession:*"+seach+"*";
     this.http.get<Array<MembreJury>>(this.url+request,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       console.log(datas);

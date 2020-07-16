@@ -45,10 +45,11 @@
         <th>Date soutenance</th>
         <th>Locale soutenance</th>
         <th>Description</th>
-        <th>Valider</th>
-        <th>Date de Validation</th>
+        <th *ngIf="role!='ETUDIANT_ROLE'">Valider</th>
+        <th *ngIf="role!='ETUDIANT_ROLE'">Date de Validation</th>
         <th>Fichier</th>
-        <th>Actions</th>
+        <th>Commentaires</th>
+        <th *ngIf="role!='ETUDIANT_ROLE'">Actions</th>
       </tr>
       <tr *ngFor="let rapport of pageRapport.content|sortBy: tableOrder.order:tableOrder.prop">
           <td>{{rapport.document.titre}}</td>
@@ -56,16 +57,17 @@
           <td>{{rapport.dateSoutenance}}</td>
           <td>{{rapport.localeSoutenance}}</td>
           <td>{{rapport.descreption}}</td>
-          <td>
-            <span *ngIf="rapport.valider" class="text-success">Validé <span class="fa fa-check"></span></span>
-            <span *ngIf="!rapport.valider" class="text-warning">Pas encore <span class="fa fa-check"></span></span>
+          <td *ngIf="role!='ETUDIANT_ROLE'">
+            <span *ngIf="rapport.valider" class="badge badge-success">Validé <span class="fa fa-check"></span></span>
+            <span *ngIf="!rapport.valider" class="badge badge-warning">Pas encore <span class="fa fa-check"></span></span>
           </td>
-        <td>{{rapport.dateValidation}}</td>
+        <td *ngIf="role!='ETUDIANT_ROLE'">{{rapport.dateValidation}}</td>
         <td><a href="http://localhost:8091/file/display/{{rapport.document.reference}}" target="_blank" class="btn-sm btn-danger"><span class="fa fa-file-archive-o"></span></a></td>
-        <td>
+          <td><span class="fa fa-comment fa-2x text-warning" style="cursor: pointer" (click)="commenter(rapport.document)" data-toggle="modal" data-target="#commenterDoc"></span></td>
+        <td *ngIf="role=='COORDINATEUR_ROLE' || role=='ADMIN_ROLE'">
           <div class="btn-group btn-group-sm">
-            <button class="btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Editer"><span class="fa fa-pencil"></span></button>
-            <button class="btn-sm btn-danger"><span class="fa fa-trash" data-toggle="tooltip" data-placement="top" title="Supprimer"></span></button>
+            <button class="btn-sm btn-success" data-toggle="modal" data-target="#ViewrapportModal" (click)="diaplayRapport(rapport)"><span class="fa fa-pencil"></span></button>
+            <button (click)="delete(rapport)" class="btn-sm btn-danger"><span class="fa fa-trash" data-toggle="tooltip" data-placement="top" title="Supprimer"></span></button>
           </div>
         </td>
       </tr>
@@ -102,6 +104,7 @@
     </nav>
   </div>
 </div>
+<app-doc-comment *ngIf="commenterDocum == true"></app-doc-comment>
 
 
 

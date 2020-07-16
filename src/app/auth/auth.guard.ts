@@ -16,7 +16,6 @@ export class AuthGuard implements CanActivate {
   }
   canActivate(route: ActivatedRouteSnapshot):  boolean {
     const user = this.sessionStorage.retrieve("logedUser");
-    console.log(this.sessionStorage.retrieve("logedUser"));
     let  check = false;
     if(user!=null){
       const rls  = user.roles;

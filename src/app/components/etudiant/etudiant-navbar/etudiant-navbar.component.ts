@@ -1,9 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {EtudiantService} from "../../../services/etudiant.service";
-import {StageService} from "../../../services/stage.service";
-import {Stage} from "../../../models/stage.model";
-import {Encadreur} from "../../../models/encadreur.model";
-import {TacheService} from "../../../services/tache.service";
+import {Component, OnInit} from '@angular/core';
 import {LocalStorageService} from "ngx-webstorage";
 import {AuthentificationService} from "../../../services/auth/authentification.service";
 
@@ -13,23 +8,25 @@ import {AuthentificationService} from "../../../services/auth/authentification.s
   styleUrls: ['./etudiant-navbar.component.css']
 })
 export class EtudiantNavbarComponent implements OnInit {
-  picture= "";
-  constructor(private localStorage:LocalStorageService,private authentificationService:AuthentificationService) { }
+  picture = "";
+
+  constructor(private localStorage: LocalStorageService, private authentificationService: AuthentificationService) {
+  }
 
   ngOnInit(): void {
     this.profilePic();
-    console.log(this.picture);
   }
-  profilePic(){
+
+  profilePic() {
     const user = this.localStorage.retrieve("logedUser");
-    if(user.photo != null){
-      this.picture = 'http://localhost:8091/gestion-stage-api/user/image/'+user.photo;
-    }else{
+    if (user.photo != null) {
+      this.picture = 'http://localhost:8091/gestion-stage-api/user/image/' + user.photo;
+    } else {
       this.picture = '../../../../assets/unnamed.png';
     }
   }
 
-  logout(){
+  logout() {
     return this.authentificationService.logout();
   }
 

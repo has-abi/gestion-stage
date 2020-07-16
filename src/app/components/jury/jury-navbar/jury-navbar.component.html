@@ -1,23 +1,29 @@
 <nav class="navbar  navbar-expand-lg navbar-light bg-white shadow">
-  <a routerLink="../encadreur/profile"  class="navbar-brand"><img src="../../../../assets/logoStage.png" alt="fstg logo" style="height:40px;width:160px">
+  <a routerLink="../jury/profile" class="navbar-brand"><img src="../../../../assets/logoStage.png" alt="fstg logo"
+                                                                 style="height:40px;width:160px">
   </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ml-auto" routerLinkActive="bg-light">
       <li class="nav-item">
-        <a routerLink="../encadreur/stage/archive" class="nav-link text-dark">Stages <span class="fa fa-bars"></span></a>
+        <a [routerLink]="['../jury/profile']" class="nav-link text-dark">Stages <span
+          class="fa fa-bars"></span></a>
       </li>
-
       <li class="nav-item dropleft mx-2">
-        <img src="../../../../assets/unnamed.png" alt="profile" class="rounded-circle border-dark dropdown-toggle shadow-sm" data-toggle="dropdown" role="button" aria-expanded="false" style="height: 40px;width: 40px">
+        <img src="{{picture}}" alt="profile"
+             class="rounded-circle border-dark dropdown-toggle shadow-sm" data-toggle="dropdown" role="button"
+             aria-expanded="false" style="height: 40px;width: 40px">
         <ul class="dropdown-menu shadow" role="menu">
-          <li class="dropdown-item">
-            <a routerLink="#" class="text-dark btn-link text-decoration-none">Profile <span class="fa-pull-right fa fa-user-circle"></span></a>
+          <li class="dropdown-item" routerLinkActive="bg-light">
+            <a  routerLink="../jury/edit" class="text-dark btn-link text-decoration-none">Profile <span
+              class="fa-pull-right fa fa-user-circle"></span></a>
           </li>
           <li class="dropdown-item">
-            <button class="text-dark btn-link text-decoration-none bg-transparent border-0" (click)="logout()">Déconnexion <span class=" fa fa-sign-out"></span></button>
+            <button class="text-dark btn-link text-decoration-none bg-transparent border-0" (click)="logout()">
+              Déconnexion <span class=" fa fa-sign-out"></span></button>
           </li>
         </ul>
       </li>

@@ -1,7 +1,7 @@
 <div  class="modal" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header bg-info shadow-sm">
         <h1 class="modal-title"><span class="fa fa-user"></span> Créer un Utilisateur :</h1>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -57,6 +57,7 @@
                 <ul class="dropdown-menu shadow-sm" role="menu">
                   <li class="dropdown-item" (click)="role = '1'">Etudiant</li>
                   <li class="dropdown-item" (click)="role = '2'">Coordinateur</li>
+
                 </ul>
               </div>
             </div>
@@ -101,8 +102,8 @@
                     <div class="dropdown">
                       <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false">Filière</button>
                       <ul class="dropdown-menu shadow-sm" role="menu">
-                        <li class="dropdown-item" (click)="selectedFiliere = 'test'">Test filiere</li>
-                        <li *ngFor="let f of filieres" class="dropdown-item" (click)="selectedFiliere = f.libelle">{{f.libelle}}</li>
+
+                        <li *ngFor="let f of filieres" class="dropdown-item" (click)="selectedFiliere = f">{{f.libelle}}</li>
                       </ul>
                     </div>
                   </div>
@@ -116,7 +117,8 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline-info btn btn-block my-2"  [disabled]="validate()" (click)="create(userForm.value)">Enregister <span class="fa fa-check"></span></button>
-      </div>
+		<flash-messages></flash-messages>
+	 </div>
     </div>
   </div>
 </div>

@@ -27,11 +27,7 @@ export class EtudiantService {
     return this.http.get<Etudiant>(this.link+"user/id/"+id,{headers:this.authentificationService.getHeaders()});
   }
   sendCode(cne:string,username:string){
-	  console.log(cne);
-	  console.log(username);
-	  console.log("code sended");
     this.http.get("http://localhost:8091/gestion-stage-api/mail/username/"+username+"/cne/"+cne).subscribe(resp=>{
-			console.log(resp);
 	});
   }
   confirmEtudiant(cne:string,codeAppoge:string):Observable<number>{
@@ -48,7 +44,7 @@ export class EtudiantService {
 
   findByEncadreur(id:number){
     this.http.get<Array<Etudiant>>(this.link+"encadreur/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(etuds=>{
-      this.etudiants = etuds;
+      this.pageEtudiant.content = etuds;
     })
   }
 
@@ -68,8 +64,11 @@ export class EtudiantService {
     this.http.get<Etudiant>(this.link+"codeAppoge/"+codeAppoge,{headers:this.authentificationService.getHeaders()}).subscribe(data=>this.etudiant = data);
   }
 
-  findAll(page:number,size:number,sort:string){
-    this.http.get<EtudiantPage>(this.link+"page/"+page+"/size/"+size+"/sort/"+sort,{headers:this.authentificationService.getHeaders()});
+    findAll(page:number,size:number,sort:string){
+    this.http.get<EtudiantPage>(this.link+"page/"+page+"/size/"+size+"/sort/"+sort,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
+      this._pageEtudiant = datas;
+      this.fillTableElements(datas.totalPages);
+    });
   }
   removeByCne(cne:string):Observable<number>{
     return this.http.delete<number>(this.link+"cin/"+cne,{headers:this.authentificationService.getHeaders()});
@@ -86,6 +85,22 @@ export class EtudiantService {
     this.http.get<Array<Etudiant>>(this.link+request,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       this.etudiants = datas;
 
+    })
+  }
+
+  searchByCoord(seach:string,id:number){
+    const request = "search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.username:*"+seach+"* OR " +
+      "cin:*"+seach+"* OR user.sexe:*"+seach+"* OR user.adress:*"+seach+"* OR codeAppoge:*"+seach+"* OR niveau:*"+seach+"*";
+    this.http.get<Array<Etudiant>>(this.link+"coordinateur/id/"+id+"/"+request,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
+      this.etudiants = datas;
+    })
+  }
+
+  searchByEncad(seach:string,id:number){
+    const request = "search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.username:*"+seach+"* OR " +
+      "cin:*"+seach+"* OR user.sexe:*"+seach+"* OR user.adress:*"+seach+"* OR codeAppoge:*"+seach+"* OR niveau:*"+seach+"*";
+    this.http.get<Array<Etudiant>>(this.link+"encadreur/id/"+id+"/"+request,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
+      this.etudiants = datas;
     })
   }
   fillTableElements(size:number){

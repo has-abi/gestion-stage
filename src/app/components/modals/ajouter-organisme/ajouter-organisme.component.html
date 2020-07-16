@@ -1,14 +1,27 @@
 <div  class="modal" id="organismeModal" tabindex="-1" role="dialog" aria-labelledby="organismeModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title">Créer une structure d'accueil :</h1>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <div class="modal-header bg-success shadow-sm">
+        <h1 class="modal-title text-white"> <span class="fa fa-building"></span> Structure d'accueil :</h1>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="ajouterOrganisme =!ajouterOrganisme">
           <span aria-hidden="true">&times;</span>
         </button>
+
       </div>
       <div class="modal-body">
-        <app-organisme-form></app-organisme-form>
+        <div class="form-group">
+          <label for="orgs">Structures</label>
+          <select class="form-control float-right text-center" id="orgs">
+            <option class="text-center" value="--CHOISIR--" disabled selected>--CHOISIR--</option>
+            <option *ngFor="let o of organismes" (click)="addOrg(o)">{{o.raisonSociale}}</option>
+          </select>
+        </div>
+        <div class="btn-group  my-2">
+          <button *ngIf="!ajouterOrg" [disabled]="!stage.organismeAccueil || stage.organismeAccueil == null" (click)="update()" class="btn  shadow-none border-0 btn-dark"><span class="fa fa-check-circle-o"></span></button>
+          <button (click)="ajouterOrg = !ajouterOrg" class="btn shadow-none border-0 btn-light"><span class="fa fa-plus"></span></button>
+        </div>
+
+        <app-organisme-form *ngIf="ajouterOrg"></app-organisme-form>
         <div *ngIf="MessgErrors.type == 'error'">
           <div class="mt-2 alert alert-danger">{{MessgErrors.message}}</div>
         </div>
@@ -17,6 +30,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-light" data-dismiss="modal" (click)="dismissOrganisme()" >Fermer</button>
+        <button type="button" class="btn btn-light" data-dismiss="modal" (click)="dismissOrganisme();ajouterOrganisme =!ajouterOrganisme;" >Fermer</button>
       </div>
-
+    </div>
+  </div>
+</div>

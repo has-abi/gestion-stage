@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from "@angular/common/http";
@@ -36,7 +37,6 @@ import { OrganismeFormComponent } from './components/organisme/organisme-form/or
 import { ListEncadreurComponent } from './components/encadreur/list-encadreur/list-encadreur.component';
 import { ListEtudiantComponent } from './components/etudiant/list-etudiant/list-etudiant.component';
 import { ListJuryComponent } from './components/jury/list-jury/list-jury.component';
-import { SearchComponent } from './components/search/search.component';
 import { ConventionComponent } from './components/pdf/convention/convention.component';
 import { MainEncadreurComponent } from './components/encadreur/main-encadreur/main-encadreur.component';
 import { NavbarEncadreurComponent } from './components/encadreur/navbar-encadreur/navbar-encadreur.component';
@@ -44,9 +44,6 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
 import { RapportTableComponent } from './components/admin/tables/rapport-table/rapport-table.component';
 import { ForumComponent } from './components/forum/forum.component';
 import { UserCreateComponent } from './components/modals/user-create/user-create.component';
-import { OrganismeComponent } from './components/modals/organisme/organisme.component';
-import { TachedetailsComponent } from './components/modals/tachedetails/tachedetails.component';
-import { AllTachesComponent } from './components/modals/all-taches/all-taches.component';
 import { CoordinateurTableComponent } from './components/admin/tables/coordinateur-table/coordinateur-table.component';
 import { OrganismesComponent } from './components/admin/config/organismes/organismes.component';
 import { AutreComponent } from './components/admin/config/autre/autre.component';
@@ -59,7 +56,19 @@ import { JuryNavbarComponent } from './components/jury/jury-navbar/jury-navbar.c
 import { JuryComponent } from './components/jury/jury.component';
 import { PlanningComponent } from './components/coordinateur/planning/planning.component';
 import { JuryAddComponent } from './components/modals/jury-add/jury-add.component';
+import { DocCommentComponent } from './components/doc-comment/doc-comment.component';
 
+import {LOCALE_ID } from '@angular/core';
+
+import { registerLocaleData } from '@angular/common';
+
+import localeFr from '@angular/common/locales/fr';
+
+import { DatePipe } from '@angular/common';
+import { ForgetPwdComponent } from './components/auth/forget-pwd/forget-pwd.component';
+import { AjouterEncadrantComponent } from './components/modals/ajouter-encadrant/ajouter-encadrant.component';
+
+registerLocaleData(localeFr);
 
 @NgModule({
   declarations: [
@@ -89,7 +98,6 @@ import { JuryAddComponent } from './components/modals/jury-add/jury-add.componen
     ListEncadreurComponent,
     ListEtudiantComponent,
     ListJuryComponent,
-    SearchComponent,
     ConventionComponent,
     MainEncadreurComponent,
     NavbarEncadreurComponent,
@@ -97,9 +105,6 @@ import { JuryAddComponent } from './components/modals/jury-add/jury-add.componen
     RapportTableComponent,
     ForumComponent,
     UserCreateComponent,
-    OrganismeComponent,
-    TachedetailsComponent,
-    AllTachesComponent,
     CoordinateurTableComponent,
     OrganismesComponent,
     AutreComponent,
@@ -111,7 +116,10 @@ import { JuryAddComponent } from './components/modals/jury-add/jury-add.componen
     JuryNavbarComponent,
     JuryComponent,
     PlanningComponent,
-    JuryAddComponent
+    JuryAddComponent,
+    DocCommentComponent,
+    ForgetPwdComponent,
+    AjouterEncadrantComponent
   ],
   imports: [
     BrowserModule,
@@ -123,9 +131,11 @@ import { JuryAddComponent } from './components/modals/jury-add/jury-add.componen
     ReactiveFormsModule,
     NgxWebstorageModule.forRoot(),
     NgpSortModule,
-    CKEditorModule
+    CKEditorModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
-  providers: [],
+  providers: [ {provide: LOCALE_ID, useValue: "fr-CA" },DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

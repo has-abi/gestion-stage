@@ -10,7 +10,9 @@ import {EncadreurService} from "../../../services/encadreur.service";
 import {CoordinateurService} from "../../../services/coordinateur.service";
 import {JuryService} from "../../../services/jury.service";
 import {User} from "../../../models/user.model";
+import {Filiere} from "../../../models/filiere.model";
 import {Coordinateur} from "../../../models/coordinateur.model";
+import {NotificationService} from "../../../services/notification.service";
 
 @Component({
   selector: 'app-user-create',
@@ -21,12 +23,12 @@ export class UserCreateComponent implements OnInit {
 
   userForm;
   role ;
-  selectedFiliere;
+  selectedFiliere:Filiere;
 
   constructor(private userService:UserService,private passwordGeneratorService:PasswordGeneratorService
               ,private flashMessagesService:FlashMessagesService,private configurationService:ConfigurationService,
               private formBuilder:FormBuilder,private etudiantService:EtudiantService,private encadreurService:EncadreurService,
-              private coordinateurService:CoordinateurService,private juryService:JuryService) { }
+              private coordinateurService:CoordinateurService,private juryService:JuryService,private notificationService:NotificationService) { }
 
   ngOnInit(): void {
 
@@ -73,34 +75,40 @@ export class UserCreateComponent implements OnInit {
     user.nom = userData.unom;
     user.prenom = userData.uprenom;
     user.username = userData.uemail;
-    user.password = userData.upwd
-    if(this.role = '1'){
+    user.password = this.upwd.value
+	console.log(this.role);
+    if(this.role == '1'){
       const e = new Etudiant();
       e.user = user;
       e.cin = userData.cne;
       e.codeAppoge = userData.codeAppoge;
       this.etudiantService.createEtudiant(e).subscribe(resp=>{
         if(resp>0){
-          this.flashMessagesService.show(userData.unom+" crée avec succée!", { cssClass: 'alert-success', timeout: 5000 });
+          this.notificationService.showSuccess(userData.unom+" crée avec succès!", "Gestion des étudiants");
           }else{
-          this.flashMessagesService.show("erreur dans la création de l'etudiant!", { cssClass: 'alert-danger', timeout: 5000 });
+          this.notificationService.showWarning("erreur dans la création de l'etudiant!", "Gestion des étudiants");
         }
+      },error => {
+        this.notificationService.showError("Erreur survenu!","Gestion des étudiants")
       })
-      console.log(e)
     }
 
     if(this.role == '2'){
       const c = new Coordinateur();
       c.reference = userData.rpp;
-      c.filiere.libelle = this.selectedFiliere;
+      c.filiere = this.selectedFiliere;
+	  c.user = user;
       this.coordinateurService.createCoordinateur(c).subscribe(resp=>{
+		  console.log(resp)
         if(resp>0){
-          this.flashMessagesService.show(userData.unom+" crée avec succée!", { cssClass: 'alert-success', timeout: 5000 });
+          this.notificationService.showSuccess(userData.unom+" est crée avec succès!", "Gestion des coordinateurs");
         }else{
-          this.flashMessagesService.show("erreur dans la création du coordinateur!", { cssClass: 'alert-danger', timeout: 5000 });
+          this.notificationService.showWarning("erreur dans la création du coordinateur!", "Gestion des coordinateurs");
         }
+      },error => {
+        this.notificationService.showError("erreur est survenu","Gestion des coordinateurs");
       })
-      console.log(c)
+
     }
   }
   get unom(){

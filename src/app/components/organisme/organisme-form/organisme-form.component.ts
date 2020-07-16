@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {StageService} from "../../../services/stage.service";
 import {OrganismeService} from "../../../services/organisme.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {NotificationService} from "../../../services/notification.service";
 
 @Component({
   selector: 'app-organisme-form',
@@ -27,7 +28,8 @@ export class OrganismeFormComponent implements OnInit {
     isClicked:false,
     valueChanged:false
   }
-  constructor(private stageService:StageService,private organismeService:OrganismeService,private formBuilder:FormBuilder) { }
+  constructor(private stageService:StageService,private organismeService:OrganismeService,private formBuilder:FormBuilder,
+              private notificationService:NotificationService) { }
 
   ngOnInit(): void {
     this.organismeForm = new FormGroup({
@@ -130,9 +132,15 @@ export class OrganismeFormComponent implements OnInit {
       this.organismeAccueil.ville.nom = formData.ville;
       this.organismeAccueil.ville.pays.nom = formData.pay;
       this.stage.organismeAccueil = this.organismeAccueil;
-      this.stageService.update(this.stage);
-      console.log(this.stage);
-      console.log(this.organismeAccueil);
+      this.stageService.update(this.stage).subscribe(resp=>{
+        if(resp>0){
+          this.notificationService.showSuccess("La structure d'acceuil est ajouter avec succès!","Modification de stage")
+        }else{
+          this.notificationService.showWarning("Erreur dans la modification de stage!","Modification de stage")
+        }
+      },error => {
+        this.notificationService.showError("Erreur est survenu!","Modification de stage");
+      })
     }
 
   }

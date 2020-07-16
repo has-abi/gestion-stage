@@ -3,7 +3,7 @@
     <h1><span class="fa fa-line-chart"></span> Statistics</h1>
     <div class="card-body">
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
           <div class="card shadow">
             <div class="card-header bg-light">
               <div class="row">
@@ -14,7 +14,7 @@
                   <div class="dropdown">
                     <button class="btn bg-dark btn-block dropdown-toggle shadow-sm text-white" data-toggle="dropdown" aria-expanded="false">Changer la filière</button>
                     <ul class="dropdown-menu shadow-sm" role="menu">
-                      <li *ngFor="let filiere of filieres" class="dropdown-item text-dark" (click)="chartData(filiere.id)">{{filiere.libelle}}</li>
+                      <li *ngFor="let filiere of filieres" class="dropdown-item text-dark" (click)="chartData(filiere.id)">{{filiere.abbr}}</li>
                     </ul>
                   </div>
                 </div>
@@ -25,7 +25,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-6">
           <app-pie></app-pie>
         </div>
       </div>

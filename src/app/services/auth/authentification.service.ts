@@ -11,13 +11,11 @@ export class AuthentificationService {
   private _user:User;
   private _loginError:string;
   private _jwtToken:string = null;
+
   url="http://localhost:8091/gestion-stage-api/user/";
   constructor(private httpClient:HttpClient,private sessionStorage:LocalStorageService,private router:Router) { }
   login(){
       this.httpClient.post(this.url+"login",this.user).subscribe(resp=>{
-        console.log("service")
-        console.log(resp);
-	      console.log(this.user);
         if(resp == -1){
           this.loginError = "Vous n'avez pas de compte!"
         }else if(resp == -2){
@@ -34,7 +32,7 @@ export class AuthentificationService {
     return this.httpClient.post("http://localhost:8091/login",this.user,{observe:'response'});
   }
   findByEmail(email:string){
-    this.httpClient.get<User>(this.url+"email/"+email).subscribe(user=>{
+    this.httpClient.post<User>(this.url+"email",email).subscribe(user=>{
       this.sessionStorage.store('logedUser',user);
       if(user.roles.length == 1){
           let r = user.roles[0];
@@ -45,8 +43,11 @@ export class AuthentificationService {
           }else if(r.role == "ADMIN_ROLE"){
             this.router.navigate(['admin/profile'])
           }else if(r.role == "ENCADREUR_ROLE"){
-		      console.log("we are in");
-            this.router.navigate(["encadreur/profile"])
+
+            this.router.navigate(["encadrant/profile"])
+          }
+		  else if(r.role == "JURY_ROLE"){
+            this.router.navigate(["jury/profile"])
           }
           this.sessionStorage.store("userRole",r.role);
       }
@@ -92,4 +93,5 @@ export class AuthentificationService {
     const headers = new HttpHeaders({'Authorization':this.jwtToken});
     return  headers;
   }
+
 }

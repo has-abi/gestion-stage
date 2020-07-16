@@ -8,6 +8,7 @@ import {Pays} from "../../../../models/pays.model";
 import {TypeOrganisme} from "../../../../models/type-organisme.model";
 import {TypeServiceOrganisme} from "../../../../models/type-service-organisme.model";
 import {FlashMessagesService} from "angular2-flash-messages";
+import {NotificationService} from "../../../../services/notification.service";
 
 @Component({
   selector: 'app-autre',
@@ -27,7 +28,7 @@ export class AutreComponent implements OnInit {
   service:TypeServiceOrganisme;
   updateEtablissement = false;
   constructor(private configurationService: ConfigurationService, private organismeService: OrganismeService,
-              private flashMessagesService: FlashMessagesService) {
+              private notificationService:NotificationService) {
   }
 
   ngOnInit(): void {
@@ -56,13 +57,12 @@ export class AutreComponent implements OnInit {
   updateEtab(){
     this.configurationService.updateEtablissement().subscribe(resp=>{
       if (resp > 0) {
-        this.flashMessagesService.show("Etablissement Modifier avec succée!", {cssClass: 'alert-success', timeout: 5000});
+        this.notificationService.showSuccess("Établissement Modifier avec succès!","Configuration de l'application");
       } else {
-        this.flashMessagesService.show("Erreur dans la modification de l'établissement!", {
-          cssClass: 'alert-danger',
-          timeout: 5000
-        });
+        this.notificationService.showWarning("Erreur dans la modification de l'établissement!", "Configuration de l'application");
       }
+    },error => {
+      this.notificationService.showError("Erreur est survenu!","Configuration de l'application");
     })
   }
 
@@ -115,30 +115,27 @@ export class AutreComponent implements OnInit {
     if (!this.ville.id) {
       this.configurationService.createVille(this.ville).subscribe(resp => {
         if (resp > 0) {
-          this.flashMessagesService.show("ville créé avec succéé!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("ville créé avec succès!","Configuration de l'application");
           this.villes.push(this.ville);
           this.ville = new Ville();
         } else {
-          this.flashMessagesService.show("Erreur dans la création de la ville!", {
-            cssClass: 'alert-danger',
-            timeout: 5000
-          });
+          this.notificationService.showWarning("Erreur dans la création de la ville!", "Configuration de l'application");
         }
+      },error => {
+        this.notificationService.showError("Erreur est survenu!","Configuration de l'application");
       });
-
     } else {
       this.configurationService.updateVille(this.ville).subscribe(resp => {
         if (resp > 0) {
-          this.flashMessagesService.show("ville modifier avec succéé!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("ville modifier avec succès!", "Configuration de l'application");
           this.ajouterElement.element = "";
           this.ajouterElement.ajouter = false;
           this.ville = new Ville();
         } else {
-          this.flashMessagesService.show("Erreur dans la modification de la ville!", {
-            cssClass: 'alert-danger',
-            timeout: 5000
-          });
+          this.notificationService.showWarning("Erreur dans la modification de la ville!", "Configuration de l'application");
         }
+      },error => {
+        this.notificationService.showError("Erreur est survenu!","Configuration de l'application");
       });
     }
   }
@@ -147,27 +144,28 @@ export class AutreComponent implements OnInit {
     if (!this.pay.id) {
       this.configurationService.createPays(this.pay).subscribe(resp => {
         if (resp > 0) {
-          this.flashMessagesService.show("Pays créé avec succéé!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("Pays créé avec succès!", "Configuration de l'application");
             this.pays.push(this.pay);
             this.pay = new Pays();
           } else {
-          this.flashMessagesService.show("Erreur dans la création du pays!", {cssClass: 'alert-danger', timeout: 5000});
+          this.notificationService.showWarning("Erreur dans la création du pays!", "Configuration de l'application");
         }
+      },error => {
+        this.notificationService.showError("Erreur est survenu!","Configuration de l'application");
       });
 
     } else {
       this.configurationService.updatePays(this.pay).subscribe(resp => {
         if (resp > 0) {
-          this.flashMessagesService.show("Pays modifier avec succéé!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("Pays modifier avec succès!", "Configuration de l'application");
           this.ajouterElement.element = "";
           this.ajouterElement.ajouter = false;
           this.pay = new Pays();
         } else {
-          this.flashMessagesService.show("Erreur dans la modification du Pays!", {
-            cssClass: 'alert-danger',
-            timeout: 5000
-          });
+          this.notificationService.showWarning("Erreur dans la modification du Pays!","Configuration de l'application");
         }
+      },error => {
+        this.notificationService.showError("Erreur est survenu!","Configuration de l'application");
       });
     }
   }
@@ -176,65 +174,59 @@ export class AutreComponent implements OnInit {
     if (!this.filiere.id) {
       this.configurationService.createFiliere(this.filiere).subscribe(resp => {
         if (resp > 0) {
-          this.flashMessagesService.show("Filière créé avec succéé!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("Filière créé avec succès!", "Configuration de l'application");
           this.filieres.push(this.filiere);
           this.filiere = new Filiere();
         } else {
-          this.flashMessagesService.show("Erreur dans la création du Filière!", {
-            cssClass: 'alert-danger',
-            timeout: 5000
-          });
+          this.notificationService.showWarning("Erreur dans la création du Filière!", "Configuration de l'application");
         }
+      },error => {
+        this.notificationService.showError("Erreur est survenu!","Configuration de l'application");
       });
 
     } else {
       this.configurationService.updateFiliere(this.filiere).subscribe(resp => {
         if (resp > 0) {
-          this.flashMessagesService.show("Filière modifier avec succéé!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("Filière modifier avec succès!", "Configuration de l'application");
           this.ajouterElement.element = "";
           this.ajouterElement.ajouter = false;
           this.filiere = new Filiere();
         } else {
-          this.flashMessagesService.show("Erreur dans la modification du Filière!", {
-            cssClass: 'alert-danger',
-            timeout: 5000
-          });
+          this.notificationService.showWarning("Erreur dans la modification du Filière!","Configuration de l'application");
         }
+      },error => {
+        this.notificationService.showError("Erreur est survenu!","Configuration de l'application");
       });
     }
   }
 
   createDep() {
     if (!this.dep.id) {
+		this.dep.etablissement = this.etablissement;
       this.configurationService.createDep(this.dep).subscribe(resp => {
         if (resp > 0) {
-          this.flashMessagesService.show("Département créé avec succéé!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("Département créé avec succès!", "Configuration de l'application");
           this.departements.push(this.dep);
           this.dep = new Departement();
         } else {
-          this.flashMessagesService.show("Erreur dans la création du Département!", {
-            cssClass: 'alert-danger',
-            timeout: 5000
-          });
+          this.notificationService.showWarning("Erreur dans la création du Département!", "Configuration de l'application");
         }
+      },error => {
+        this.notificationService.showError("Erreur est survenu!","Configuration de l'application");
       });
 
     } else {
       this.configurationService.updateDep(this.dep).subscribe(resp => {
         if (resp > 0) {
-          this.flashMessagesService.show("Département modifier avec succéé!", {
-            cssClass: 'alert-success',
-            timeout: 5000
-          });
+          this.notificationService.showSuccess("Département modifier avec succès!", "Configuration de l'application");
           this.ajouterElement.element = "";
           this.ajouterElement.ajouter = false;
           this.dep = new Departement();
         } else {
-          this.flashMessagesService.show("Erreur dans la modification du Département!", {
-            cssClass: 'alert-danger',
-            timeout: 5000
-          });
+          this.notificationService.showWarning("Erreur dans la modification du Département!","Configuration de l'application");
         }
+      },error => {
+        this.notificationService.showError("Erreur est survenu!","Configuration de l'application");
       });
     }
   }
@@ -243,28 +235,29 @@ export class AutreComponent implements OnInit {
     if (!this.type.id) {
       this.configurationService.createType(this.type).subscribe(resp => {
         if (resp > 0) {
-          this.flashMessagesService.show("Type créé avec succéé!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("Type créé avec succès!", "Configuration de l'application");
           this.typeOrganismes.push(this.type);
           this.type = new TypeOrganisme();
         } else {
-          this.flashMessagesService.show("Erreur dans la création du Type!", {cssClass: 'alert-danger', timeout: 5000});
+          this.notificationService.showWarning("Erreur dans la création du Type!", "Configuration de l'application");
         }
+      },error => {
+        this.notificationService.showError("Erreur est survenu!","Configuration de l'application");
       });
 
     } else {
       this.configurationService.updateType(this.type).subscribe(resp => {
         if (resp > 0) {
 
-          this.flashMessagesService.show("Type modifier avec succéé!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("Type modifier avec succès!", "Configuration de l'application");
           this.ajouterElement.element = "";
           this.type = new TypeOrganisme();
           this.ajouterElement.ajouter = false;
         } else {
-          this.flashMessagesService.show("Erreur dans la modification du Type!", {
-            cssClass: 'alert-danger',
-            timeout: 5000
-          });
+          this.notificationService.showWarning("Erreur dans la modification du Type!", "Configuration de l'application");
         }
+      },error => {
+        this.notificationService.showError("Erreur est survenu!","Configuration de l'application");
       });
     }
   }
@@ -273,30 +266,28 @@ export class AutreComponent implements OnInit {
     if (!this.service.id) {
       this.configurationService.createService(this.service).subscribe(resp => {
         if (resp > 0) {
-          this.flashMessagesService.show("Service créé avec succéé!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("Service créé avec succès!", "Configuration de l'application");
           this.typeServiceOrganismes.push(this.service);
           this.service = new TypeServiceOrganisme();
         } else {
-          this.flashMessagesService.show("Erreur dans la création du Service!", {
-            cssClass: 'alert-danger',
-            timeout: 5000
-          });
+          this.notificationService.showWarning("Erreur dans la création du Service!", "Configuration de l'application");
         }
+      },error => {
+        this.notificationService.showError("Erreur est survenu!","Configuration de l'application");
       });
 
     } else {
       this.configurationService.updateService(this.service).subscribe(resp => {
         if (resp > 0) {
-          this.flashMessagesService.show("Service modifier avec succéé!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("Service modifier avec succès!", "Configuration de l'application");
           this.service = new TypeServiceOrganisme();
           this.ajouterElement.element = "";
           this.ajouterElement.ajouter = false;
         } else {
-          this.flashMessagesService.show("Erreur dans la modification du Service!", {
-            cssClass: 'alert-danger',
-            timeout: 5000
-          });
+          this.notificationService.showWarning("Erreur dans la modification du Service!", "Configuration de l'application");
         }
+      },error => {
+        this.notificationService.showError("Erreur est survenu!","Configuration de l'application");
       });
     }
   }

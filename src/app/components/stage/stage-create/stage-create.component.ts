@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewChild, ElementRef } from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {StageService} from "../../../services/stage.service";
 import {Etudiant} from "../../../models/etudiant.model";
 import {EtudiantService} from "../../../services/etudiant.service";
@@ -14,6 +14,7 @@ import {OrganismeAccueil} from "../../../models/organisme-accueil.model";
 import {Stage} from "../../../models/stage.model";
 import {CoordinateurService} from "../../../services/coordinateur.service";
 import {LocalStorageService} from "ngx-webstorage";
+import {NotificationService} from "../../../services/notification.service";
 
 @Component({
   selector: 'app-stage-create',
@@ -24,15 +25,17 @@ export class StageCreateComponent implements OnInit {
   ajouterSujet = false;
   ajouterStructure = false;
   ajouterEncadreur = false;
-  stage:Stage  = new Stage();
-  typeEnc:string="--Type Encadreur--";
-  constructor(private stageService: StageService,private etudiantService: EtudiantService,private encadreurService:EncadreurService,
-              private juryService:JuryService,private flashMessagesService:FlashMessagesService,private passwordGeneratorService:PasswordGeneratorService
-              ,private organismeService:OrganismeService,private coordinateurService:CoordinateurService,private localStorage:LocalStorageService) { }
+  stage: Stage = new Stage();
+  typeEnc: string = "--Type Encadreur--";
+
+  constructor(private stageService: StageService, private etudiantService: EtudiantService, private encadreurService: EncadreurService,
+              private juryService: JuryService, private notificationService:NotificationService, private passwordGeneratorService: PasswordGeneratorService
+    , private organismeService: OrganismeService, private coordinateurService: CoordinateurService, private localStorage: LocalStorageService) {
+  }
 
   ngOnInit(): void {
     const user = this.localStorage.retrieve("logedUser");
-    this.coordinateurService.findByUserId(user.id).subscribe(coord=>{
+    this.coordinateurService.findByUserId(user.id).subscribe(coord => {
       this.etudiantService.findByFiliere(coord.filiere.id);
       this.organismeService.findByFiliere(coord.filiere.id);
       this.encadreurService.findByFiliere(coord.filiere.id);
@@ -43,187 +46,215 @@ export class StageCreateComponent implements OnInit {
     this.coordinateurService.getCoordinateur();
   }
 
-  increaseEtudiants(){
+  increaseEtudiants() {
     this.etudiants.push(this.cloneEtudiant(new Etudiant()));
   }
-  increaseEncadrants(){
-	if(this.typeEnc != "--Type Encadreur--"){
-	 this.ajouterEncadreur = true;
-    const e = new Encadreur();
-    e.type = this.typeEnc;
-    if(this.typeEnc == "Encadreur de l'organisme"){
-      const  d = new Date();
-      e.reference = "EO"+d.getTime();
+
+  increaseEncadrants() {
+    if (this.typeEnc != "--Type Encadreur--") {
+      this.ajouterEncadreur = true;
+      const e = new Encadreur();
+      e.type = this.typeEnc;
+      if (this.typeEnc == "Encadreur de l'organisme") {
+        const d = new Date();
+        e.reference = "EO" + d.getTime();
+      }
+      this.encadreurs.push(this.cloneEncadreur(e));
     }
-    this.encadreurs.push(this.cloneEncadreur(e));
-	}
-  }
-  decreaseEtudiant(i:number){
-      this.etudiants.splice(i,1);
   }
 
-  get fEncadreurs(){
+  decreaseEtudiant(i: number) {
+    this.etudiants.splice(i, 1);
+  }
+
+  get fEncadreurs() {
     return this.encadreurService.fEncadreurs;
   }
-  get fEtudiants(){
+
+  get fEtudiants() {
     return this.etudiantService.fEtudiants
   }
-  get organismes(){
+
+  get organismes() {
     return this.organismeService.organismeAcceuils;
   }
-  decreaseEncadreur(i:number){
-      this.encadreurs.splice(i,1);
-      if(this.encadreurs.length == 0) this.ajouterSujet = false;
+
+  decreaseEncadreur(i: number) {
+    this.encadreurs.splice(i, 1);
+    if (this.encadreurs.length == 0) this.ajouterSujet = false;
   }
-  get etudiants(){
+
+  get etudiants() {
     return this.etudiantService.etudiants;
   }
-  get etudiant(){
+
+  get etudiant() {
     return this.etudiantService.etudiant;
   }
-  get encadreur(){
+
+  get encadreur() {
     return this.encadreurService.encadreur;
   }
-  get encadreurs(){
+
+  get encadreurs() {
     return this.encadreurService.encadreurs;
   }
-  cloneEtudiant(etudiant:Etudiant){
-   return this.etudiantService.cloneEtudiant(etudiant);
+
+  cloneEtudiant(etudiant: Etudiant) {
+    return this.etudiantService.cloneEtudiant(etudiant);
   }
-  cloneEncadreur(encadreur:Encadreur){
+
+  cloneEncadreur(encadreur: Encadreur) {
     return this.encadreurService.cloneEncadreur(encadreur);
   }
-  ceateStage(){
-    this.etudiants.forEach(e=>{
-      if(e.cin){
-        const se = new StageEtudiant();
-        e.filiere.id = 1;
-        se.etudiant = e;
-        this.stage.stageEtudiants.push(se);
-      }
-    });
-    this.encadreurs.forEach(e=>{
-      if(e.reference){
+
+  ceateStage() {
+    this.encadreurs.forEach(e => {
+      if (e.reference) {
         const se = new StageEncadreur();
         se.encadreur = e;
         this.stage.stageEncadreurs.push(se);
       }
     })
     const user = this.localStorage.retrieve('logedUser')
-    this.coordinateurService.findByUserId(user.id).subscribe(coord=>{
-      this.stage.coordinateur= coord
+    this.coordinateurService.findByUserId(user.id).subscribe(coord => {
+      this.etudiants.forEach(e => {
+        if (e.cin) {
+          const se = new StageEtudiant();
+          e.filiere = coord.filiere;
+          se.etudiant = e;
+          this.stage.stageEtudiants.push(se);
+        }
+      });
+
+      this.stage.coordinateur = coord
       console.log(this.stage)
-      this.stageService.save(this.stage).subscribe(resp=>{
+      this.stageService.save(this.stage).subscribe(resp => {
         console.log(this.stage)
         console.log(resp)
-        if(resp>0){
-          this.flashMessagesService.show('stage est crée avec succée!', { cssClass: 'alert-success', timeout: 6000 })
+        if (resp > 0) {
+          this.notificationService.showSuccess("stage est crée avec succès!", "Gestion des stages")
           this.stage = new Stage();
           this.etudiantService.etudiants = new Array<Etudiant>();
           this.encadreurService.encadreurs = new Array<Encadreur>();
-		  this.etudiants.push(this.etudiant);
-          this.stage.organismeAccueil =  null;
-		  this.ajouterEncadreur = false;
-		  this.ajouterStructure = false;
-		  this.ajouterSujet = false; 
-        }else{
-          this.flashMessagesService.show('il y\'a un problème dans la création du stage! ', { cssClass: 'alert-danger', timeout: 6000 })
+          this.etudiants.push(this.etudiant);
+          this.stage.organismeAccueil = null;
+          this.ajouterEncadreur = false;
+          this.ajouterStructure = false;
+          this.ajouterSujet = false;
+        } else {
+          this.notificationService.showWarning("il y\'a un problème dans la création du stage!", "Gestion des stages")
         }
+      },error => {
+        this.notificationService.showError("Erreur est  survenu!", "Gestion des stages")
       });
 
     });
     console.log(this.stage);
 
   }
-  findEtudiantByCin(i:number) {
-      if(this.etudiants[i].cin ){
-        this.etudiantService.findByCin(this.etudiants[i].cin)
-        this.etudiants[i] = this.etudiant;
-      }
+
+  findEtudiantByCin(i: number) {
+    if (this.etudiants[i].cin) {
+      this.etudiantService.findByCin(this.etudiants[i].cin)
+      this.etudiants[i] = this.etudiant;
+    }
   }
-  generateP(i:number){
-      this.encadreurs[i].user.password = this.passwordGeneratorService.getRandomPassword();
+
+  generateP(i: number) {
+    this.encadreurs[i].user.password = this.passwordGeneratorService.getRandomPassword();
   }
-  get typeOrganismes(){
+
+  get typeOrganismes() {
     return this.organismeService.typeOrganismes;
   }
-  get typeServiceOrganismes(){
+
+  get typeServiceOrganismes() {
     return this.organismeService.typeServiceOrganismes;
   }
-  get villes(){
+
+  get villes() {
     return this.organismeService.villes;
   }
-  get pays(){
+
+  get pays() {
     return this.organismeService.pays;
   }
-  initOrganisation(){
-    this.stage.organismeAccueil.ville.nom = this.stage.organismeAccueil.typeOrganisme.type = this.stage.organismeAccueil.typeServiceOrganisme.type =this.stage.organismeAccueil.ville.pays.nom= "--SELECT--"
-  }
-  toggleOrganisme(){
 
-    this.ajouterStructure =!this.ajouterStructure;
-    if(this.ajouterStructure){
+  initOrganisation() {
+    this.stage.organismeAccueil.ville.nom = this.stage.organismeAccueil.typeOrganisme.type = this.stage.organismeAccueil.typeServiceOrganisme.type = this.stage.organismeAccueil.ville.pays.nom = "--SELECT--"
+  }
+
+  toggleOrganisme() {
+
+    this.ajouterStructure = !this.ajouterStructure;
+    if (this.ajouterStructure) {
       this.organismeService.findAllPays();
       this.organismeService.findAllTypeOrganisme();
       this.organismeService.findAllTypeServiceOrganisme();
       this.organismeService.findAllVille();
       this.stage.organismeAccueil = new OrganismeAccueil();
       this.initOrganisation();
-    }else{
+    } else {
       this.stage.organismeAccueil = null;
     }
   }
+
   validateInputs() {
-    return this.stage.dateDebut  && this.stage.dateFin && this.validateEtuiants() && this.validateEncadreurs();
+    return this.stage.dateDebut && this.stage.dateFin && this.validateEtuiants() && this.validateEncadreurs();
   }
-  validateOrganisme(){
-    if(this.stage.organismeAccueil != null){
+
+  validateOrganisme() {
+    if (this.stage.organismeAccueil != null) {
       const o = this.stage.organismeAccueil;
-      return o.raisonSociale && o.adress && o.email && o.responsable && o.tele && o.teleFix && o.typeOrganisme.type !="--SELECT--" && o.typeServiceOrganisme.type != "--SELECT--" && o.ville.nom != "--SELECT--" && o.ville.pays.nom !="--SELECT--";
-    }else{
+      return o.raisonSociale && o.adress && o.email && o.responsable && o.tele && o.teleFix && o.typeOrganisme.type != "--SELECT--" && o.typeServiceOrganisme.type != "--SELECT--" && o.ville.nom != "--SELECT--" && o.ville.pays.nom != "--SELECT--";
+    } else {
       return true;
     }
 
   }
-  validateEtuiants(){
 
-    for(let i = 0;i<this.etudiants.length;i++) {
-      if((this.etudiants[i].cin == undefined  || this.etudiants[i].cin.length != 10) || (this.etudiants[i].codeAppoge == undefined  || this.etudiants[i].codeAppoge.length ==0)
-        || (this.etudiants[i].user.nom == undefined || this.etudiants[i].user.nom.length==0) || (this.etudiants[i].user.prenom == undefined  || this.etudiants[i].user.prenom.length==0)){
+  validateEtuiants() {
+
+    for (let i = 0; i < this.etudiants.length; i++) {
+      if ((this.etudiants[i].cin == undefined || this.etudiants[i].cin.length != 10) || (this.etudiants[i].codeAppoge == undefined || this.etudiants[i].codeAppoge.length == 0)
+        || (this.etudiants[i].user.nom == undefined || this.etudiants[i].user.nom.length == 0) || (this.etudiants[i].user.prenom == undefined || this.etudiants[i].user.prenom.length == 0)) {
         return false;
       }
     }
-      return true;
+    return true;
   }
 
-  validateEncadreurs(){
-    if(this.encadreurs.length == 0) return  true;
-    for(let i = 0;i<this.encadreurs.length;i++){
-      if(((this.encadreurs[i].reference == undefined || this.encadreurs[i].reference.length == 0) ||(this.encadreurs[i].user.nom == undefined  || this.encadreurs[i].user.nom.length ==0) ||
-        (this.encadreurs[i].user.prenom == undefined  || this.encadreurs[i].user.prenom.length == 0) || (this.encadreurs[i].user.username == undefined  || this.encadreurs[i].user.username.length == 0)) ||
-        (this.encadreurs[i].user.password  == undefined  || this.encadreurs[i].user.password.length == 0)){
+  validateEncadreurs() {
+    if (this.encadreurs.length == 0) return true;
+    for (let i = 0; i < this.encadreurs.length; i++) {
+      if (((this.encadreurs[i].reference == undefined || this.encadreurs[i].reference.length == 0) || (this.encadreurs[i].user.nom == undefined || this.encadreurs[i].user.nom.length == 0) ||
+        (this.encadreurs[i].user.prenom == undefined || this.encadreurs[i].user.prenom.length == 0) || (this.encadreurs[i].user.username == undefined || this.encadreurs[i].user.username.length == 0)) ||
+        (this.encadreurs[i].user.password == undefined || this.encadreurs[i].user.password.length == 0)) {
         return false;
       }
     }
-      return true;
+    return true;
   }
 
-  choisirEtud(e:Etudiant){
-    if(this.etudiants.length<2){
-      if(!this.validateEtuiants()){
-        this.etudiants.splice(0,1);
+  choisirEtud(e: Etudiant) {
+    if (this.etudiants.length < 2) {
+      if (!this.validateEtuiants()) {
+        this.etudiants.splice(0, 1);
       }
       this.etudiants.push(e);
     }
   }
-  choisirEnca(e:Encadreur){
-    if(this.encadreurs.length<2){
+
+  choisirEnca(e: Encadreur) {
+    if (this.encadreurs.length < 2) {
       this.ajouterEncadreur = true;
       this.encadreurs.push(e);
       console.log(this.encadreurs)
     }
   }
-  addOrg(o:OrganismeAccueil){
+
+  addOrg(o: OrganismeAccueil) {
     this.stage.organismeAccueil = o;
 
   }

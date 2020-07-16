@@ -143,9 +143,9 @@
         <div class="col-md-3">
           <div class="form-group">
             <label for="vpays">Pays*</label>
-            <select  id="vpays" class="form-control" [(ngModel)]="ville.pays.nom">
+            <select  id="vpays" class="form-control" >
               <option [ngValue]="'--SELECT--'" selected disabled>--SELECT--</option>
-              <option *ngFor="let p of pays" value="{{p.nom}}" >{{p.nom}}</option>
+              <option *ngFor="let p of pays" value="{{p.nom}}" (click)="ville.pays = p">{{p.nom}}</option>
             </select>
           </div>
         </div>
@@ -191,18 +191,30 @@
       </div>
 
       <div *ngIf="ajouterElement.element == 'filiere' && ajouterElement.ajouter == true" class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="form-group">
             <label for="filiere">Filière*</label>
             <input type="text" id="filiere" class="form-control" placeholder="filière ..." [(ngModel)]="filiere.libelle">
           </div>
         </div>
+		  <div class="col-md-3">
+          <div class="form-group">
+            <label for="filiere">Abréviation*</label>
+            <input type="text" id="filiere" class="form-control" placeholder="abbr ..." [(ngModel)]="filiere.abbr">
+          </div>
+        </div>
+		 <div class="col-md-2">
+          <div class="form-group">
+            <label for="filiere">Déplôme*</label>
+            <input type="text" id="filiere" class="form-control" placeholder="abbr ..." [(ngModel)]="filiere.diplome">
+          </div>
+        </div>
         <div class="col-md-3">
           <div class="form-group">
             <label for="fdep">Département*</label>
-            <select  id="fdep" class="form-control" [(ngModel)]="filiere.departement.libelle">
+            <select  id="fdep" class="form-control">
               <option [ngValue]="'--SELECT--'" selected disabled>--SELECT--</option>
-              <option *ngFor="let d of departements" value="{{d.libelle}}">{{d.libelle}}</option>
+              <option *ngFor="let d of departements" value="{{d.libelle}}" (click)="filiere.departement = d">{{d.libelle}}</option>
             </select>
           </div>
         </div>

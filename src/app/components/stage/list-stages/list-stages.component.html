@@ -5,12 +5,11 @@
         <h1 class="text-dark"> <span class="fa fa-bars"></span> Stages</h1>
       </div>
       <div class="col-sm-2">
-        <select class="form-control" [(ngModel)]="showenStages">
+        <select class="form-control" [(ngModel)]="showenStages" (change)="changerStag()">
           <option value="active">Active Stages</option>
           <option value="tout">Tout Stages</option>
         </select>
       </div>
-
     </div>
 
   </div>
@@ -76,12 +75,12 @@
       <div *ngIf="role == 'COORDINATEUR_ROLE' " class="btn-group float-right">
         <button  class="btn btn-light shadow-sm" (click)="plannig()">Planning <span class="fa fa-calendar"></span></button>
         <button   class="btn btn-dark shadow-sm" (click)=" chargerPv()">PV <span class="fa fa-file"></span></button>
-      </div>  
+      </div>
     </div>
-    <div  *ngIf="selectedStages.length>0 && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')"  class="col-md-3 mt-2 offset-5">
+    <div  *ngIf="selectedStages.length>0 && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')"  class="col-md-3 mt-2">
       <div class="btn-group">
         <button class="btn btn-danger shadow-sm" (click)="deleteAll()">Suprimer <span class="fa fa-trash"></span></button>
-        <button class="btn btn-primary mx-1 shadow-sm" (click)="activateAll()">Activer <span class="fa fa-check"></span></button>
+        <button *ngIf="!checkStatus()" class="btn btn-primary mx-1 shadow-sm" (click)="activateAll()">Activer <span class="fa fa-check"></span></button>
       </div>
 
     </div>
@@ -151,10 +150,10 @@
               </ul>
             </td>
             <td *ngIf="columns.organisme" class="text-center"><span *ngIf="stage.organismeAccueil">{{stage.organismeAccueil.raisonSociale}}</span>
-              <span *ngIf="stage.organismeAccueil == null "><span data-toggle="tooltip" data-placement="top" title="Ajouter la structure d'accueil" class="fa fa-plus-circle text-success fa-2x" data-toggle="modal" data-target="#organismeModal" (click)="ajouterStructure(stage)"></span></span>
+              <span *ngIf="stage.organismeAccueil == null "><span data-toggle="tooltip" data-placement="top" title="Ajouter la structure d'accueil" class="fa fa-plus-circle text-success fa-2x" data-toggle="modal" data-target="#organismeModal" (click)="ajouterStructure(stage);ajouterOrganisme=!ajouterOrganisme;"></span></span>
             </td>
             <td *ngIf="columns.rapport" class="text-center">
-              <button *ngIf="stage.rapport != null" class="btn btn-danger" data-toggle="modal" data-target="#ViewrapportModal" (click)="diaplayRapport(stage.rapport)"><span class="fa fa-file-pdf-o"></span></button>
+              <button *ngIf="stage.rapport != null" class="btn " [class.btn-success]="stage.rapport.valider" [class.btn-danger]="!stage.rapport.valider" data-toggle="modal" data-target="#ViewrapportModal" (click)="diaplayRapport(stage.rapport)"><span class="fa fa-file-pdf-o"></span></button>
               <button *ngIf="stage.rapport == null" class="btn btn-info" data-toggle="modal" data-target="#rapportModal" (click)="setStageRef(stage.reference)"><span class="fa fa-upload"></span></button>
             </td>
             <td *ngIf="columns.convention && (role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')">
@@ -175,7 +174,7 @@
 
 
   </div>
-  <div *ngIf="selectedTable == 'Stages'" class="card-footer d-flex justify-content-center align-items-center">
+  <div *ngIf="showenStages == 'tout'" class="card-footer d-flex justify-content-center align-items-center">
     <nav class="text-center m-auto">
       <ul *ngIf="searchStage.length == 0"  class="pagination">
         <li class="page-item">
@@ -209,5 +208,5 @@
 
 <app-rapport></app-rapport>
 <app-rapport-display></app-rapport-display>
-<app-ajouter-organisme></app-ajouter-organisme>
-<app-convention *ngIf="(role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE')"></app-convention>
+<app-ajouter-organisme *ngIf="ajouterOrganisme"></app-ajouter-organisme>
+<app-convention *ngIf="(role == 'COORDINATEUR_ROLE' || role == 'ADMIN_ROLE') && convent"></app-convention>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {AuthentificationService} from "../../../services/auth/authentification.service";
-import {LocalStorageService, SessionStorageService} from "ngx-webstorage";
+import {LocalStorageService} from "ngx-webstorage";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -10,7 +10,7 @@ import {LocalStorageService, SessionStorageService} from "ngx-webstorage";
 export class LoginComponent implements OnInit {
   loginForm;
   constructor(private formBuilder:FormBuilder,private authentificationService:AuthentificationService,
-              private sessionStorage:LocalStorageService) { }
+              private localStorage:LocalStorageService) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -30,7 +30,8 @@ export class LoginComponent implements OnInit {
         //this.loginUser();
       this.authentificationService.springLogin().subscribe(resp=>{
         const jwt = resp.headers.get('Authorization')
-        this.sessionStorage.store('jwt',jwt);
+        this.localStorage.store('jwt',jwt);
+        this.localStorage.store("firstLogin",true);
         this.authentificationService.findByEmail(this.user.username);
       },error => {
         this.authentificationService.loginError = "E-mail ou mot de pass incorrect(s)!"

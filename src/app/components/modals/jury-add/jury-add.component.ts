@@ -9,6 +9,7 @@ import {User} from "../../../models/user.model";
 import {StageService} from "../../../services/stage.service";
 import {StageMembreJury} from "../../../models/stage-membre-jury.model";
 import {PasswordGeneratorService} from "../../../services/utils/password-generator.service";
+import {NotificationService} from "../../../services/notification.service";
 
 @Component({
   selector: 'app-jury-add',
@@ -20,7 +21,7 @@ export class JuryAddComponent implements OnInit {
   type = "";
   stageJuries:Array<StageMembreJury> = new Array<StageMembreJury>();
   constructor(private localStorage:LocalStorageService,private juryService:JuryService,private encadreurService:EncadreurService,private coordinateurService:CoordinateurService,
-              private stageService:StageService,private passwordGeneratorService:PasswordGeneratorService) { }
+              private stageService:StageService,private passwordGeneratorService:PasswordGeneratorService,private notificationService:NotificationService) { }
 
   ngOnInit(): void {
 
@@ -29,7 +30,6 @@ export class JuryAddComponent implements OnInit {
       this.encadreurService.findByFiliere(coord.filiere.id);
       this.juryService.findByfiliere(coord.filiere.id);
     })
-    console.log(this.encadreurs);
   }
 
   get encadreurs():Array<Encadreur>{
@@ -69,7 +69,15 @@ export class JuryAddComponent implements OnInit {
         sj.membreJury.reference = "J"+this.getTime();
       }
     })
-        this.stageService.update(this.stage).subscribe()
+        this.stageService.update(this.stage).subscribe(resp=>{
+          if(resp>0){
+            this.notificationService.showSuccess("Le jury est ajouté avec succès","Gestion des jurys")
+          }else{
+            this.notificationService.showWarning("Erreur dans l'ajout de jury","Gestion des jurys")
+          }
+        },error => {
+          this.notificationService.showError("Erreur est survenu","Gestion des jurys")
+        })
   }
   ajouterMembre(){
     if(this.stage.stageMembreJuries.length+this.stageJuries.length<3){

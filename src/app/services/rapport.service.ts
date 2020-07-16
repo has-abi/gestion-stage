@@ -114,13 +114,13 @@ export class RapportService {
   countRapport():Observable<number>{
     return this.http.get<number>(this.url+"count",{headers:this.authentificationService.getHeaders()});
   }
-  validerRapport(){
-    this.http.put(this.url+"reference",this.rapport.reference,{headers:this.authentificationService.getHeaders()}).subscribe(resp=>{
-      if(resp>0){
-        this.rapport.valider = true;
-      }
-    })
-    return this.rapport;
+  validerRapport():Observable<number> {
+    return this.http.put<number>(this.url + "reference", this.rapport.reference, {headers: this.authentificationService.getHeaders()});
+  }
+
+
+  delete(r:Rapport):Observable<number>{
+    return this.http.delete<number>(this.url+"ref/"+r.reference,{headers:this.authentificationService.getHeaders()})
   }
 
   get tacheRef(): string {

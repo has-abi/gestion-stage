@@ -1,0 +1,56 @@
+<div  class="modal" id="commenterDoc" tabindex="-1" role="dialog" aria-labelledby="commenterDoc" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-warning shadow-sm">
+        <h1 class="modal-title"><span class="fa fa-comments"></span> {{document.titre}}</h1>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row mx-2">
+		          <textarea class="form-control ml-1 shadow-none textarea" [(ngModel)]="comment.contenu"></textarea>
+          <div class="mt-2 text-right"><button  class="btn btn-success btn-sm shadow-none" [disabled]="!comment.contenu || comment.contenu.length == 0" style="cursor: pointer" (click)="create()">Commenter</button>
+		  </div>
+        </div>
+        <div class="row mx-2 my-2 bg-light p-2">
+		<div *ngIf="comments.length == 0" class="alert alert-light ">La liste des commentaires est vide!</div>
+          <div  *ngFor="let c of comments,let i = index" class="row p-2 m-3 bg-white " style="border-radius: 10px">
+            <div class="col-12 d-flex flex-row">
+              <div class="p-2">
+                <img *ngIf="c.user.photo==null" src="../../../assets/unnamed.png" alt="photo" class="rounded-circle" height="40" width="40">
+                <img *ngIf="c.user.photo!=null"  src="http://localhost:8091/gestion-stage-api/user/image/{{c.user.photo}}" alt="photo" class="rounded-circle" height="40" width="40">
+              </div>
+              <div class="p-2">
+                <div class="font-weight-bold" style="color:#db7b04 ;">{{c.user.nom}} {{c.user.prenom}}</div>
+                <div class=" small text-dark">Publier le- {{c.dateCreation|date:'medium'}}</div>
+              </div>
+            </div>
+            <div *ngIf="!updateC.update || updateC.id != c.id" class="text-left col-12">{{c.contenu}}</div>
+            <div *ngIf="updateC.update && updateC.id == c.id" class="col-12 row ml-4">
+              <textarea  cols="30" rows="2" class="form-control col-10" [(ngModel)]="commentToUpdate.contenu">Sujet ...</textarea>
+
+              <div class="col-2"><button class="btn btn-sm shadow-none btn-success" (click)="update()"><span class="fa fa-check"></span></button>
+                <button class="btn btn-warning btn-sm shadow-none" (click)="updateC.update = false"><span class="fa fa-times"></span></button>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="btn-group float-right">
+                <div *ngIf="user.id == c.user.id || checkAdmin() == true" class="dropdown">
+                  <button class="btn btn-white shadow-sm dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" aria-expanded="false" type="button" id="commDropdown"><span class="fa fa-ellipsis-v"></span></button>
+                  <ul class="dropdown-menu w-75" aria-labelledby="commDropdown">
+                    <li class="dropdown-item" style="cursor:pointer" (click)="updateComm(c)"><span class="fa fa-pencil" ></span> Editer</li>
+                    <li class="dropdown-item" style="cursor:pointer" (click)="delete(c)"><span class="fa fa-trash" ></span> Supprimer</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>

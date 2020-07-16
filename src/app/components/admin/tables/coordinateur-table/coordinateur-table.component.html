@@ -26,7 +26,6 @@
   <table class="table table-striped shadow-sm mt-3">
     <thead>
     <tr>
-      <td><input type="checkbox"></td>
       <td>RPP</td>
       <td>Nom</td>
       <td>Prénom</td>
@@ -40,7 +39,6 @@
     </thead>
     <tbody>
     <tr *ngFor="let cooord of pageCoordinateur.content| sortBy: tableOrder.order:tableOrder.prop">
-      <td><input type="checkbox"></td>
       <td>{{cooord.reference}}</td>
       <td>{{cooord.user.nom}}</td>
       <td>{{cooord.user.prenom}}</td>

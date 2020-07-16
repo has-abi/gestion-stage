@@ -7,6 +7,8 @@ import {StageService} from "../../../services/stage.service";
 import {UserService} from "../../../services/user.service";
 import {ForumService} from "../../../services/forum.service";
 import {RapportService} from "../../../services/rapport.service";
+import {NotificationService} from "../../../services/notification.service";
+import {LocalStorageService} from "ngx-webstorage";
 
 @Component({
   selector: 'app-main',
@@ -23,9 +25,15 @@ export class MainComponent implements OnInit {
   nombreRepport = 0;
   nombreForum =0;
   constructor(private etudiantService:EtudiantService,private encadreurService:EncadreurService,private juryService:JuryService,
-              private stageService:StageService,private userService:UserService, private forumService:ForumService,private rapportService:RapportService) { }
+              private stageService:StageService,private userService:UserService, private forumService:ForumService,
+              private rapportService:RapportService,private notificationService:NotificationService,private localStorage:LocalStorageService) { }
 
   ngOnInit(): void {
+    const user = this.localStorage.retrieve("logedUser");
+    if(this.localStorage.retrieve("firstLogin")){
+      this.notificationService.showInfo("Bienvenu "+user.nom+" "+user.prenom+"!","Administration")
+      this.localStorage.store("firstLogin",false);
+    }
     this.countForums();
     this.countRapports();
     this.countStages();

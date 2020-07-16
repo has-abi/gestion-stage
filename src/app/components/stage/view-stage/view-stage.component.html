@@ -4,8 +4,8 @@
     <span *ngIf="!updateStage.stage && !stage.statu && !checkFinStage()" class="fa fa-pencil fa-2x float-right" (click)="updateStage.stage  = !updateStage.stage" style="cursor: pointer"></span>
     <span *ngIf="updateStage.stage" class="fa fa-times fa-2x float-right" (click)="updateStage.stage  = !updateStage.stage" style="cursor: pointer"></span>
     <div  class="row">
-      <div class="col-md-3"><b>Statu:</b> <span *ngIf="stage.statu" class="text-success">Active <span class="fa fa-check"></span></span>
-        <span *ngIf="!stage.statu" class="text-warning"><span class="font-weight-bolder ml-2">Inactive</span> <span class="fa fa-warning"></span> <span class="btn-sm btn-success mx-3 fa fa-check"></span></span>
+      <div class="col-md-3"><b>Statu:</b> <span *ngIf="stage.statu" class="badge badge-success">Active <span class="fa fa-check"></span></span>
+        <span *ngIf="!stage.statu" class="text-warning"><span class="badge badge-warning ml-2">Inactive <span class="fa fa-warning text-white"></span></span>  <span class="mx-3 btn-sm btn-success fa fa-check mb-2" (click)="stage.statu = true"></span></span>
       </div>
       <div class="col-md-3"><b><span class="fa fa-calendar"></span> Date céation :</b>{{stage.dateCreation}}</div>
       <div class="col-md-3"><b><span class="fa fa-calendar"></span> Date début :</b>{{stage.dateDebut}}</div>
@@ -26,7 +26,7 @@
       </div>
       <div class="input-group col-md-6">
         <div class="input-group-prepend " >
-          <div class="input-group-text bg-light">Ajouter le Sujet <span class="fa fa-chevron-circle-right"></span></div>
+          <div class="input-group-text bg-light">le Sujet <span class="fa fa-chevron-circle-right"></span></div>
         </div>
         <input type="text" class="form-control" placeholder="sujet de stage..."  [(ngModel)]="stage.sujet">
       </div>
@@ -71,11 +71,15 @@
         <div *ngIf="updateStage.etudiants" class="card-footer">
           <div  *ngFor="let se of stage.stageEtudiants">
             <div class="row">
-              <div class="form-group col-md-6">
-                <label for="cin">Cin*</label>
-                  <input type="text" class="form-control" placeholder="cin..." id="cin" [(ngModel)]="se.etudiant.cin" [class.border-warning]=" se.etudiant.cin =='' "  >
+              <div class="form-group col-md-4">
+                <label for="nom">Nom*</label>
+                  <input type="text" class="form-control" placeholder="nom..." id="nom" [(ngModel)]="se.etudiant.user.nom" [class.border-warning]=" se.etudiant.user.nom =='' "  >
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
+                <label for="prenom">Prénom*</label>
+                <input type="text" class="form-control" placeholder="prénom..." id="prenom" [(ngModel)]="se.etudiant.user.prenom" [class.border-warning]=" se.etudiant.user.prenom =='' "  >
+              </div>
+              <div class="form-group col-md-4">
                 <label for="codeAppoge">Code d'appogé*</label>
                 <input type="text" class="form-control" placeholder="code d'appogé..." id="codeAppoge" [(ngModel)]="se.etudiant.codeAppoge" [class.border-warning]=" se.etudiant.codeAppoge =='' ">
               </div>
@@ -98,12 +102,12 @@
               <input type="text" class="form-control" placeholder="code d'appogé..." id="McodeAppoge" [(ngModel)]="etudiant.codeAppoge" [class.border-warning]=" etudiant.codeAppoge =='' ">
             </div>
             <div class="form-group col-md-3">
-              <label for="nom">Nom*</label>
-              <input type="text" class="form-control" placeholder="nom..." id="nom" [(ngModel)]="etudiant.user.nom" [class.border-warning]=" etudiant.user.nom =='' ">
+              <label for="enom">Nom*</label>
+              <input type="text" class="form-control" placeholder="nom..." id="enom" [(ngModel)]="etudiant.user.nom" [class.border-warning]=" etudiant.user.nom =='' ">
             </div>
             <div class="form-group col-md-3">
-              <label for="prenom">Prénom</label>
-              <input type="text" class="form-control" placeholder="prénom..." id="prenom" [(ngModel)]="etudiant.user.prenom" [class.border-warning]=" etudiant.user.prenom =='' ">
+              <label for="eprenom">Prénom</label>
+              <input type="text" class="form-control" placeholder="prénom..." id="eprenom" [(ngModel)]="etudiant.user.prenom" [class.border-warning]=" etudiant.user.prenom =='' ">
             </div>
           </div>
           <button *ngIf="ajouterEtudiant" class="btn-sm btn-danger float-right" (click)="ajouterEtudiant = false"><span class="fa fa-minus-circle"></span></button>
@@ -124,10 +128,12 @@
             <td>Téléphone</td>
             <td>Email</td>
             <td>profession</td>
+			<td>Qualité</td>
             <td>Type</td>
           </tr>
           </thead>
           <tbody>
+          <tr *ngIf="!stage.stageEncadreurs || stage.stageEncadreurs.length == 0" class="alert alert-light text-center"><td colspan="8">La liste des encadrants est vide!</td></tr>
           <tr *ngFor="let se of stage.stageEncadreurs">
             <td>{{se.encadreur.user.nom}}</td>
             <td>{{se.encadreur.user.prenom}}</td>
@@ -135,13 +141,15 @@
             <td>{{se.encadreur.user.tele}}</td>
             <td>{{se.encadreur.user.username}}</td>
             <td>{{se.encadreur.profession}}</td>
+			<td>{{se.encadreur.qualite}}</td>
             <td>{{se.encadreur.type}}</td>
           </tr>
           </tbody>
         </table>
       </div>
       <div *ngIf="updateStage.encadreurs" class="card-footer">
-        <div *ngFor="let e of stage.stageEncadreurs ">
+	  <ul class="list-group list-group-flush">
+	  <li  class="list-group-item list-group-item-action" *ngFor="let e of stage.stageEncadreurs ">
             <div class="row mt-2">
               <div *ngIf="e.encadreur.type == 'Encadreur de la faculté'" class="form-group col-md-3">
                 <label for="ref">Rpp*</label>
@@ -159,6 +167,10 @@
                 <label for="profession">Profession*</label>
                 <input type="text" class="form-control" placeholder="profession..." id="profession" [(ngModel)]="e.encadreur.profession" >
               </div>
+			    <div class="form-group col-md-3">
+                <label for="profession">Téléphone*</label>
+                <input type="text" class="form-control" placeholder="téléphone..." id="profession" [(ngModel)]="e.encadreur.user.tele" >
+              </div>
               <div class="col-md-3 form-group">
                 <label for="type">Type Encadreur*</label>
                 <select  id="typeEncadreur" class="form-control text-center" [(ngModel)]="e.encadreur.type" id="type">
@@ -169,18 +181,25 @@
                   <option value="Encadreur de l'organisme">Encadreur de l'organisme</option>
                 </select>
               </div>
-            </div>
-            <div class="row" >
-              <div class="input-group col-md-6">
+			  <div class="form-group col-md-3">
+			  <label for="email">E-mail*</label>
+			   <div class="input-group ">
                 <div class="input-group-prepend">
                   <button class="btn bg-dark"><span class="fa fa-user text-white"></span></button>
                 </div>
                 <input type="email" class="form-control" placeholder="email..." id="email" [(ngModel)]="e.encadreur.user.username">
               </div>
-
+			  </div>
+			  
             </div>
+          
+             
 
-        </div>
+       
+
+        </li>
+	  </ul>
+        
         <div *ngIf="updateStage.encadreurs && stage.stageEncadreurs.length<2" class="row">
           <div class="col-3 offset-8">
             <select   class="form-control text-center float-right" [(ngModel)]="typeEnc" >
@@ -216,8 +235,8 @@
                 <input type="text" class="form-control" placeholder="prénom..." id="MprenomE" [(ngModel)]="e.encadreur.user.prenom">
               </div>
               <div class="form-group col-md-3">
-                <label for="Mprofession">Profession*</label>
-                <input type="text" class="form-control" placeholder="profession..." id="Mprofession" [(ngModel)]="e.encadreur.profession" >
+                <label for="Mprofession">Qualité*</label>
+                <input type="text" class="form-control" placeholder="qualite..." id="Mprofession" [(ngModel)]="e.encadreur.qualite" >
               </div>
             </div>
             <div class="row" >
@@ -262,6 +281,7 @@
         </tr>
         </thead>
         <tbody>
+        <tr *ngIf="!stage.stageMembreJuries || stage.stageMembreJuries.length == 0" class="alert alert-light text-center"><td colspan="7">La liste des jurys est vide!</td></tr>
         <tr *ngFor="let sm of stage.stageMembreJuries">
           <td>{{sm.membreJury.user.nom}}</td>
           <td>{{sm.membreJury.user.prenom}}</td>
@@ -353,7 +373,8 @@
   </div>
     <div class="card shadow-sm mt-3">
       <div class="card-header bg-dark text-white"><h1 class="d-inline"><span class="fa fa-building"></span> Structure D'acceuil</h1>
-        <span *ngIf="stage.organismeAccueil!=null && !stage.statu && !checkFinStage()" class="fa fa-pencil fa-2x float-right" style="cursor: pointer" (click)="updateStage.organisme = true"></span>
+        <span *ngIf="stage.organismeAccueil!=null && !stage.statu && !checkFinStage() && !updateStage.organisme" class="fa fa-pencil fa-2x float-right" style="cursor: pointer" (click)="updateStage.organisme = true"></span>
+		<span *ngIf="stage.organismeAccueil!=null && !stage.statu && !checkFinStage() && updateStage.organisme" class="fa fa-times fa-2x float-right" style="cursor: pointer" (click)="updateStage.organisme = false"></span>
         <span *ngIf="stage.organismeAccueil==null && !stage.statu" class="fa fa-plus-circle fa-2x float-right" data-toggle="modal" data-target="#organismeModal"  style="cursor: pointer"></span>
       </div>
       <div *ngIf="stage.organismeAccueil!=null" class="card-body">
@@ -362,7 +383,7 @@
           <div class="col-md-3"><b>Adress:</b> {{stage.organismeAccueil.adress}}</div>
           <div class="col-md-3"><b>Responsable:</b> {{stage.organismeAccueil.responsable}}</div>
           <div class="col-md-3"><b>Email:</b> {{stage.organismeAccueil.email}}</div>
-          <div class="col-md-3"><b>Téléphone fix:</b> {{stage.organismeAccueil.tele}}</div>
+          <div class="col-md-3"><b>Téléphone fix:</b> {{stage.organismeAccueil.teleFix}}</div>
           <div class="col-md-3"><b>Téléphone Gsm:</b> {{stage.organismeAccueil.tele}}</div>
           <div class="col-md-3"><b>Type:</b> {{stage.organismeAccueil.typeOrganisme.type}}</div>
           <div class="col-md-3"><b>Type de service:</b> {{stage.organismeAccueil.typeServiceOrganisme.type}}</div>
@@ -380,7 +401,11 @@
             <input type="email" class="form-control" id="emailS" placeholder="email..." [(ngModel)]="stage.organismeAccueil.email">
           </div>
           <div class="col-md-6">
-            <label for="tele">Télé</label>
+            <label for="fix">Fix*</label>
+            <input type="text" class="form-control" id="fix" placeholder="telephone..." [(ngModel)]="stage.organismeAccueil.teleFix">
+          </div>
+		  <div class="col-md-6">
+            <label for="tele">GSM</label>
             <input type="text" class="form-control" id="tele" placeholder="telephone..." [(ngModel)]="stage.organismeAccueil.tele">
           </div>
           <div class="col-md-6">
@@ -417,8 +442,8 @@
     </div>
     <div class="card shadow-sm mt-3">
       <div class="card-header bg-dark text-white"><h1 class="d-inline"><span class="fa fa-file-pdf-o"></span> Rapport de stage</h1>
-        <span *ngIf="(stage.rapport || stage.rapport !=null) " class="fa fa-pencil fa-2x float-right" style="cursor: pointer" (click)="updateStage.rapport=!updateStage.rapport"></span>
-        <span *ngIf="(!stage.rapport || stage.rapport ==null) " class="fa fa-plus-circle fa-2x float-right" style="cursor: pointer" data-toggle="modal" data-target="#ViewrapportModal"></span>
+        <span *ngIf="(stage.statu && (stage.rapport || stage.rapport !=null)) " class="fa fa-pencil fa-2x float-right" style="cursor: pointer" (click)="updateStage.rapport=!updateStage.rapport"></span>
+        <span *ngIf="(stage.statu && (!stage.rapport || stage.rapport ==null)) " class="fa fa-plus-circle fa-2x float-right" style="cursor: pointer" data-toggle="modal" data-target="#ViewrapportModal" click="ajouterRapport"></span>
       </div>
       <div *ngIf="stage.rapport" class="card-body">
         <div class="row">
@@ -439,11 +464,12 @@
     <div *ngIf="updateStage.rapport" class="card-footer">
       <app-rapport-form></app-rapport-form>
     </div>
+	<div class="my-2"><flash-messages></flash-messages></div>
   </div>
   <div class="card-footer">
     <button *ngIf="!checkExpiredStage()" class="btn btn-outline-success btn-block" (click)="update()" >Enregistre les changements</button>
   </div>
 </div>
-<flash-messages></flash-messages>
-<app-ajouter-organisme></app-ajouter-organisme>
-<app-rapport></app-rapport>
+
+<app-ajouter-organisme *ngIf="ajouterOrganisme"></app-ajouter-organisme>
+<app-rapport *ngIf="ajouterRapport"></app-rapport>

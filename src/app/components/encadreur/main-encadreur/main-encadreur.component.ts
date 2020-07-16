@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TacheService} from "../../../services/tache.service";
 import {StageService} from "../../../services/stage.service";
-import {FlashMessagesService} from "angular2-flash-messages";
 import {Tache} from "../../../models/tache.model";
 import {Etudiant} from "../../../models/etudiant.model";
 import {Stage} from "../../../models/stage.model";
-declare let bootbox:any;
+import {NotificationService} from "../../../services/notification.service";
+
+declare let bootbox: any;
+
 @Component({
   selector: 'app-main-encadreur',
   templateUrl: './main-encadreur.component.html',
@@ -21,13 +23,21 @@ export class MainEncadreurComponent implements OnInit {
     show: false,
     ref: ""
   }
-  showEtud = false;
-  showStructure = false;
+  showEtud = {
+    show: true,
+    ref: ""
+  }
+
+  showStructure = {
+    show: true,
+    ref: ""
+  }
   tache: Tache = new Tache();
   etudiant: Etudiant = new Etudiant();
   deleteTache = false;
 
-  constructor(private tacheService: TacheService, private stageService: StageService, private flashMessagesService: FlashMessagesService) {
+  constructor(private tacheService: TacheService, private stageService: StageService,
+              private notificationService:NotificationService) {
   }
 
   ngOnInit(): void {
@@ -42,14 +52,27 @@ export class MainEncadreurComponent implements OnInit {
     return this.tacheService.taches;
   }
 
-  showEtudiant(e: Etudiant) {
-    if (this.etudiant.id == e.id) {
-      this.showEtud = false;
+  showEtudiant(e: Etudiant, s: Stage) {
+    if (this.etudiant.id = e.id) {
+      this.showEtud.show = false;
+      this.showEtud.ref = "";
     } else {
+      this.showEtud.ref = s.reference;
+      this.showEtud.show = true;
       this.etudiant = e;
-      this.showEtud = true;
     }
   }
+
+  showStructures(s: Stage) {
+    if (this.showStructure.ref == s.reference) {
+      this.showStructure.show = false;
+      this.showStructure.ref = "";
+    } else {
+      this.showStructure.show = true;
+      this.showStructure.ref = s.reference;
+    }
+  }
+
 
   loadTaches(ref: string) {
     if (ref == this.showTaches.ref) {
@@ -73,24 +96,30 @@ export class MainEncadreurComponent implements OnInit {
       this.tache.reference = "T" + d.getTime();
       this.tacheService.create(this.tache).subscribe(resp => {
         if (resp > 0) {
-          this.flashMessagesService.show("Tâche affecter avec succée!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("Tâche affecter avec succès!", "Gestion des tâches");
           this.ajouterTache = false;
           this.loadTaches(stage.reference);
           this.tache = new Tache();
         } else {
-          this.flashMessagesService.show("Erreur dans l'affectation!!", {cssClass: 'alert-danger', timeout: 5000});
+          this.notificationService.showWarning("Erreur dans l'affectation!!", "Gestion des tâches");
         }
+      }, error => {
+        this.notificationService.showError("Erreur est survenu!!", "Gestion des tâches");
       })
     } else if (this.updateTache) {
+      this.tache.stage = stage;
+      this.tache.encadreur = stage.stageEncadreurs[0].encadreur;
       this.tacheService.update(this.tache).subscribe(resp => {
         if (resp > 0) {
-          this.flashMessagesService.show("Tâche Modifier avec succée!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("Tâche Modifier avec succès!", "Gestion des tâches");
           this.updateTache.update = false;
           this.updateTache.tache = ""
           this.tache = new Tache();
-          } else {
-          this.flashMessagesService.show("Erreur dans la modification!!", {cssClass: 'alert-danger', timeout: 5000});
+        } else {
+          this.notificationService.showWarning("Erreur dans la modification!!", "Gestion des tâches");
         }
+      }, error => {
+        this.notificationService.showError("Erreur est survenu!!", "Gestion des tâches");
       })
     }
   }
@@ -102,42 +131,57 @@ export class MainEncadreurComponent implements OnInit {
     } else {
       this.updateTache.update = true;
       this.updateTache.tache = tache.reference;
-	    this.tache = tache;
+      this.tache = tache;
     }
   }
- delete = (tache:Tache,stage:Stage) =>{
+
+  delete = (tache: Tache, stage: Stage) => {
     bootbox.confirm({
-      message: "Vous voulez vraiment supprimer cette tache?",
+      message: "Vous voulez vraiment supprimer cette tâche?",
       buttons: {
         confirm: {
-          label: 'Confirmer',
+          label: 'Confirmer <i class="fa fa-check"></i>',
           className: 'btn-success'
         },
         cancel: {
-          label: 'Annuler',
+          label: 'Annuler <i class="fa fa-times"></i>',
           className: 'btn-danger'
         }
       },
-      callback:(result)=>{
-        if(result){
-          this.remove(tache,stage);
+      callback: (result) => {
+        if (result) {
+          this.remove(tache, stage);
         }
       }
     })
- }
+  }
 
-remove(tache:Tache,stage:Stage){
-    this.tacheService.deleteByReference(tache.reference).subscribe(resp=>{
+  remove(tache: Tache, stage: Stage) {
+    this.tacheService.deleteByReference(tache.reference).subscribe(resp => {
       if (resp > 0) {
-        this.flashMessagesService.show("Tâche supprimer avec succée!", {cssClass: 'alert-success', timeout: 5000});
-          this.loadTaches(stage.reference);
+        this.notificationService.showSuccess("Tâche supprimer avec succès!", "Gestion des tâches");
+        this.loadTaches(stage.reference);
       } else {
-        this.flashMessagesService.show("Erreur dans la suppression!!", {cssClass: 'alert-danger', timeout: 5000});
+        this.notificationService.showWarning("Erreur dans la suppression!!", "Gestion des tâches");
       }
+    }, error => {
+      this.notificationService.showError("Erreur est survenu!!", "Gestion des tâches");
     })
-}
+  }
 
+  validerTache(tache: Tache, stage: Stage) {
+    this.tacheService.validerTache(tache.reference).subscribe(resp => {
+      if (resp > 0) {
+        this.notificationService.showSuccess("Tâche valider avec succès!", "Gestion des tâches");
+        this.loadTaches(stage.reference);
+      } else {
+        this.notificationService.showWarning("Erreur dans la validation!!", "Gestion des tâches");
+      }
+    }, error => {
+      this.notificationService.showError("Erreur est survenu!!", "Gestion des tâches");
+    })
 
+  }
 
 
 }

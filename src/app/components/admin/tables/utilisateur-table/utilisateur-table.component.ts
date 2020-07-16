@@ -6,6 +6,9 @@ import {EncadreurService} from "../../../../services/encadreur.service";
 import {EtudiantService} from "../../../../services/etudiant.service";
 import {CoordinateurService} from "../../../../services/coordinateur.service";
 import {JuryService} from "../../../../services/jury.service";
+import * as $ from "jquery"
+import {NotificationService} from "../../../../services/notification.service";
+declare let bootbox:any;
 
 @Component({
   selector: 'app-utilisateur-table',
@@ -28,7 +31,7 @@ export class UtilisateurTableComponent implements OnInit {
 	updateUser = false;
 	createUser= false;
 
-  constructor(private userService:UserService,private flashMessagesService:FlashMessagesService,private encadreurService:EncadreurService,
+  constructor(private userService:UserService,private notificationService:NotificationService,private encadreurService:EncadreurService,
               private etudiantService:EtudiantService,private coordinateurService:CoordinateurService,private juryService:JuryService) { }
 
   ngOnInit(): void {
@@ -37,18 +40,35 @@ export class UtilisateurTableComponent implements OnInit {
   deleteUser(user:User){
     this.userService.removeUser(user.id).subscribe(resp=>{
       if (resp > 0) {
-        this.flashMessagesService.show("utilisateur supprimer avec succée!", {cssClass: 'alert-success', timeout: 5000});
-        this.users.splice(this.users.indexOf(user),1);
-        this.pageUser.content.splice(this.pageUser.content.indexOf(user),1);
+        this.notificationService.showSuccess("utilisateur est supprimé avec succès!", "Utilisateur");
+		this.findAll();
       } else {
-        this.flashMessagesService.show("Erreur dans la suppression!", {
-          cssClass: 'alert-danger',
-          timeout: 5000
-        });
+        this.notificationService.showWarning("Erreur dans la suppression!", "Utilisteur");
+      }
+    })
+  }
+   delete = (user:User) =>{
+    bootbox.confirm({
+      message: "Vous voulez vraiment supprimer cet utilisateur?",
+      buttons: {
+        confirm: {
+          label: 'Confirmer',
+          className: 'btn-success'
+        },
+        cancel: {
+          label: 'Annuler',
+          className: 'btn-danger'
+        }
+      },
+      callback:(result)=>{
+        if(result){
+          this.deleteUser(user);
+        }
       }
     })
   }
   findAll(){
+	   this.userService.tableElements = [];
     this.userService.findAll(this.page,this.size,this.sort);
   }
   get pageUser(){
@@ -120,8 +140,9 @@ export class UtilisateurTableComponent implements OnInit {
     }
   }
   update(user:User){
-
-    if(this.checkEtdudiant(user)){
+	console.log("kollati")
+    if(!this.checkEtdudiant(user)){
+		console.log("etudiant")
       this.etudiantService.findByUserId(user.id).subscribe(data=>{
         this.etudiantService.etudiant = data;
         this.userService.user = user;

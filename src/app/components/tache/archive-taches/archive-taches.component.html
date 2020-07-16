@@ -1,13 +1,14 @@
 <div class="container container-fluid my-4">
 	<div class="text-center"><h1><span class="fa fa-tasks"></span> Archive des Tâches</h1></div>
-  <div class="row mx-5">
+  <div *ngIf="tachePage.content && tachePage.content.length >0 "  class="row mx-5">
     <div class="input-group">
       <input type="text" class="form-control" (input)="search()" [(ngModel)]="searchInput" placeholder="Chercher une tache...">
       <div class="input-group-append">
         <button class="btn btn-outline-info"><span class="fa fa-search"></span></button></div>
     </div>
   </div>
-  <ul *ngIf="!searching"  class="list-group list-group-flush">
+  <ul class="list-group list-group-flush">
+  <li class="list-group-item text-center bg-light shadow-sm" *ngIf="!tachePage.content || tachePage.content.length == 0">L'archive des tache est vide</li>
     <li *ngFor="let tache of tachePage.content" class="list-group-item">
 
       <div class="row">
@@ -32,7 +33,7 @@
         </li>
       </ul>
 
-  <div class="row d-flex justify-content-center align-items-center">
+  <div *ngIf="tachePage.content && tachePage.content.length >0 " class="row d-flex justify-content-center align-items-center">
     <nav *ngIf="!searching" class="text-center m-auto">
       <ul  class="pagination">
         <li class="page-item">

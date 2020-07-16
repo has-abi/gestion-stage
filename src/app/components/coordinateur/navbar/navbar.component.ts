@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SearchService} from "../../../services/search/search.service";
 import {AuthentificationService} from "../../../services/auth/authentification.service";
+import {LocaleSettings} from "primeng";
+import {LocalStorageService} from "ngx-webstorage";
 
 @Component({
   selector: 'app-navbar',
@@ -8,27 +10,25 @@ import {AuthentificationService} from "../../../services/auth/authentification.s
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  searchInput;
-  searching =false;
-  constructor(private searchService:SearchService,private authentificationService:AuthentificationService) { }
+  picture = "";
+
+  constructor(private searchService: SearchService, private authentificationService: AuthentificationService, private localStorage: LocalStorageService) {
+  }
 
   ngOnInit(): void {
-
-  }
-  search(){
-  this.searching = true;
-  if(this.searchInput.lenght != 0){
-    this.searchService.searchOverStage(this.searchInput);
-  }else{
-    this.searching = false;
-    this.searchService.searchResult = [];
+	this.profilePic();
   }
 
+  profilePic() {
+    const user = this.localStorage.retrieve("logedUser");
+    if (user.photo != null) {
+      this.picture = 'http://localhost:8091/gestion-stage-api/user/image/' + user.photo;
+    } else {
+      this.picture = '../../../../assets/unnamed.png';
+    }
   }
-  get searchResult(){
-    return this.searchService.searchResult;
-  }
-  logout(){
+
+  logout() {
     return this.authentificationService.logout();
   }
 }

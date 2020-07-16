@@ -1,36 +1,53 @@
 <nav class="navbar  navbar-expand-lg navbar-light bg-white shadow">
-  <a  class="navbar-brand" routerLink="../coordinateur/stage/list"><img src="../../../../assets/logoStage.png" alt="fstg logo" style="height:40px;width:160px" class="img-fluid">
+  <a class="navbar-brand" routerLink="../coordinateur/stage/list"><img src="../../../../assets/logoStage.png"
+                                                                       alt="fstg logo" style="height:40px;width:160px"
+                                                                       class="img-fluid">
   </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-  <ul class="navbar-nav ml-auto">
-    <li class="nav-item mx-2"><a routerLink="../coordinateur/stage/create" class="nav-link btn btn-sm btn-success shadow-none text-white" data-toggle="tooltip" data-placement="top" title="créé un stage">
-     Créer un stage <span class="fa fa-plus"></span></a>
-    </li>
-    <li class="nav-item"><a routerLink="../coordinateur/stage/list" class="nav-link btn bg-transparent border-0 text-dark" data-toggle="tooltip" data-placement="top" title="voire tout les stages">Stages <span class="fa fa-bars"></span></a></li>
-    <li class="nav-item dropdown text-center">
-      <button class="btn bg-transparent border-0 dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Autres <span class="fa fa-cog"></span></button>
-      <ul class="dropdown-menu" role="menu">
-        <li class="dropdown-item"><a routerLink="../coordinateur/etudiants">Etudiants <span class="fa fa-graduation-cap float-right"></span></a></li>
-        <li class="dropdown-item"><a routerLink="../coordinateur/encadreurs">Encadreurs <span class="fa fa-briefcase float-right"></span></a></li>
-        <li class="dropdown-item"><a routerLink="../coordinateur/jurys">Jurys <span class="fa fa-briefcase float-right"></span></a></li>
-        <li class="dropdown-item"><a routerLink="../coordinateur/structures">Structures <span class="fa fa-building float-right"></span></a></li>
-      </ul>
-    </li>
-    <li class="nav-item dropleft mx-2 mr-5 text-center">
-      <img src="../../../../assets/unnamed.png" alt="profile" class="rounded-circle border-dark dropdown-toggle shadow-sm" data-toggle="dropdown" role="button" aria-expanded="false" style="height: 40px;width: 40px">
-      <ul class="dropdown-menu shadow" role="menu">
-        <li class="dropdown-item">
-          <a href="#" class="text-dark btn-link text-decoration-none">Profile <span class="fa-pull-right fa fa-user-circle"></span></a>
-        </li>
-        <li class="dropdown-item">
-          <button  class="text-dark btn-link text-decoration-none" (click)="logout()">Déconnexion <span class=" fa fa-sign-out"></span></button>
-        </li>
-      </ul>
-    </li>
-  </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mx-2" routerLinkActive="bg-light"><a [routerLink]="['../coordinateur/stage/create']"
+                                   class="nav-link btn btn-sm btn-success shadow-none text-white" data-toggle="tooltip"
+                                   data-placement="top" title="créé un stage">
+        Créer un stage <span class="fa fa-plus"></span></a>
+      </li>
+      <li class="nav-item" routerLinkActive="bg-light"><a [routerLink]="['../coordinateur/stage/list']"
+                              class="nav-link btn bg-transparent border-0 text-dark" data-toggle="tooltip"
+                              data-placement="top" title="voire tout les stages">Stages <span class="fa fa-bars"></span></a>
+      </li>
+      <li class="nav-item dropdown " routerLinkActive="bg-light">
+        <button class="btn bg-transparent border-0 dropdown-toggle" data-toggle="dropdown" role="button"
+                aria-expanded="false">Autres <span class="fa fa-cog"></span></button>
+        <ul class="dropdown-menu" role="menu">
+          <li class="dropdown-item" routerLinkActive="bg-light"><a [routerLink]="['../coordinateur/etudiants']" class="nav-link text-dark">Etudiants <span
+            class="fa fa-graduation-cap float-right"></span></a></li>
+          <li class="dropdown-item" routerLinkActive="bg-light"><a [routerLink]="['../coordinateur/encadreurs']" class="nav-link text-dark">Encadreurs
+            <span class="fa fa-user-circle "></span></a></li>
+          <li class="dropdown-item" routerLinkActive="bg-light"><a [routerLink]="['../coordinateur/jurys']" class="nav-link text-dark">Jurys <span
+            class="fa fa-briefcase float-right"></span></a></li>
+          <li class="dropdown-item" routerLinkActive="bg-light"><a [routerLink]="['../coordinateur/structures']" class="nav-link text-dark">Structures
+            <span class="fa fa-building float-right"></span></a></li>
+        </ul>
+      </li>
+      <li class="nav-item dropleft mx-2 mr-5 text-center">
+        <img src="{{picture}}" alt="profile"
+             class="rounded-circle border-dark dropdown-toggle shadow-sm" data-toggle="dropdown" role="button"
+             aria-expanded="false" style="height: 40px;width: 40px">
+        <ul class="dropdown-menu shadow" role="menu">
+          <li class="dropdown-item" routerLinkActive="bg-light">
+            <a [routerLink]="['../coordinateur/edit']" class="text-dark btn-link text-decoration-none">Profile <span
+              class="fa-pull-right fa fa-user-circle"></span></a>
+          </li>
+          <li class="dropdown-item">
+            <button class="text-dark btn-link bg-transparent border-0" (click)="logout()">Déconnexion <span
+              class=" fa fa-sign-out"></span></button>
+          </li>
+        </ul>
+      </li>
+    </ul>
   </div>
 </nav>
 

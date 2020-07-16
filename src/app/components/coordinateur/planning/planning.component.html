@@ -5,27 +5,42 @@
     </div>
   </div>
   <div class="card-body">
-
     <div class="container mt-4">
 
-      <div class="row mt-4"><div class="col-md-6">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div class="input-group-text">
-              <span class="fa fa-calendar" ></span> Date des soutenances
+      <div class="row mt-4">
+        <div class="col-12 my-3">
+          <div class="row">
+            <div class="col-md-8 offset-4">
+              <div class="d-inline mx-4">
+
+					   <button class="btn-sm btn-light border-0 shadow-sm" (click)="reordonner();structurer = !structurer;"><span class="fa fa-bars"></span></button>
+                Génération structuré suivant l'encadrant
+              </div>
+              <div class="form-group d-inline mx-4">
+			   <button class="btn-sm btn-dark border-0 shadow-sm text-white" (click)="makeEncadrantUnJury();encadrantJury = !encadrantJury;"><span class="fa fa-tasks"></span></button>
+              Inclure l'encadrant comme un jury
+              </div>
             </div>
           </div>
-          <input type="date" class="form-control" [(ngModel)]="dateSoutenance">
         </div>
-      </div>
         <div class="col-md-6">
           <div class="input-group">
             <div class="input-group-prepend">
               <div class="input-group-text">
-                <span class="fa fa-info"></span>  Plus d'infos
+                <span class="fa fa-calendar"></span> Date des soutenances
               </div>
             </div>
-            <input type="text" class="form-control" placeholder="info..."  [(ngModel)]="plusInfos">
+            <input type="date" class="form-control" [(ngModel)]="dateSoutenance">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="fa fa-info"></span> Plus d'infos
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="info..." [(ngModel)]="plusInfos">
           </div>
         </div>
       </div>
@@ -36,22 +51,78 @@
           <th class="text-center"><span class="fa fa-graduation-cap"></span> Nom & prénom</th>
           <th class="text-center"><span class="fa fa-file-text"></span> Sujet</th>
           <th class="text-center"><span class="fa fa-university"></span> Jury</th>
+          <th *ngIf="structurer" class="text-center"><span class="fa fa-user"></span> Encadrant</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="!structurer">
         <tr *ngFor="let stage of stages">
-          <td  class="text-center" ><input type="text" class="form-control form-control-sm" placeholder="salle ou amphi..." [(ngModel)]="stage.localeSoutenance"></td>
-          <td  class="text-center"><span *ngFor="let se  of stage.stageEtudiants">{{se.etudiant.user.nom}} {{se.etudiant.user.prenom}}</span></td>
-          <td  class="text-center">{{stage.sujet}}</td>
-          <td  class="text-center"><button *ngIf="stage.stageMembreJuries.length == 0"data-toggle="modal" data-target="#juryModal" (click)="ajouterJury(stage)" class="btn btn-success btn-sm shadow-none">Ajouter
-            <span class="fa fa-plus"></span></button>
-            <span *ngIf="stage.stageMembreJuries.length>0"><span *ngFor="let sj of  stage.stageMembreJuries"> {{sj.membreJury.user.nom}} {{sj.membreJury.user.prenom}} | </span>
-              <span *ngIf="stage.stageMembreJuries.length<3" class="fa fa-user-plus text-primary" data-toggle="modal" data-target="#juryModal"  style="cursor: pointer" (click)="ajouterJury(stage)"></span>
+          <td class="text-center"><input type="text" class="form-control form-control-sm"
+                                         placeholder="salle ou amphi..." [(ngModel)]="stage.localeSoutenance"></td>
+          <td class="text-center"><span class="d-block"
+                                        *ngFor="let se  of stage.stageEtudiants;let i = index">{{se.etudiant.user.nom}} {{se.etudiant.user.prenom}} </span>
+          </td>
+          <td class="text-center">{{stage.sujet}}</td>
+          <td class="text-center">
+            <button *ngIf="stage.stageMembreJuries.length == 0" data-toggle="modal" data-target="#juryModal"
+                    (click)="ajouterJury(stage)" class="btn btn-success btn-sm shadow-none">Ajouter
+              <span class="fa fa-plus"></span></button>
+            <span *ngIf="stage.stageMembreJuries.length>0"><span
+              *ngFor="let sj of  stage.stageMembreJuries"> {{sj.membreJury.user.nom}} {{sj.membreJury.user.prenom}}
+              | </span>
+              <span *ngIf="stage.stageMembreJuries.length<3" class="fa fa-user-plus text-primary" data-toggle="modal"
+                    data-target="#juryModal" style="cursor: pointer" (click)="ajouterJury(stage)"></span>
           </span></td>
         </tr>
         </tbody>
+
+        <tbody *ngIf="structurer">
+        <tr *ngFor="let p of planning">
+          <td class="text-center" rowspan="p.id"><input type="text" class="form-control form-control-sm m-auto"
+                                                        placeholder="salle ou amphi..." [(ngModel)]="p.locale"></td>
+          <td class="text-center">
+            <ul class="list-group">
+              <li class="list-group-item bg-transparent border-0" *ngFor="let s of p.stages">
+				<span class="d-block"
+              *ngFor="let se  of s.stageEtudiants;let i = index">{{se.etudiant.user.nom}} {{se.etudiant.user.prenom}} </span>
+              </li>
+            </ul>
+          </td>
+
+          <td class="text-center">
+            <ul class="list-group">
+              <li class="list-group-item bg-transparent border-0" *ngFor="let s of p.stages">
+                {{s.sujet}}
+              </li>
+
+            </ul>
+          </td>
+          <td class="text-center">
+            <button *ngIf="p.jurys.length == 0" data-toggle="modal" data-target="#juryModal"
+                    (click)="ajouterJurys(p.stages)" class="btn btn-success btn-sm shadow-none m-auto">Ajouter
+              <span class="fa fa-plus"></span></button>
+            <span *ngIf="p.jurys.length>0"><span
+              *ngFor="let sj of  p.jurys" class="m-auto"> {{sj.user.nom}} {{sj.user.prenom}}
+              | </span>
+              <span *ngIf="p.jurys.length<3" class="fa fa-user-plus text-primary m-auto" data-toggle="modal"
+                    data-target="#juryModal" style="cursor: pointer"></span>
+          </span></td>
+
+          <td *ngIf="structurer" class="text-center">{{p.encadrant.user.nom}} {{p.encadrant.user.prenom}}</td>
+        </tr>
+        </tbody>
       </table>
-      <button class="btn btn-primary float-right" (click)="view()">Générer le planning</button>
+	  <div class="row">
+		<div class="col-5 offset-5">
+		 <div class="input-group ">
+        <div class="input-group-prepend"><div class="input-group-text">Nombre d'élement par tableau</div></div>
+        <input type="number" min="1" class="form-control" style="width:50px" [(ngModel)]="nbre">
+      </div>
+		</div>
+		<div class="col-2">
+		<button class="btn btn-primary float-right" (click)="view()">Générer le planning</button>
+		</div>
+	  </div>
+
     </div>
 
   </div>

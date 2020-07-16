@@ -39,11 +39,9 @@ export class TacheService {
       this.fillTableElements(datas.totalPages);
     })
   }
-  search(search:string){
+  search(search:string):Observable<Array<Tache>>{
     const request = "search?search=titre:*"+search+"* OR contenu:*"+search+"*";
-    this.http.get<Array<Tache>>(this.url+request,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
-      this.taches = datas;
-    })
+    return this.http.get<Array<Tache>>(this.url+request,{headers:this.authentificationService.getHeaders()});
   }
   fillTableElements(size:number){
     for(let i = 0;i<size;i++){
@@ -90,6 +88,10 @@ export class TacheService {
 
   validerTache(ref:string):Observable<number>{
     return this.http.put<number>(this.url+"valider/reference/"+ref,null,{headers:this.authentificationService.getHeaders()});
+  }
+  
+  effectuerTache(ref:string):Observable<number>{
+    return this.http.put<number>(this.url+"effectuer/reference/"+ref,null,{headers:this.authentificationService.getHeaders()});
   }
 
   get taches(): Array<Tache> {

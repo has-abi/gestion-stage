@@ -6,6 +6,7 @@ import {StageEncadreur} from "../models/stage-encadreur.model";
 import {EncadreurPage} from "../models/pageModels/encadreur-page";
 import {Observable} from "rxjs";
 import {AuthentificationService} from "./auth/authentification.service";
+import {Etudiant} from "../models/etudiant.model";
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +20,25 @@ export class EncadreurService {
   url="http://localhost:8091/gestion-stage-api/encadreur"
 
   constructor(private http: HttpClient,private authentificationService:AuthentificationService) { }
-
+  fetchEncadrant(email:string):Observable<Encadreur>{
+	  console.log(email);
+    return  this.http.post<Encadreur>(this.url+"/fetch",email,{headers:this.authentificationService.getHeaders()})
+  }
   findByFiliere(id:number){
     this.http.get<Array<Encadreur>>(this.url+"/filiere/id/"+id,{headers:this.authentificationService.getHeaders()}).subscribe(encads=>{
       this.fEncadreurs = encads;
+    })
+  }
+  findAll(page:number,size:number,sort:string){
+	this.http.get<EncadreurPage>(this.url+"/page/"+page+"/size/"+size+"/sort/"+sort,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
+      this.pageEncadreurs = datas;
+      this.fillTableElements(datas.totalPages);
+    })
+  }
+  findByType(page:number,size:number,type:string){
+	this.http.get<EncadreurPage>(this.url+"/type/"+type+"/page/"+page+"/size/"+size,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
+      this.pageEncadreurs = datas;
+      this.fillTableElements(datas.totalPages);
     })
   }
   createEncadreur(encadreur:Encadreur):Observable<number>{
@@ -44,11 +60,19 @@ export class EncadreurService {
     })
   }
   search(seach:string){
-    const request = "/search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.email:*+"+seach+"* " +
+    const request = "/search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.username:*+"+seach+"* " +
       "OR type:*"+seach+"* OR user.sexe:*"+seach+"* OR user.adress:*"+seach+"* OR qualite:*"+seach+"* OR profession:*"+seach+"*";
     this.http.get<Array<Encadreur>>(this.url+request,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
       console.log(datas);
       this.encadreurs = datas;
+    })
+  }
+  searchByCoord(seach:string,id:number){
+    const request = "/search?search=user.nom:*"+seach+"* OR user.prenom:*"+seach+"* OR user.username:*+"+seach+"* " +
+      "OR type:*"+seach+"* OR user.sexe:*"+seach+"* OR user.adress:*"+seach+"* OR qualite:*"+seach+"* OR profession:*"+seach+"*";
+    this.http.get<Array<Encadreur>>(this.url+"coordinateur/id/"+id+"/"+request,{headers:this.authentificationService.getHeaders()}).subscribe(datas=>{
+      this.encadreurs = datas;
+
     })
   }
   fillTableElements(size:number){

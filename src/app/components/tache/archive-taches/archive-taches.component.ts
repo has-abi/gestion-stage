@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TacheService} from "../../../services/tache.service";
+import {LocalStorageService, SessionStorageService} from "ngx-webstorage";
 
 @Component({
   selector: 'app-archive-taches',
@@ -8,65 +9,94 @@ import {TacheService} from "../../../services/tache.service";
 })
 export class ArchiveTachesComponent implements OnInit {
   page = 0;
-  size =10;
-  id=1;
-  sort="asc";
-  searchInput ="";
+  size = 10;
+  id = 1;
+  sort = "asc";
+  searchInput = "";
   searching = false;
-  constructor(private tacheService:TacheService) { }
+  role = ""
+
+  constructor(private tacheService: TacheService, private sessionStorage: LocalStorageService) {
+  }
 
   ngOnInit(): void {
-  this.findByEtudiant();
+    this.tacheService.tacheElements = [];
+    this.findByEtudiant();
   }
-  search(){
-    if(this.searchInput.length>0){
-      this.searching = true;
-      this.tacheService.search(this.searchInput);
-    }else{
+
+  search() {
+    if (this.searchInput.length > 0) {
       this.tacheService.tacheElements = [];
-      this.findByEtudiant();
+      this.searching = true;
+      this.tacheService.search(this.searchInput).subscribe(datas => {
+        this.tachePage.content = datas;
+      });
+
+    } else {
+      this.tacheService.tacheElements = [];
+      this.chargerTaches();
       this.searching = false;
     }
   }
-  findByEncadreur(){
-    return this.tacheService.findByEncadeur(1,this.page,this.size);
-  }
-  findByEtudiant(){
-    return this.tacheService.findByEtudiant(1,this.page,this.size);
+
+  findByEncadreur() {
+    return this.tacheService.findByEncadeur(1, this.page, this.size);
   }
 
-  get tachePage(){
+  findByEtudiant() {
+    return this.tacheService.findByEtudiant(1, this.page, this.size);
+
+  }
+
+  chargerTaches() {
+    const user = this.sessionStorage.retrieve("logedUser");
+    this.role = user.roles[0].role;
+    if (this.role == "ETUDIANT_ROLE") {
+      return this.tacheService.findByEtudiant(user.id, this.page, this.size);
+    }
+    if (this.role == "ETUDIANT_ROLE") {
+      return this.tacheService.findByEncadeur(user.id, this.page, this.size);
+    }
+  }
+
+  get tachePage() {
     return this.tacheService.tachePage;
   }
-  get taches(){
+
+  get taches() {
     return this.tacheService.taches;
   }
-  nextElements(){
-    if(this.page<=this.tachePage.totalPages){
+
+  nextElements() {
+    if (this.page <= this.tachePage.totalPages) {
       this.page++;
-      this.findByEtudiant();
+      this.chargerTaches();
       this.tacheService.tacheElements = [];
     }
   }
-  prevElements(){
-    if(this.page>=0){
+
+  prevElements() {
+    if (this.page >= 0) {
       this.page--;
-      this.findByEtudiant();
+      this.chargerTaches();
       this.tacheService.tacheElements = [];
     }
   }
-  getIndexPage(i:number){
-    if(i<=this.tachePage.totalPages){
+
+  getIndexPage(i: number) {
+    if (i <= this.tachePage.totalPages) {
       this.page = i;
-      this.findByEtudiant();
+      this.chargerTaches();
       this.tacheService.tacheElements = [];
     }
   }
-  get tableElements(){
-    return  this.tacheService.tacheElements ;
+
+  get tableElements() {
+    return this.tacheService.tacheElements;
   }
-  resizePage(){
-    this.findByEtudiant();
+
+  resizePage() {
+    this.chargerTaches();
     this.tacheService.tacheElements = [];
   }
 }

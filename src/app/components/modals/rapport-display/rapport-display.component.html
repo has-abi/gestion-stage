@@ -19,13 +19,13 @@
           <li class="list-group-item">
             <div *ngIf="rapport.valider" ><span class="fa fa-check-circle text-success fa-2x"></span> <b>Valider</b></div>
             <div *ngIf="!rapport.valider" ><span class="fa fa-warning text-warning fa-2x"></span> <b>Pas Encore Valider</b>
-              <button class="btn-sm btn-success float-right" (click)="valider()"> Valider le rapport <span class="fa fa-check"></span></button>
+              <button *ngIf="role == 'JURY_ROLE'"  class="btn-sm btn-success float-right" (click)="valider()" > Valider le rapport <span class="fa fa-check"></span></button>
             </div>
           </li>
           <li class="list-group-item"><b>Fichier:</b> Voir:
-            <button  class="btn-sm btn-success" (click)="display()"><span class="fa fa-file-pdf-o "></span></button>
+            <a href="http://localhost:8091/file/display/{{rapport.document.reference}}" target="_blank"  class="btn-sm btn-success" ><span class="fa fa-file-pdf-o "></span></a>
             Telecharger:
-            <button  (click)="download()" class="btn-sm btn-primary"><span class="fa fa-download "></span></button>
+            <a  href="http://localhost:8091/files/{{rapport.document.reference}}" class="btn-sm btn-primary"><span class="fa fa-download "></span></a>
             <div *ngIf="modifierRapport" class="form-group">
               <div *ngIf="currentFile" class="progress">
                 <div

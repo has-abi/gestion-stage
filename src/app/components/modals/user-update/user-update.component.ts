@@ -13,6 +13,7 @@ import {MembreJury} from "../../../models/membre-jury.model";
 import {Coordinateur} from "../../../models/coordinateur.model";
 import {ConfigurationService} from "../../../services/configuration.service";
 import {PasswordGeneratorService} from "../../../services/utils/password-generator.service";
+import {NotificationService} from "../../../services/notification.service";
 
 @Component({
   selector: 'app-user-update',
@@ -24,7 +25,8 @@ export class UserUpdateComponent implements OnInit {
   rpp = "";
   constructor(private userService:UserService,private flashMessagesService:FlashMessagesService,private etudiantService:EtudiantService,
               private encadreurService:EncadreurService,private coordinateurService:CoordinateurService,
-              private juryService:JuryService,private configurationService:ConfigurationService,private passwordGeneratorService:PasswordGeneratorService) { }
+              private juryService:JuryService,private configurationService:ConfigurationService,private passwordGeneratorService:PasswordGeneratorService,
+              private notificationService:NotificationService) { }
 
   ngOnInit(): void {
 
@@ -58,7 +60,7 @@ export class UserUpdateComponent implements OnInit {
 		}
 	}
   validate(){
-    let checkUser = this.user.nom.length== 0 || this.user.prenom.length == 0 || this.user.username.length == 0 || this.user.roles.length == 0;
+    let checkUser = this.user.nom.length== 0 || this.user.prenom.length == 0 || (!this.user.username || this.user.username.length == 0) || this.user.roles.length == 0;
     if(this.checkEtdudiant(this.user)){
       return checkUser || !this.etudiant.cin ||this.etudiant.cin.length == 0  || !this.etudiant.codeAppoge ||this.etudiant.codeAppoge.length == 0;
     }else if(this.check(this.user,"COORDINATEUR_ROLE")){
@@ -83,14 +85,13 @@ export class UserUpdateComponent implements OnInit {
       this.etudiant.user = this.user;
       this.etudiantService.update(this.etudiant).subscribe(resp=>{
         if (resp > 0) {
-          this.flashMessagesService.show("Etudiant modifier avec succée!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("Etudiant modifier avec succée!", "Modification des données de l'étudiant");
           this.userService.user = new User();
         } else {
-          this.flashMessagesService.show("Erreur dans la modification!", {
-            cssClass: 'alert-danger',
-            timeout: 5000
-          });
+          this.notificationService.showWarning("Erreur dans la modification!", "Modification des données de l'étudiant");
         }
+      },error => {
+        this.notificationService.showError("Erreur dans la modification!", "Modification des données de l'étudiant");
       })
   }
   updateEncadreur(){
@@ -98,14 +99,13 @@ export class UserUpdateComponent implements OnInit {
       this.encadreur.reference = this.rpp;
       this.encadreurService.update(this.encadreur).subscribe(resp=>{
         if (resp > 0) {
-          this.flashMessagesService.show("Encadreur modifier avec succée!", {cssClass: 'alert-success', timeout: 5000});
+          this.notificationService.showSuccess("l'encadrant est modifié avec succès!", "Modification des données de l'encadrant");
           this.userService.user = new User();
         } else {
-          this.flashMessagesService.show("Erreur dans la modification!", {
-            cssClass: 'alert-danger',
-            timeout: 5000
-          });
+          this.notificationService.showWarning("Erreur dans la modification de l'encadrant!", "Modification des données de l'encadrant");
         }
+      },error => {
+        this.notificationService.showError("Erreur est survenu!", "Modification des données de l'encadrant");
       })
   }
   updateJury(){
@@ -113,14 +113,13 @@ export class UserUpdateComponent implements OnInit {
     this.jury.reference = this.rpp;
     this.juryService.update(this.jury).subscribe(resp=>{
       if (resp > 0) {
-        this.flashMessagesService.show("Jury modifier avec succée!", {cssClass: 'alert-success', timeout: 5000});
+        this.notificationService.showSuccess("Le membre de jury est modifié avec succès!", "Modification des données de membre de jury");
         this.userService.user = new User();
       } else {
-        this.flashMessagesService.show("Erreur dans la modification!", {
-          cssClass: 'alert-danger',
-          timeout: 5000
-        });
+        this.notificationService.showWarning("Erreur dans la modification!", "Modification des données de membre de jury");
       }
+    },error => {
+      this.notificationService.showWarning("Erreur est survenu!", "Modification des données de membre de jury");
     })
   }
   updateCoordinateur(){
@@ -128,13 +127,12 @@ export class UserUpdateComponent implements OnInit {
     this.coordinateur.reference = this.rpp;
     this.coordinateurService.update(this.coordinateur).subscribe(resp=>{
       if (resp > 0) {
-        this.flashMessagesService.show("Coordinateur modifier avec succée!", {cssClass: 'alert-success', timeout: 5000});
+        this.notificationService.showSuccess("Le coordinateur est modifié avec succès!", "La modification des données de coordinateur");
       } else {
-        this.flashMessagesService.show("Erreur dans la modification!", {
-          cssClass: 'alert-danger',
-          timeout: 5000
-        });
+        this.notificationService.showWarning("Erreur dans la modification!", "La modification des données de coordinateur");
       }
+    },error => {
+      this.notificationService.showError("Erreur est survenu!","La modification des données de coordinateur")
     })
   }
   update(){

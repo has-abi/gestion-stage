@@ -73,10 +73,10 @@
         <th>Prénom</th>
         <th>Email</th>
         <th>Sexe</th>
-        <th>Tele</th>
+        <th>Télé</th>
         <th>Adress</th>
         <th>Date de création</th>
-        <th>Roles</th>
+        <th>Rôles</th>
         <th>Actions</th>
       </tr>
       <tr *ngFor="let user of pageUser.content|sortBy: tableOrder.order:tableOrder.prop">
@@ -89,10 +89,10 @@
         <td>{{user.dateJoin}}</td>
         <td><div *ngFor="let r of user.roles">{{r.role}}</div></td>
         <td>
-          <div class="btn-group btn-group-sm">
+          <div *ngIf="user.roles[0].role != 'ADMIN_ROLE'" class="btn-group btn-group-sm">
             <button class="btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Editer" data-toggle="modal" data-target="#muserModal" (click)="update(user)"><span
               class="fa fa-pencil"></span></button>
-            <button class="btn-sm btn-danger" (click)="deleteUser(user)"><span class="fa fa-trash" data-toggle="tooltip" data-placement="top"
+            <button class="btn-sm btn-danger" (click)="delete(user)"><span class="fa fa-trash" data-toggle="tooltip" data-placement="top"
                                                     title="Supprimer"></span></button>
           </div>
         </td>
@@ -133,7 +133,7 @@
     </nav>
   </div>
 </div>
-<app-user-update *ngIf="updateUser"></app-user-update>
+<app-user-update *ngIf="updateUser == true"></app-user-update>
 <app-user-create *ngIf="createUser"></app-user-create>
 
 

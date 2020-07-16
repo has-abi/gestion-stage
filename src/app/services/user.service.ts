@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {User} from "../models/user.model";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpRequest} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {UserPage} from "../models/pageModels/user-page.model";
 import {Role} from "../models/role.model";
@@ -19,6 +19,32 @@ export class UserService {
   tableElements = [];
   url="http://localhost:8091/gestion-stage-api/user"
   constructor(private httpClient: HttpClient,private authentificationService:AuthentificationService) { }
+  checkCode(username:string,code:string):Observable<number>{
+    const user  = new User();
+    user.username = username;
+    user.codeConfirm = code;
+    return  this.httpClient.post<number>(this.url+"/checkCode",user);
+  }
+  checkSecurityQuestion(username:string,question:string,reponse:string):Observable<number>{
+    const user  = new User();
+    user.username = username;
+    user.question = question;
+    user.reponce = reponse;
+    return  this.httpClient.post<number>(this.url+"/checkSecurityQuestion",user);
+  }
+
+  updatePassword(username:string,pwd:string):Observable<number>{
+    const user  = new User();
+    user.username = username;
+    user.password = pwd;
+    return  this.httpClient.post<number>(this.url+"/updatePassword",user);
+  }
+
+  sendEmail(username:string){
+
+    this.httpClient.post<number>("http://localhost:8091/gestion-stage-api/mail/send",username).subscribe()
+  }
+
   confirmUser(cne:string,code:string):Observable<number>{
     return this.httpClient.get<number>(this.url+"/confirm/code/"+code+"/cne/"+cne);
   }
@@ -88,11 +114,18 @@ export class UserService {
     })
   }
   findByEmail(email:string):Observable<User>{
-    return this.httpClient.get<User>(this.url+"/email/"+email,{headers:this.authentificationService.getHeaders()});
+    return this.httpClient.post<User>(this.url+"/email",email,{headers:this.authentificationService.getHeaders()});
   }
 
   findByReference(ref:string):Observable<User>{
     return this.httpClient.get<User>(this.url+"/reference/"+ref,{headers:this.authentificationService.getHeaders()});
+  }
+
+  checkPassword(ref:string,password:string):Observable<number>{
+	 const user  = new User();
+	user.reference = ref;
+    user.password = password;
+	return this.httpClient.post<number>(this.url+"/checkPassword",user,{headers:this.authentificationService.getHeaders()})
   }
 
   get user(): User {

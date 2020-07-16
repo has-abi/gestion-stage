@@ -1,0 +1,72 @@
+<div class="d-flex justify-content-center align-items-center" >
+  <div class="card shadow mt-5 p-0" style="width:600px">
+    <div class="card-header bg-white">
+      <img src="../../../../assets/logoStage.png" alt="" class="img-fluid m-auto">
+    </div>
+    <div class="card-body">
+      <div class="bg-info text-white shadow-sm p-4 text-center">Réinitialiser par question de sécurité <span class="fa fa-question-circle " style="cursor:pointer" (click)="showQuestion = !showQuestion;showEmail = false;"></span></div>
+      <div *ngIf="showQuestion" class="row">
+        <div class="col-md-12">
+          <label for="q">Questions</label>
+          <select class="form-control" id="q" [(ngModel)]="question">
+            <option [ngValue]="'-SELECT-'" selected disabled>-SELECT-</option>
+            <option value="Quel est votre livre préféré?">Quel est votre livre préféré?</option>
+            <option value="Quel est votre ami(e) de l'enfance?">Quel est votre ami(e) de l'enfance?</option>
+            <option value="quelle chanson vous ecouter la plupart du temps?">quelle chanson vous ecouter la plupart du temps?</option>
+          </select>
+        </div>
+        <div class="col-md-12">
+          <label for="resp">Réponse</label>
+          <input type="text" class="form-control" [(ngModel)]="reponse" placeholder="réponse" id="resp">
+        </div>
+
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="emailq">E-mail</label>
+            <div class="input-group">
+              <input type="email" class="form-control" placeholder="e-mail" id="emailq" [(ngModel)]="email">
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="my-2"><b>OU</b></p>
+      <div class="bg-warning text-white shadow-sm p-4 text-center">Envoyer un code a votre E-mail <span class="fa fa-send " style="cursor:pointer" (click)="showEmail = !showEmail;showQuestion = false;"></span></div>
+      <div *ngIf="showEmail" class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <div class="input-group">
+              <input type="email" class="form-control" placeholder="e-mail" id="email" [(ngModel)]="email">
+              <div class="input-group-append">
+                <button class="btn btn-primary" (click)="send=true;sendEmail();">Envoyer <span class="fa fa-send"></span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div *ngIf="send" class="form-group">
+            <label for="code">Le Code envoyé</label>
+            <input type="text" class="form-control" placeholder="code" id="code" [(ngModel)]="code">
+          </div>
+          <div *ngIf="send " class="alert alert-info my-2">veuillez taper le code envoyé a votre boite E-mail!</div>
+        </div>
+      </div>
+	  <div *ngIf="showQuestion || showEmail" class="row my-2">
+      <div class="col-md-12"><button *ngIf="showQuestion || sended" class="btn btn-success float-right" (click)="renew()" [disabled]="validate()">Réinitialiser <span class="fa fa-lock"></span></button></div>
+      <div *ngIf="allow"  class="form-group my-2 col-md-12">
+        <label for="pwd">Nouveau mot de passe</label>
+        <div class="input-group">
+          <input type="password" class="form-control" placeholder="mot de passe" id="pwd" [(ngModel)]="pwd">
+          <div class="input-group-append">
+            <button class="btn btn-success" (click)="save()">Enregistrer <span class="fa fa-check-circle"></span></button>
+          </div>
+        </div>
+      </div>
+	  </div>
+      <flash-messages></flash-messages>
+    </div>
+    <div class="card-footer text-center">
+      <a routerLink="/login">S'authentifier?</a>
+    </div>
+  </div>
+</div>

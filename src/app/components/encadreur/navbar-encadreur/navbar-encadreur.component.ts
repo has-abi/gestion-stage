@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthentificationService} from "../../../services/auth/authentification.service";
+import {LocalStorageService} from "ngx-webstorage";
 
 @Component({
   selector: 'app-navbar-encadreur',
@@ -7,14 +8,28 @@ import {AuthentificationService} from "../../../services/auth/authentification.s
   styleUrls: ['./navbar-encadreur.component.css']
 })
 export class NavbarEncadreurComponent implements OnInit {
-  searchInput:string;
+  searchInput: string;
   searching = false;
-  constructor(private authentificationService:AuthentificationService) { }
+  picture = "";
+
+  constructor(private authentificationService: AuthentificationService, private localStorage: LocalStorageService) {
+  }
 
   ngOnInit(): void {
+    this.profilePic();
   }
-  logout(){
+
+  logout() {
     return this.authentificationService.logout();
+  }
+
+  profilePic() {
+    const user = this.localStorage.retrieve("logedUser");
+    if (user.photo != null) {
+      this.picture = 'http://localhost:8091/gestion-stage-api/user/image/' + user.photo;
+    } else {
+      this.picture = '../../../../assets/unnamed.png';
+    }
   }
 
 }

@@ -1,8 +1,8 @@
 <div  class="modal" id="muserModal" tabindex="-1" role="dialog" aria-labelledby="muserModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title"> <span class="fa fa-user"></span> Modification de {{user.nom}} {{user.prenom}} :</h1>
+      <div class="modal-header bg-success shadow-sm">
+        <h1 class="modal-title text-white"> <span class="fa fa-user"></span> Modification de {{user.nom}} {{user.prenom}} :</h1>
 
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -29,7 +29,7 @@
             <input type="email" class="form-control" id="email" [(ngModel)]="user.username">
           </div>
         </div>
-          <div class="col-md-6">
+          <div *ngIf="user.roles[0].role != 'ETUDIANT_ROLE'" class="col-md-6">
             <div class="form-group">
               <div class="dropdown">
                 <button class="btn bg-light btn-block dropdown-toggle shadow-sm" data-toggle="dropdown" aria-expanded="false">
